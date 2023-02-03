@@ -1,0 +1,51 @@
+type CreatePostRequest = record {
+  nfts : vec NftToken;
+  user : principal;
+  words : text;
+};
+type GetPostsByIdsRequest = record { id : vec nat32 };
+type GetPostsByIdsResponse = record { posts : vec Post };
+type GetPostsByNftCanistersRequest = record {
+  offset : opt nat32;
+  limit : opt int32;
+  nft_canisters : vec text;
+};
+type GetPostsByNftCanistersResponse = record {
+  offset : opt nat32;
+  posts : vec Post;
+};
+type GetPostsRequest = record { offset : nat32; limit : opt int32 };
+type GetPostsResponse = record { offset : int32; posts : vec Post };
+type GetUserPostsRequest = record { user : principal };
+type GetUserPostsResponse = record { posts : vec Post };
+type ListingInfo = record { listing_price : opt nat64; status : ListingStatus };
+type ListingStatus = variant {
+  FILLED : record { principal; nat64 };
+  ACTIVE;
+  WITHDRAWN : nat64;
+};
+type NftToken = record {
+  listing : opt ListingInfo;
+  token_id : text;
+  canister_id : text;
+  token_standard : NftTokenStandard;
+};
+type NftTokenStandard = variant { EXT };
+type Post = record {
+  id : nat32;
+  nfts : vec NftToken;
+  user : principal;
+  created_ts : nat64;
+  words : text;
+};
+service : {
+  create_post : (CreatePostRequest) -> (nat32);
+  get_post_by_ids : (GetPostsByIdsRequest) -> (GetPostsByIdsResponse) query;
+  get_posts : (GetPostsRequest) -> (GetPostsResponse) query;
+  get_posts_by_nft_canisters : (GetPostsByNftCanistersRequest) -> (
+      GetPostsByNftCanistersResponse,
+    ) query;
+  get_user_posts : (GetUserPostsRequest) -> (GetUserPostsResponse) query;
+  remove_all_posts : () -> ();
+  remove_post_by_ids : (GetPostsByIdsRequest) -> ();
+}

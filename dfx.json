@@ -1,0 +1,33 @@
+{
+  "canisters": {
+    "server_backend": {
+      "candid": "src/server_backend/server_backend.did",
+      "package": "server_backend",
+      "type": "rust"
+    },
+    "parade_ui": {
+      "frontend": {
+        "entrypoint": "src/parade_ui/src/index.tsx"
+      },
+      "source": [
+        "src/parade_ui/assets",
+        "dist/parade_ui/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "dfx": "0.11.2",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}

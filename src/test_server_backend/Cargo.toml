@@ -1,0 +1,10 @@
+[package]
+name = "test_server_backend"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+candid = "0.8.3"
+ic-cdk = "0.6.3"
+ic-cdk-macros = "0.6.3"
+serde = "1.0.147"
