@@ -17,7 +17,7 @@ import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-
+import { CollectionList } from './CollectionList'
 
 interface NftCardProps {
     data: {
@@ -165,6 +165,7 @@ const UserPortfolio = () => {
                     </Box>
                 ))}
             </List>
+            <CollectionList userAccount={appContext.userLoginInfo.userAccount} />
         </Box>
     )
 }

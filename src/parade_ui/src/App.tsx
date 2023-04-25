@@ -2,6 +2,7 @@ import Homepage from './components/feed/Homepage';
 import { createContext, useState, Dispatch, SetStateAction } from 'react'
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Profile } from './components/profile/Profile';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 export interface UserLoginInfo {
   userPid: string;
@@ -35,20 +36,24 @@ export const AppContext = createContext<AppContext>({
   setUserLoginInfo: () => { },
 })
 
+const queryClient = new QueryClient();
+
 export const App = () => {
   const [userLoginInfo, setUserLoginInfo] = useState<UserLoginInfo>(defaultTestingLoginInfo)
 
   return (
-    <AppContext.Provider value={{ userLoginInfo, setUserLoginInfo }}>
-      <BrowserRouter>
-        <Route exact={true} path="/">
-          <Homepage />
-        </Route>
-        <Route exact={true} path="/profile">
-          <Profile />
-        </Route>
-      </BrowserRouter>
-    </AppContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <AppContext.Provider value={{ userLoginInfo, setUserLoginInfo }}>
+        <BrowserRouter>
+          <Route exact={true} path="/">
+            <Homepage />
+          </Route>
+          <Route exact={true} path="/profile">
+            <Profile />
+          </Route>
+        </BrowserRouter>
+      </AppContext.Provider>
+    </QueryClientProvider>
   );
 }
 

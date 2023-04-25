@@ -1,28 +1,20 @@
-import { useContext, useEffect, useState } from 'react'
-import { Box } from '@mui/material';
-import { AppContext } from '../../App';
-import Typography from '@mui/material/Typography';
-import { getAllUserNFTs, getNFTInfo, getNFTActor, NFTCollection, getCachedUserNFTs } from '@psychedelic/dab-js';
-import List from '@mui/material/List';
-import Stack from '@mui/material/Stack';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
-import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import CardContent from '@mui/material/CardContent';
-import { styled } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
+import { useUserCollectionList } from '../../data/useUserCollectionList'
+
+interface CollectionListProps {
+    userAccount: string;
+}
 
 
+export const CollectionList = ({ userAccount }: CollectionListProps) => {
+    const queryRes = useUserCollectionList(userAccount);
 
-const CollectionList = () => {
+    if (queryRes.isLoading) {
+        console.log("loading");
+    } else {
+        console.dir(queryRes.data);
+    }
     return (
-        <div></div>
+        <div>New componenet</div>
         // <List>
         //     {userCollections.map((collection, index) => (
         //         <Box key={collection.canisterId}>

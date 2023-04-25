@@ -16,10 +16,10 @@ export interface Token {
     smallImage: string;
 }
 
-const paradeApiHost = 'https://parade-api-7fuobxt2ia-uw.a.run.app/';
+const paradeApiHost = 'https://parade-api-7fuobxt2ia-uw.a.run.app/getUserTokens/';
 
-const fetchUserCollectionList = async (): Promise<CollectionListData> => {
-    const response = await fetch(paradeApiHost);
+const fetchUserCollectionList = async (userAccount: string): Promise<CollectionListData> => {
+    const response = await fetch(paradeApiHost + userAccount);
     if (!response.ok) {
         throw new Error('Error fetching user collection list data');
     }
@@ -27,6 +27,6 @@ const fetchUserCollectionList = async (): Promise<CollectionListData> => {
     return data;
 };
 
-export const useUserCollectionList = () => {
-    return useQuery<CollectionListData, Error>('userCollectionList', fetchUserCollectionList);
+export const useUserCollectionList = (userAccount: string) => {
+    return useQuery<CollectionListData, Error>(['userCollectionList', userAccount], () => fetchUserCollectionList(userAccount));
 };
