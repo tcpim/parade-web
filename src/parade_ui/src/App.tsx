@@ -5,6 +5,7 @@ import { Profile } from './components/profile/Profile';
 
 export interface UserLoginInfo {
   userPid: string;
+  userAccount: string;
   walletConnected: boolean;
   walletType: "Plug" | "Stoic" | "";
 }
@@ -14,17 +15,19 @@ interface AppContext {
   setUserLoginInfo: Dispatch<SetStateAction<UserLoginInfo>>
 }
 
-const defaultLoginInfo: UserLoginInfo = {
+export const defaultLoginInfo: UserLoginInfo = {
   userPid: "",
+  userAccount: "",
   walletConnected: false,
   walletType: ""
 }
 
 // only use this in local testing
 const defaultTestingLoginInfo: UserLoginInfo = {
-  userPid: "dt6hm-ehioi-scl5p-lcl2v-jlti3-iexjx-rbzfn-cb4dc-tru44-jex2a-hae",
+  userPid: "yrwna-bkgxs-vuzuw-lheqr-357oj-n4yiz-2zdjx-icv63-jgoqb-pmf3m-qqe",
+  userAccount: "8795113c70c29285fb83d2b016fb12d8ee0d3e4fb19fca6b1c014c2f5096c17c",
   walletConnected: true,
-  walletType: "Plug"
+  walletType: "Stoic"
 }
 
 export const AppContext = createContext<AppContext>({

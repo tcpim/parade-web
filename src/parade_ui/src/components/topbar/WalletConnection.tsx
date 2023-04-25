@@ -2,10 +2,12 @@ import Button from '@mui/material/Button';
 import { Box } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { MouseEvent, useState, useMemo } from 'react';
+import { MouseEvent, useState, useContext, useMemo } from 'react';
 import Typography from '@mui/material/Typography';
-import { AppContext, UserLoginInfo } from '../../App';
-import { useContext } from 'react';
+import { AppContext, UserLoginInfo, defaultLoginInfo } from '../../App';
+import { Principal } from '@dfinity/principal';
+import { AccountIdentifier } from "@dfinity/nns";
+import { StoicIdentity as stoic } from 'ic-stoic-identity';
 
 const WalletConnection = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -19,29 +21,54 @@ const WalletConnection = () => {
         setAnchorEl(null);
     };
 
-    const handleOnClickPlug = async () => {
+    const getAccountFromPrincipal = (pid: string): string => {
+        const principal = Principal.from(pid);
+        const accountIdentifier = AccountIdentifier.fromPrincipal({ principal });
+        return accountIdentifier.toHex();
+    }
+
+    const loginPlugWallet = async () => {
         await window.ic.plug.requestConnect();
         const connected = await window.ic.plug.isConnected();
         setAnchorEl(null) // close the menu dropdown
 
-        // update app context
         if (connected) {
             const userLoginInfo: UserLoginInfo = {
                 userPid: window.ic.plug.principalId,
-                //userPid: "yrwna-bkgxs-vuzuw-lheqr-357oj-n4yiz-2zdjx-icv63-jgoqb-pmf3m-qqe", // stoic pid
+                userAccount: getAccountFromPrincipal(window.ic.plug.principalId),
                 walletConnected: true,
                 walletType: 'Plug'
             }
             appContext.setUserLoginInfo(userLoginInfo)
+        } else {
+            throw new Error("Failed to connect with Plug");
+        }
+    }
+
+    const loginStoicWallet = async () => {
+        setAnchorEl(null) // close the menu dropdown
+        const isLoaded = await stoic.load();
+
+        if (isLoaded !== false) {
+            appContext.setUserLoginInfo({
+                userPid: isLoaded.getPrincipal().toText(),
+                userAccount: getAccountFromPrincipal(isLoaded.getPrincipal().toText()),
+                walletConnected: true,
+                walletType: 'Stoic'
+            })
+        } else {
+            const identity = await stoic.connect();
+            appContext.setUserLoginInfo({
+                userPid: identity.getPrincipal().toText(),
+                userAccount: getAccountFromPrincipal(identity.getPrincipal().toText()),
+                walletConnected: true,
+                walletType: 'Stoic'
+            })
         }
     }
 
     const handleLogout = () => {
-        appContext.setUserLoginInfo({
-            userPid: "",
-            walletConnected: false,
-            walletType: ""
-        })
+        appContext.setUserLoginInfo(defaultLoginInfo)
         setAnchorEl(null)
     }
 
@@ -55,7 +82,6 @@ const WalletConnection = () => {
 
     return (
         <Box>
-
             <Button variant="contained" sx={{ margin: '4px' }} onClick={handleWalletMenuOpen}>
                 <Typography>{getWalletName}</Typography>
             </Button>
@@ -64,8 +90,8 @@ const WalletConnection = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleWalletMenuClose}
             >
-                <MenuItem onClick={handleWalletMenuClose}>StoicWallet</MenuItem>
-                {!walletConnected && <MenuItem onClick={handleOnClickPlug}>Plug</MenuItem>}
+                {!walletConnected && <MenuItem onClick={loginStoicWallet}>StoicWallet</MenuItem>}
+                {!walletConnected && <MenuItem onClick={loginPlugWallet}>Plug</MenuItem>}
                 {walletConnected && <MenuItem onClick={handleLogout}>Logout</MenuItem>}
             </Menu>
         </Box>

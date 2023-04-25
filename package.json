@@ -16,9 +16,10 @@
     "copy:types": "rsync -avr .dfx/$(echo ${DFX_NETWORK:-'**'})/canisters/** --exclude='assets/' --exclude='idl/' --exclude='*.wasm' --exclude='*.most' --delete src/declarations"
   },
   "devDependencies": {
-    "@dfinity/agent": "0.14.1",
-    "@dfinity/candid": "0.14.1",
-    "@dfinity/principal": "^0.14.1",
+    "@dfinity/agent": "0.15.5",
+    "@dfinity/candid": "0.15.5",
+    "@dfinity/principal": "0.15.5",
+    "@types/crypto-js": "^4.1.1",
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "@types/react-router-dom": "^5.3.3",
@@ -48,16 +49,24 @@
   "dependencies": {
     "@connect2ic/core": "^0.1.6",
     "@connect2ic/react": "^0.1.4",
+    "@dfinity/agent": "0.15.5",
+    "@dfinity/candid": "0.15.5",
+    "@dfinity/identity": "^0.15.5",
+    "@dfinity/nns": "^0.15.1",
+    "@dfinity/principal": "0.15.5",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.13",
     "@psychedelic/dab-js": "^1.6.0-alpha.2",
     "@psychedelic/plug-connect": "^0.2.0",
+    "crypto-js": "^4.1.1",
     "css-loader": "^6.7.1",
+    "ic-stoic-identity": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-promise": "^3.0.2",
+    "react-query": "^3.39.3",
     "react-router-dom": "^5.2.0",
     "style-loader": "^3.3.1"
   }

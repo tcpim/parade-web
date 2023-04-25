@@ -102,8 +102,10 @@ const NftCard = ({ data }: NftCardProps) => {
 const UserPortfolio = () => {
     const appContext = useContext(AppContext)
     const [userCollections, setUserCollections] = useState<NFTCollection[]>([])
+
     const [isExpanded, setIsExpanded] = useState<boolean[]>([])
 
+    console.dir(appContext.userLoginInfo);
     useEffect(() => {
         const fetchCollections = async () => {
             const collectionsPlug = await getCachedUserNFTs({
