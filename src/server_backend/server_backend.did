@@ -29,6 +29,7 @@ type NftToken = record {
   token_id : text;
   canister_id : text;
   token_standard : NftTokenStandard;
+  token_img_url : opt text;
 };
 type NftTokenStandard = variant { EXT };
 type Post = record {
@@ -43,9 +44,9 @@ service : {
   get_post_by_ids : (GetPostsByIdsRequest) -> (GetPostsByIdsResponse) query;
   get_posts : (GetPostsRequest) -> (GetPostsResponse) query;
   get_posts_by_nft_canisters : (GetPostsByNftCanistersRequest) -> (
-      GetPostsByNftCanistersResponse,
-    ) query;
+    GetPostsByNftCanistersResponse
+  ) query;
   get_user_posts : (GetUserPostsRequest) -> (GetUserPostsResponse) query;
   remove_all_posts : () -> ();
   remove_post_by_ids : (GetPostsByIdsRequest) -> ();
-}
+};

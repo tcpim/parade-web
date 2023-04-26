@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/material';
 import TopBar from '../topbar/TopBar'
 import SideBar from '../../sidebar/SideBar'
-import Feed from './Feed';
+import { Feed } from './Feed';
 import LeaderBoard from './LeaderBoard';
 import Divider from '@mui/material/Divider';
 

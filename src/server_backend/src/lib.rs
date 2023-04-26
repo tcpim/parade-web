@@ -24,6 +24,7 @@ thread_local! {
    static USER_TO_POST_LIST: RefCell<HashMap<Principal, VecDeque<u32>>> = RefCell::default();
    static NFT_CANISTER_ID_TO_POST_LIST: RefCell<HashMap<String, VecDeque<u32>>> = RefCell::default();
 }
+
 #[derive(CandidType, Deserialize, Default)]
 struct StableState {
     post_id_store: VecDeque<u32>,

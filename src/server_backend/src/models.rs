@@ -95,6 +95,7 @@ pub struct NftToken {
     pub token_id: String,
     pub token_standard: NftTokenStandard,
     pub listing: Option<ListingInfo>,
+    pub token_img_url: Option<String>,
 }
 
 #[derive(Debug, Clone, CandidType, Deserialize)]

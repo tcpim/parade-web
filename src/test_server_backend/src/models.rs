@@ -94,6 +94,7 @@ pub struct NftToken {
     pub canister_id: String,
     pub token_id: String,
     pub token_standard: NftTokenStandard,
+    pub token_img_url: String,
     pub listing: Option<ListingInfo>,
 }
 
