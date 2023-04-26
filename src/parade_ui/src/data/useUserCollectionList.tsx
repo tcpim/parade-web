@@ -5,8 +5,10 @@ export interface CollectionListData {
 }
 
 export interface Collection {
-    canisterId: string;
-    tokenList: Token[];
+    collection: {
+        canisterId: string;
+        tokens: Token[];
+    }
 }
 
 export interface Token {
