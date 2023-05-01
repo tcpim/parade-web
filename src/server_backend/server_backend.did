@@ -44,9 +44,9 @@ service : {
   get_post_by_ids : (GetPostsByIdsRequest) -> (GetPostsByIdsResponse) query;
   get_posts : (GetPostsRequest) -> (GetPostsResponse) query;
   get_posts_by_nft_canisters : (GetPostsByNftCanistersRequest) -> (
-    GetPostsByNftCanistersResponse
-  ) query;
+      GetPostsByNftCanistersResponse,
+    ) query;
   get_user_posts : (GetUserPostsRequest) -> (GetUserPostsResponse) query;
   remove_all_posts : () -> ();
   remove_post_by_ids : (GetPostsByIdsRequest) -> ();
-};
+}

@@ -1,7 +1,8 @@
-use candid::CandidType;
-use candid::Principal;
+use candid::{candid_method, CandidType, Principal};
 use ic_cdk::api::time;
 use ic_cdk_macros::{query, update};
+use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
+use ic_stable_structures::{BoundedStorable, DefaultMemoryImpl, Log, StableBTreeMap, Storable};
 use models::*;
 use serde::Deserialize;
 use std::cell::RefCell;
@@ -10,10 +11,16 @@ use std::mem;
 
 pub mod models;
 
+type Memory = VirtualMemory<DefaultMemoryImpl>;
+
 // ######################
-// Storage
+// Stable Storage
 // ######################
 thread_local! {
+    // initiate a memory manager
+    static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> =
+        RefCell::new(MemoryManager::init(DefaultMemoryImpl::default()));
+
    // store post id in sequence of created time
    static POST_ID_STORE: RefCell<VecDeque<u32>> = RefCell::default();
 
@@ -24,6 +31,7 @@ thread_local! {
    static USER_TO_POST_LIST: RefCell<HashMap<Principal, VecDeque<u32>>> = RefCell::default();
    static NFT_CANISTER_ID_TO_POST_LIST: RefCell<HashMap<String, VecDeque<u32>>> = RefCell::default();
 }
+
 #[derive(CandidType, Deserialize, Default)]
 struct StableState {
     post_id_store: VecDeque<u32>,
@@ -66,7 +74,7 @@ fn post_upgrade() {
 }
 
 #[update]
-// #[candid::candid_method(update)]
+#[candid_method(update)]
 pub fn create_post(request: CreatePostRequest) -> u32 {
     let mut next_id = 0;
 
@@ -138,7 +146,7 @@ pub fn create_post(request: CreatePostRequest) -> u32 {
 1. if request.offset = -1, get all pages
 2. if out of bound, get all pages
  */
-// #[candid::candid_method(query)]
+#[candid_method(query)]
 pub fn get_posts(request: GetPostsRequest) -> GetPostsResponse {
     let mut page_res: Vec<Post> = Vec::new();
     let mut next_offset: i32 = 0;
@@ -192,7 +200,7 @@ pub fn get_posts(request: GetPostsRequest) -> GetPostsResponse {
 }
 
 #[query]
-// #[candid::candid_method(query)]
+#[candid::candid_method(query)]
 pub fn get_user_posts(request: GetUserPostsRequest) -> GetUserPostsResponse {
     let mut posts = Vec::new();
 
@@ -219,7 +227,7 @@ pub fn get_user_posts(request: GetUserPostsRequest) -> GetUserPostsResponse {
 }
 
 #[query]
-// #[candid::candid_method(query)]
+#[candid::candid_method(query)]
 pub fn get_posts_by_nft_canisters(
     request: GetPostsByNftCanistersRequest,
 ) -> GetPostsByNftCanistersResponse {
@@ -265,7 +273,7 @@ pub fn get_posts_by_nft_canisters(
 }
 
 #[query]
-// #[candid::candid_method(query)]
+#[candid::candid_method(query)]
 pub fn get_post_by_ids(request: GetPostsByIdsRequest) -> GetPostsByIdsResponse {
     let mut result = Vec::<Post>::new();
 
@@ -289,7 +297,7 @@ currently only remove the id to post pair in ID_TO_POST
 other storate map still contain the pair of x -> ID, but the queries should not include those result anymore
 however, we should clean up the unused IDs in a heartbeat method
 */
-// #[candid::candid_method(update)]
+#[candid::candid_method(update)]
 pub fn remove_post_by_ids(request: RemovePostsByIdsRequest) {
     ID_TO_POST.with(|state| {
         let mut id_post_map = state.borrow_mut();
@@ -305,7 +313,7 @@ pub fn remove_post_by_ids(request: RemovePostsByIdsRequest) {
 /**
  * Clean up all posts storage
  */
-// #[candid::candid_method(update)]
+#[candid::candid_method(update)]
 pub fn remove_all_posts() {
     POST_ID_STORE.with(|state| {
         state.borrow_mut().clear();
@@ -324,11 +332,16 @@ pub fn remove_all_posts() {
     });
 }
 
-/*
-1. add #[candid::candid_method(query)]
-2. comment out .cargo/config.toml file, otherwise won't run
- */
-pub fn generate_candid() {
-    candid::export_service!();
-    std::print!("{}", __export_service());
+candid::export_service!();
+fn export_candid() -> String {
+    __export_service()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn write_candid_to_disk() {
+        std::fs::write("server_backend.did", export_candid()).unwrap();
+    }
 }
