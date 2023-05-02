@@ -1,5 +1,4 @@
 [workspace]
 members = [
     "src/server_backend",
-    "src/test_server_backend",
 ]

@@ -1,3 +1,4 @@
 # comment out this one to use test to generate candid file
+
 # [build]
 # target = "wasm32-unknown-unknown"
