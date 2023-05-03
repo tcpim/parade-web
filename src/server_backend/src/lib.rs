@@ -2,10 +2,10 @@ use candid::candid_method;
 use ic_cdk_macros::{query, update};
 use models::api::*;
 use models::post::*;
-use stable_structure::*;
 
 mod models;
 mod stable_structure;
+mod tests;
 
 // ######################
 // APIs
@@ -55,22 +55,49 @@ pub fn create_post(request: CreatePostRequest) -> CreatePostResponse {
 
 #[query]
 #[candid_method(query)]
-pub fn get_posts(request: GetPostsRequest) -> GetPostsResponse {
+pub fn get_street_posts(request: GetStreetPostsRequest) -> GetStreetPostsResponse {
     stable_structure::POSTS_STREET.with(|posts| {
         let posts = posts.borrow();
-        let mut post_vec = vec![];
-        for post_id in posts.iter() {
-            stable_structure::POST_BY_ID.with(|post_by_id| {
-                let post_by_id = post_by_id.borrow();
-                match post_by_id.get(&post_id) {
-                    Some(post) => post_vec.push(post.clone()),
-                    None => {}
-                }
-            })
+
+        // Normalize start and end
+        let posts_len = posts.len() as i32;
+        let mut start = request.offset;
+        let mut end = start + request.limit.unwrap_or_else(|| 100);
+        if start > posts_len {
+            return GetStreetPostsResponse {
+                posts: vec![],
+                offset: posts_len,
+            };
         }
-        return GetPostsResponse {
-            posts: post_vec,
-            offset: 0,
+        end = std::cmp::min(end, posts_len);
+
+        // Iterate to get post ids from POSTS_STREET and then get each post from POST_BY_ID map
+        let mut result_vec = vec![];
+        for i in start..end {
+            let post_id = posts.get(i as u64);
+            match post_id {
+                Some(post_id) => stable_structure::POST_BY_ID.with(|post_by_id| {
+                    let post_by_id = post_by_id.borrow();
+                    match post_by_id.get(&post_id) {
+                        Some(post) => result_vec.push(post.clone()),
+                        None => {
+                            println!(
+                                "Failed to find post in POST_BY_ID with post_id: {:?}",
+                                &post_id
+                            )
+                        }
+                    }
+                }),
+                None => {
+                    println!("Failed to find post in POSTS_STREET with index : {:?}", i);
+                    break;
+                }
+            }
+        }
+
+        return GetStreetPostsResponse {
+            posts: result_vec,
+            offset: end,
         };
     })
 }
@@ -104,12 +131,12 @@ candid::export_service!();
 fn export_candid() -> String {
     __export_service()
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn write_candid_to_disk() {
-        std::fs::write("server_backend.did", export_candid()).unwrap();
-    }
-}
+//
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+//     #[test]
+//     fn write_candid_to_disk() {
+//         std::fs::write("server_backend.did", export_candid()).unwrap();
+//     }
+// }

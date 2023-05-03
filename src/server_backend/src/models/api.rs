@@ -26,14 +26,13 @@ pub struct CreatePostResponse {
 
 // Get all posts
 #[derive(Debug, CandidType, Deserialize)]
-pub struct GetPostsRequest {
+pub struct GetStreetPostsRequest {
     pub limit: Option<i32>,
-    pub offset: u32,
-    pub from_club_id: Option<String>, // if set, only return posts from this club
+    pub offset: i32,
 }
 
 #[derive(Debug, CandidType, Deserialize)]
-pub struct GetPostsResponse {
+pub struct GetStreetPostsResponse {
     pub offset: i32,
     pub posts: Vec<Post>,
 }

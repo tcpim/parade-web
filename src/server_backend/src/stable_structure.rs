@@ -1,11 +1,7 @@
 use super::models::post::{Post, PostIdString};
 use super::models::user::{User, UserPrincipalStringKey};
-use candid::{candid_method, CandidType, Decode, Encode, Principal};
-use ic_cdk_macros::{query, update};
 use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
-use ic_stable_structures::{
-    BoundedStorable, DefaultMemoryImpl, Log, StableBTreeMap, StableVec, Storable,
-};
+use ic_stable_structures::{DefaultMemoryImpl, StableBTreeMap, StableVec};
 use std::cell::RefCell;
 
 type Memory = VirtualMemory<DefaultMemoryImpl>;

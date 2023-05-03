@@ -12,12 +12,8 @@ type DeletePostResponse = record { error : opt ServerError };
 type GetPostByIdResponse = record { post : opt Post };
 type GetPostByUserRequest = record { pid : text };
 type GetPostByUserResponse = record { post : vec Post };
-type GetPostsRequest = record {
-  offset : nat32;
-  limit : opt int32;
-  from_club_id : opt text;
-};
-type GetPostsResponse = record { offset : int32; posts : vec Post };
+type GetStreetPostsRequest = record { offset : nat32; limit : opt int32 };
+type GetStreetPostsResponse = record { offset : int32; posts : vec Post };
 type NftToken = record {
   token_index : nat16;
   token_id : text;
@@ -43,6 +39,6 @@ service : {
   delete_all_post : () -> ();
   delete_post : (DeletePostRequest) -> (DeletePostResponse);
   get_post_by_id : (DeletePostRequest) -> (GetPostByIdResponse) query;
-  get_posts : (GetPostsRequest) -> (GetPostsResponse) query;
   get_posts_by_user : (GetPostByUserRequest) -> (GetPostByUserResponse) query;
+  get_street_posts : (GetStreetPostsRequest) -> (GetStreetPostsResponse) query;
 }
