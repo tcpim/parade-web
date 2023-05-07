@@ -1,10 +1,5 @@
 {
   "canisters": {
-    "server_backend": {
-      "candid": "src/server_backend/server_backend.did",
-      "package": "server_backend",
-      "type": "rust"
-    },
     "parade_ui": {
       "frontend": {
         "entrypoint": "src/parade_ui/src/index.tsx"

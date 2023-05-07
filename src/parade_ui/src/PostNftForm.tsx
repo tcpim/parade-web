@@ -6,8 +6,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { server_backend } from '../../declarations/server_backend';
-import { CreatePostRequest, NftToken, NftTokenStandard, Post } from '../../declarations/server_backend/server_backend.did';
+// import { server_backend } from '../../declarations/server_backend';
+// import { CreatePostRequest, NftToken, NftTokenStandard, Post } from '../../declarations/server_backend/server_backend.did';
 import { Principal } from '@dfinity/principal';
 
 export default function PostNftForm(props: any) {
@@ -33,24 +33,24 @@ export default function PostNftForm(props: any) {
     console.log("url:" + token.url);
     //const newPost: Post = {user: user, url: token.url, words: textValue};
 
-    const nftRequest: NftToken = {
-      listing: [],
-      token_id: token.index.toString(),
-      canister_id: collection.canisterId,
-      token_standard: { 'EXT': null },
-    }
-    const newPostRequest: CreatePostRequest = {
-      nfts: [nftRequest],
-      user: Principal.fromText(user),
-      words: textValue,
-    }
-    const postData = async () => {
-      //await hello_backend.post(user, token.url, textValue);
-      //await rust_hello_backend.add_post(newPost);
-      await server_backend.create_post(newPostRequest);
-    };
+    // const nftRequest: NftToken = {
+    //   listing: [],
+    //   token_id: token.index.toString(),
+    //   canister_id: collection.canisterId,
+    //   token_standard: { 'EXT': null },
+    // }
+    // const newPostRequest: CreatePostRequest = {
+    //   nfts: [nftRequest],
+    //   user: Principal.fromText(user),
+    //   words: textValue,
+    // }
+    // const postData = async () => {
+    //   //await hello_backend.post(user, token.url, textValue);
+    //   //await rust_hello_backend.add_post(newPost);
+    //   await server_backend.create_post(newPostRequest);
+    // };
 
-    postData().catch(console.error);
+    // postData().catch(console.error);
     handleClose();
     window.alert("Post uploaded");
   };

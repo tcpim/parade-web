@@ -1,6 +1,6 @@
 import { TabPanel } from './TabPanel'
 import { useState, useEffect } from "react";
-import { server_backend } from "../../declarations/server_backend";
+// import { server_backend } from "../../declarations/server_backend";
 
 
 export const Streets = () => {
@@ -12,8 +12,8 @@ export const Streets = () => {
         'offset': 0,
         'limit': [],
       };
-      let response = await server_backend.get_posts(args);
-      setGetPostsResponse(response);
+      //let response = await server_backend.get_posts(args);
+      setGetPostsResponse({});
     };
 
     fetchData().catch(console.error);
@@ -54,11 +54,12 @@ export const Streets = () => {
     );
   };
 
+
   return (
     <div>
       <h1>Let's see what is going on...</h1>
-
-      <ul>{getPostFeed()}</ul>
+      <h1>{process.env.CANISTER_ID_MAIN_SERVER}</h1>  
+      {/* <ul>{getPostFeed()}</ul> */}
     </div>
   );
 }
