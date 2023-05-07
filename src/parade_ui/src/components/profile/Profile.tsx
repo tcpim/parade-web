@@ -3,7 +3,7 @@ import { TabPanel } from '../../TabPanel'
 import { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import { Box, Stack } from '@mui/material';
-import UserPortfolio from './UserPortfolio';
+import UserPortfolio from './UserPortfolioPage';
 import SideBar from '../../sidebar/SideBar';
 import TopBar from '../topbar/TopBar';
 import Divider from '@mui/material/Divider';

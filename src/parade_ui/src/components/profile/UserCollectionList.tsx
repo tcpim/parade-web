@@ -1,4 +1,4 @@
-import { useUserCollectionList } from '../../data/useUserCollectionList'
+import { useUserCollectionList } from '../../hooks/useUserCollectionList'
 import { useContext, useEffect, useState } from 'react'
 import { Box } from '@mui/material';
 import { AppContext } from '../../App';
@@ -18,7 +18,9 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import CircularProgress from '@mui/material/CircularProgress';
-import { CollectionListData, Collection, Token } from '../../data/useUserCollectionList';
+import { CollectionListData, Collection, Token } from '../../hooks/useUserCollectionList';
+import { useCreatePost, CreatePostProps } from '../../hooks/useCreatePost';
+import { PostCreationForm } from '../post_creation/PostCreation';
 
 interface NftCardProps {
     data: {
@@ -84,7 +86,6 @@ const NftCard = ({ data }: NftCardProps) => {
         }
     }
 
-
     return (
         <Card sx={{ maxWidth: 350, mr: 1, mt: 1 }}>
             {MediaComponent()}
@@ -92,9 +93,6 @@ const NftCard = ({ data }: NftCardProps) => {
                 <Typography variant="subtitle2" component="div">
                     {data.name ? data.name : "#".concat(data.index)}
                 </Typography>
-                <Button size="small" color="primary">
-                    <AddIcon />
-                </Button>
             </CardContentNoPadding>
         </Card>
     )
@@ -104,12 +102,40 @@ interface CollectionListProps {
     userAccount: string;
 }
 
-export const CollectionList = ({ userAccount }: CollectionListProps) => {
+interface PostFormNftData {
+    collectionCanisterId: string;
+    collectionName: string;
+    tokenIndex: number;
+    tokenIdentifier: string;
+}
+
+export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
     const { data, isLoading, isError, error } = useUserCollectionList(userAccount);
-    const [isExpanded, setIsExpanded] = useState<boolean[]>([])
+    const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
+    const [openForm, setOpenForm] = useState<boolean>(false);
+    const [postFormNftData, setPostFormNftData] = useState<PostFormNftData>({
+        collectionCanisterId: "",
+        collectionName: "",
+        tokenIndex: 0,
+        tokenIdentifier: "",
+    });
+
+    const handleOpenForm = (collection: Collection, token: Token) => {
+        setOpenForm(true);
+        setPostFormNftData({
+            collectionCanisterId: collection.canisterId,
+            collectionName: collection.collectionName,
+            tokenIndex: token.index,
+            tokenIdentifier: token.identifier,
+        });
+    };
+
+    const handleCloseForm = () => {
+        setOpenForm(false);
+    };
 
     useEffect(() => {
-        var collectionExpandedState: boolean[] = new Array(data?.result.length).fill(true)
+        const collectionExpandedState: boolean[] = new Array(data?.collections.length).fill(true)
         setIsExpanded(collectionExpandedState)
     }, [userAccount, data])
 
@@ -138,34 +164,48 @@ export const CollectionList = ({ userAccount }: CollectionListProps) => {
         console.dir(isExpanded);
     }
 
-    data.result.map((collectionObj, index) => {
-        console.log(index);
-    });
-
+    if (data.collections.length == 0) {
+        return <Box>You don't have any NFTs</Box>
+    }
     return (
-        <List>
-            {data.result.map((collectionObj, index) => (
-                <Box key={collectionObj.collection.canisterId}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-                        <ListItemText primary={collectionObj.collection.canisterId} />
-                        <ListItemButton sx={{ maxWidth: '10%' }} onClick={() => handleCollectionExpansionClick(index)}>
-                            {isExpanded[index] ? <ExpandLess /> : <ExpandMore />}
-                        </ListItemButton>
+        <Box>
+            <List>
+                {data.collections.map((collection, index) => (
+                    <Box key={collection.canisterId}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+                            <ListItemText primary={collection.collectionName + ": " + collection.canisterId} />
+                            <ListItemButton sx={{ maxWidth: '10%' }} onClick={() => handleCollectionExpansionClick(index)}>
+                                {isExpanded[index] ? <ExpandLess /> : <ExpandMore />}
+                            </ListItemButton>
+                        </Box>
+                        <Collapse in={isExpanded[index]} timeout="auto" >
+                            <Stack direction="row" sx={{ ml: 1, flexWrap: "wrap" }}>
+                                {collection.tokens.map(token => (
+                                    <Box>
+                                        <NftCard key={token.index.toString()} data={{
+                                            imageUrl: token.smallImage,
+                                            index: token.index.toString(),
+                                            canisterId: collection.canisterId
+                                        }} />
+                                        <Button size="small" color="primary" onClick={() => handleOpenForm(collection, token)}>
+                                            <AddIcon />
+                                        </Button>
+                                    </Box>
+                                ))}
+                            </Stack>
+                        </Collapse>
                     </Box>
-                    <Collapse in={isExpanded[index]} timeout="auto" >
-                        <Stack direction="row" sx={{ ml: 1, flexWrap: "wrap" }}>
-                            {collectionObj.collection.tokens.map(token => (
-                                <NftCard key={token.index.toString()} data={{
-                                    imageUrl: token.smallImage,
-                                    index: token.index.toString(),
-                                    canisterId: collectionObj.collection.canisterId
-                                }} />
-                            ))}
-                        </Stack>
-                    </Collapse>
-                </Box>
-            ))}
-        </List>
+                ))}
+            </List>
+            <PostCreationForm
+                open={openForm}
+                handleClose={handleCloseForm}
+                nftCanisterId={postFormNftData.collectionCanisterId}
+                nftCollectionName={postFormNftData.collectionName}
+                nftTokenIndex={postFormNftData.tokenIndex}
+                nftTokenIdentifier={postFormNftData.tokenIdentifier} />
+        </Box>
+
     )
 
 }

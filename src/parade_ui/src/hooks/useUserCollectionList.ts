@@ -1,14 +1,13 @@
 import { useQuery } from 'react-query';
 
 export interface CollectionListData {
-    result: Collection[]
+    collections: Collection[];
 }
 
 export interface Collection {
-    collection: {
-        canisterId: string;
-        tokens: Token[];
-    }
+    canisterId: string;
+    collectionName: string;
+    tokens: Token[];
 }
 
 export interface Token {

@@ -17,26 +17,12 @@ import CardContent from '@mui/material/CardContent';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
-import { CollectionList } from './CollectionList'
+import { UserCollectionList } from './UserCollectionList'
 import CircularProgress from '@mui/material/CircularProgress';
 
 
 const UserPortfolio = () => {
     const appContext = useContext(AppContext)
-
-    // Legacy code to use dab-js to fetch nft data
-    // useEffect(() => {
-    //     const fetchCollections = async () => {
-    //         const collectionsPlug = await getCachedUserNFTs({
-    //             userPID: appContext.userLoginInfo.userPid,
-    //             refresh: false,
-    //         });
-    //         setUserCollections(collectionsPlug)
-    //         var collectionExpandedState: boolean[] = new Array(collectionsPlug.length).fill(true)
-    //         setIsExpanded(collectionExpandedState)
-    //     }
-    //     fetchCollections()
-    // }, [appContext])
 
     if (!appContext.userLoginInfo.walletConnected) {
         return (
@@ -48,7 +34,7 @@ const UserPortfolio = () => {
 
     return (
         <Box bgcolor='rgba(251, 18, 18, 0.2)' sx={{ flexBasis: '85%', marginLeft: "15%", marginTop: "5%", overflow: "auto" }}>
-            <CollectionList userAccount={appContext.userLoginInfo.userAccount} />
+            <UserCollectionList userAccount={appContext.userLoginInfo.userAccount} />
         </Box>
     )
 }
