@@ -20,7 +20,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CircularProgress from '@mui/material/CircularProgress';
 import { CollectionListData, Collection, Token } from '../../hooks/useUserCollectionList';
 import { useCreatePost, CreatePostProps } from '../../hooks/useCreatePost';
-import { PostCreationForm } from '../post_creation/PostCreation';
+import { PostCreationForm } from '../post/PostCreation';
 
 interface NftCardProps {
     data: {
@@ -199,7 +199,7 @@ export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
             </List>
             <PostCreationForm
                 open={openForm}
-                handleClose={handleCloseForm}
+                handleCloseForm={handleCloseForm}
                 nftCanisterId={postFormNftData.collectionCanisterId}
                 nftCollectionName={postFormNftData.collectionName}
                 nftTokenIndex={postFormNftData.tokenIndex}

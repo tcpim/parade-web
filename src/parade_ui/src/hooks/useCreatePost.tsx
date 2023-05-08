@@ -1,7 +1,7 @@
 import { useCallback } from "react"
 import { useMainServer } from "./useMainServer"
 import { CreatePostRequest, CreatePostResponse, NftToken } from "../../backend_declarations/main_server/main_server.did"
-import {useMutation} from 'react-query'
+import { useMutation } from 'react-query'
 
 export interface CreatePostProps {
     userPid: string;
@@ -32,13 +32,19 @@ export function useCreatePost(createPostProps: CreatePostProps) {
     const mainServer = useMainServer();
     const request = getCreatePostRequest(createPostProps);
 
-    const createPost = useCallback(async (): Promise<CreatePostResponse> => {
-        const response: CreatePostResponse = await mainServer.create_post(request);
-        console.log(`createPost response: ${JSON.stringify(response)}`);
-        return response;
-    }, [mainServer, request]);
+    const mutation = useMutation(async () => {
+        return await mainServer.create_post(request);
+    }, {
+        onSuccess: (data: CreatePostResponse) => {
+            console.log(`createPost mutation success: ${data}`);
+        },
+        onError: (error: Error) => {
+            console.log(`createPost mutation error: ${error}`);
+        }
+    });
 
-    const {mutate, isLoading, isError, error, isSuccess, data} = useMutation(createPost);
-
-    return {createPostAction: mutate, isLoading, isError, error, isSuccess, data};
+    if (mutation.isError) {
+        console.log(`createPost mutation error: ${mutation.error}`);
+    }
+    return mutation;
 }

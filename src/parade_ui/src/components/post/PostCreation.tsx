@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Box, DialogContentText, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
 import { useMutation } from "react-query";
 import Paper, { PaperProps } from '@mui/material/Paper';
@@ -13,7 +13,7 @@ export interface PostCreationFormProps {
     nftCollectionName: string;
     nftTokenIndex: number;
     nftTokenIdentifier: string;
-    handleClose: () => void;
+    handleCloseForm: () => void;
 }
 
 function PaperComponent(props: PaperProps) {
@@ -33,12 +33,12 @@ export const PostCreationForm = ({
     nftCollectionName,
     nftTokenIndex,
     nftTokenIdentifier,
-    handleClose,
+    handleCloseForm,
 }: PostCreationFormProps) => {
     const [words, setWords] = useState("");
     const appContext = useContext(AppContext)
 
-    const {createPostAction, isLoading, isError, error, isSuccess, data} = useCreatePost({
+    const createPostMutation= useCreatePost({
         userPid: appContext.userLoginInfo.userPid,
         nftCanisterId,
         nftTokenIndex,
@@ -52,16 +52,12 @@ export const PostCreationForm = ({
     }
 
     const handleSubmit = () => {
-        console.log(`words ${words}, nftCanisterId ${nftCanisterId}, nftCollectionName ${nftCollectionName} nftTokenIndex ${nftTokenIndex}, nftTokenIdentifier ${nftTokenIdentifier}`)
-        createPostAction();
-    }
-
-    if (isSuccess) {
-        console.log(`hi!!! ${data?.post.id}`);
+        //console.log(`words ${words}, nftCanisterId ${nftCanisterId}, nftCollectionName ${nftCollectionName} nftTokenIndex ${nftTokenIndex}, nftTokenIdentifier ${nftTokenIdentifier}`)
+        createPostMutation.mutate();
     }
 
     return (
-        <Dialog open={open} onClose={handleClose} PaperComponent={PaperComponent}>
+        <Dialog open={open} onClose={handleCloseForm} PaperComponent={PaperComponent} maxWidth="md" fullWidth={true} >
             <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">Post NFT</DialogTitle>
             <DialogContent>
                 <DialogContentText>
@@ -78,8 +74,9 @@ export const PostCreationForm = ({
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button type="submit" color="primary" onClick={handleSubmit} disabled={isLoading}>Submit</Button>
+                {!createPostMutation.isSuccess && <Button onClick={handleCloseForm}>Cancel</Button>}
+                {!createPostMutation.isSuccess && <Button type="submit" color="primary" onClick={handleSubmit} disabled={createPostMutation.isLoading}>Submit</Button>}
+                {createPostMutation.isSuccess && <Button type="submit" color="primary" onClick={handleCloseForm} disabled={createPostMutation.isLoading}>Done</Button>}
             </DialogActions>
         </Dialog>
     )
