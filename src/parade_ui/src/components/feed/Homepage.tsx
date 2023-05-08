@@ -3,12 +3,8 @@ import TopBar from '../topbar/TopBar'
 import SideBar from '../../sidebar/SideBar'
 import { Feed } from './Feed';
 import LeaderBoard from './LeaderBoard';
-import Divider from '@mui/material/Divider';
 import { useEffect, useState } from 'react';
 import { GetStreetPostsRequest, GetStreetPostsResponse, _SERVICE as MainServer } from '../../../backend_declarations/main_server/main_server.did';
-import {main_server, createActor} from '../../../backend_declarations/main_server';
-import {MAIN_SERVER_CANISTER} from '../../../backend_declarations/config'
-import { ActorSubclass } from '@dfinity/agent';
 import {useMainServer} from '../../hooks/useMainServer'
 
 const Homepage = () => {
