@@ -1,8 +1,9 @@
-import Homepage from './components/feed/Homepage';
-import { createContext, useState, Dispatch, SetStateAction } from 'react'
-import { BrowserRouter, Route } from 'react-router-dom';
-import { Profile } from './components/profile/Profile';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import Homepage from "./components/Homepage/Homepage";
+import { createContext, useState, Dispatch, SetStateAction } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import { Profile } from "./components/Profile/Profile";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export interface UserLoginInfo {
   userPid: string;
@@ -13,33 +14,36 @@ export interface UserLoginInfo {
 
 interface AppContext {
   userLoginInfo: UserLoginInfo;
-  setUserLoginInfo: Dispatch<SetStateAction<UserLoginInfo>>
+  setUserLoginInfo: Dispatch<SetStateAction<UserLoginInfo>>;
 }
 
 export const defaultLoginInfo: UserLoginInfo = {
   userPid: "",
   userAccount: "",
   walletConnected: false,
-  walletType: ""
-}
+  walletType: "",
+};
 
 // only use this in local testing
 const defaultTestingLoginInfo: UserLoginInfo = {
   userPid: "yrwna-bkgxs-vuzuw-lheqr-357oj-n4yiz-2zdjx-icv63-jgoqb-pmf3m-qqe",
-  userAccount: "8795113c70c29285fb83d2b016fb12d8ee0d3e4fb19fca6b1c014c2f5096c17c",
+  userAccount:
+    "8795113c70c29285fb83d2b016fb12d8ee0d3e4fb19fca6b1c014c2f5096c17c",
   walletConnected: true,
-  walletType: "Stoic"
-}
+  walletType: "Stoic",
+};
 
 export const AppContext = createContext<AppContext>({
   userLoginInfo: defaultLoginInfo,
-  setUserLoginInfo: () => { },
-})
+  setUserLoginInfo: () => {},
+});
 
 const queryClient = new QueryClient();
 
 export const App = () => {
-  const [userLoginInfo, setUserLoginInfo] = useState<UserLoginInfo>(defaultTestingLoginInfo)
+  const [userLoginInfo, setUserLoginInfo] = useState<UserLoginInfo>(
+    defaultTestingLoginInfo
+  );
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -53,7 +57,7 @@ export const App = () => {
           </Route>
         </BrowserRouter>
       </AppContext.Provider>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
-}
-
+};
