@@ -13,7 +13,6 @@ export interface CreatePostResponse {
   'post' : Post,
   'error' : [] | [ServerError],
 }
-export interface DeletePostRequest { 'post_id' : string }
 export interface DeletePostResponse { 'error' : [] | [ServerError] }
 export interface GetPostByIdResponse {
   'post' : [] | [Post],
@@ -86,8 +85,8 @@ export type ServerError = { 'GetPostError' : string } |
 export interface _SERVICE {
   'create_post' : ActorMethod<[CreatePostRequest], CreatePostResponse>,
   'delete_all_post' : ActorMethod<[], undefined>,
-  'delete_post' : ActorMethod<[DeletePostRequest], DeletePostResponse>,
-  'get_post_by_id' : ActorMethod<[DeletePostRequest], GetPostByIdResponse>,
+  'delete_post' : ActorMethod<[string], DeletePostResponse>,
+  'get_post_by_id' : ActorMethod<[string], GetPostByIdResponse>,
   'get_post_replies' : ActorMethod<
     [GetPostRepliesRequest],
     GetPostRepliesResponse

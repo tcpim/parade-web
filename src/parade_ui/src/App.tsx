@@ -1,9 +1,25 @@
 import Homepage from "./components/Homepage/Homepage";
 import { createContext, useState, Dispatch, SetStateAction } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
 import { Profile } from "./components/Profile/Profile";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { PostPage } from "./components/Post/PostPage";
+import { Route, RouterProvider, createBrowserRouter } from "react-router-dom";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Homepage />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
+  },
+  {
+    path: "/post/:postId",
+    element: <PostPage />,
+  },
+]);
 
 export interface UserLoginInfo {
   userPid: string;
@@ -48,14 +64,7 @@ export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AppContext.Provider value={{ userLoginInfo, setUserLoginInfo }}>
-        <BrowserRouter>
-          <Route exact={true} path="/">
-            <Homepage />
-          </Route>
-          <Route exact={true} path="/profile">
-            <Profile />
-          </Route>
-        </BrowserRouter>
+        <RouterProvider router={router} />
       </AppContext.Provider>
       <ReactQueryDevtools />
     </QueryClientProvider>

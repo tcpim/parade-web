@@ -35,7 +35,6 @@ export const idlFactory = ({ IDL }) => {
     'post' : Post,
     'error' : IDL.Opt(ServerError),
   });
-  const DeletePostRequest = IDL.Record({ 'post_id' : IDL.Text });
   const DeletePostResponse = IDL.Record({ 'error' : IDL.Opt(ServerError) });
   const GetPostByIdResponse = IDL.Record({
     'post' : IDL.Opt(Post),
@@ -88,12 +87,8 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     'create_post' : IDL.Func([CreatePostRequest], [CreatePostResponse], []),
     'delete_all_post' : IDL.Func([], [], []),
-    'delete_post' : IDL.Func([DeletePostRequest], [DeletePostResponse], []),
-    'get_post_by_id' : IDL.Func(
-        [DeletePostRequest],
-        [GetPostByIdResponse],
-        ['query'],
-      ),
+    'delete_post' : IDL.Func([IDL.Text], [DeletePostResponse], []),
+    'get_post_by_id' : IDL.Func([IDL.Text], [GetPostByIdResponse], ['query']),
     'get_post_replies' : IDL.Func(
         [GetPostRepliesRequest],
         [GetPostRepliesResponse],

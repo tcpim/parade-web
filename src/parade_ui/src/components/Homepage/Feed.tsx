@@ -40,6 +40,7 @@ export const Feed = () => {
         <Fragment key={index}>
           {page.posts.map((post) => (
             <PostCard
+              postId={post.id}
               createdBy={post.created_by}
               timeAgo={"5m"}
               content={post.words}

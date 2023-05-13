@@ -8,8 +8,10 @@ import {
   Chip,
 } from "@mui/material";
 import { ChatBubbleOutline, Favorite } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 interface PostCardProps {
+  postId: string;
   createdBy: string;
   timeAgo: string;
   content: string;
@@ -19,6 +21,7 @@ interface PostCardProps {
 }
 
 export const PostCard = ({
+  postId,
   createdBy,
   timeAgo,
   content,
@@ -26,6 +29,12 @@ export const PostCard = ({
   nftCanisterId,
   nftTokenIndex,
 }: PostCardProps) => {
+  const navigate = useNavigate();
+
+  const handlePostClick = () => {
+    navigate("/post/" + postId);
+  };
+
   return (
     <Card sx={{ marginBottom: 20 }}>
       <CardContent>
@@ -40,7 +49,7 @@ export const PostCard = ({
           {content}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
+      <CardActions disableSpacing onClick={handlePostClick}>
         <IconButton aria-label="number of replies">
           <ChatBubbleOutline />
         </IconButton>
