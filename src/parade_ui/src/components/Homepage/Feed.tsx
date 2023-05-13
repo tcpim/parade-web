@@ -7,28 +7,17 @@ import { PostCard } from "../Post/PostCard";
 import { AppContext } from "../../App";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
 
-const PAGE_SIZE = 10;
-
 export const Feed = () => {
-  const {
-    data,
-    error,
-    status,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isLoading,
-    isFetchingNextPage,
-  } = useStreetPosts();
+  const { data, error, status, fetchNextPage, isLoading, isFetchingNextPage } =
+    useStreetPosts();
 
   useScrollToBottomAction(
     document,
     () => {
-      if (hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
+      if (isFetchingNextPage) return;
+      fetchNextPage();
     },
-    500
+    200
   );
 
   if (isLoading) {
@@ -61,6 +50,11 @@ export const Feed = () => {
           ))}
         </Fragment>
       ))}
+      {isFetchingNextPage && (
+        <Box>
+          <CircularProgress />
+        </Box>
+      )}
     </Box>
   );
 };

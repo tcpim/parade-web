@@ -27,7 +27,7 @@ export const PostCard = ({
   nftTokenIndex,
 }: PostCardProps) => {
   return (
-    <Card sx={{ marginBottom: 10 }}>
+    <Card sx={{ marginBottom: 20 }}>
       <CardContent>
         <Typography variant="h6" component="div">
           {createdBy}
