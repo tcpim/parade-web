@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 import TopBar from "../Topbar/TopBar";
 import SideBar from "../Sidebar/SideBar";
 import { LeaderBoard } from "../Homepage/LeaderBoard";
@@ -19,17 +19,25 @@ const PostDetail = ({ postId }: PostDetailProps) => {
         <CircularProgress />
       </Box>
     );
+  } else if (data === undefined || data?.post.length === 0) {
+    return <h1>No post found</h1>;
   }
-  //   else if (data?.post.length === 0 || data?.error) {
-  //     return <h1>No post found</h1>;
-  //   }
-  return <h1>{data?.post[0]?.id}</h1>;
+
+  const post = data.post[0];
+  return (
+    <Container sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
+      <Typography variant="h6" gutterBottom>
+        Created by: {post?.created_by}
+      </Typography>
+    </Container>
+  );
 };
 
 export const PostPage = () => {
   let { postId } = useParams();
+
   return (
-    <Box>
+    <Box sx={{ marginTop: "5%" }}>
       <TopBar />
       <Stack
         direction="row"
@@ -39,7 +47,7 @@ export const PostPage = () => {
         sx={{ marginTop: "5%" }}
       >
         <SideBar />
-        <PostDetail postId={postId ?? "what"} />
+        <PostDetail postId={postId ?? "0"} />
         <LeaderBoard />
       </Stack>
     </Box>

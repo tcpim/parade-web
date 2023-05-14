@@ -4,22 +4,17 @@ import { Profile } from "./components/Profile/Profile";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { PostPage } from "./components/Post/PostPage";
-import { Route, RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  RouterProvider,
+  createBrowserRouter,
+  BrowserRouter,
+} from "react-router-dom";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Homepage />,
-  },
-  {
-    path: "/profile",
-    element: <Profile />,
-  },
-  {
-    path: "/post/:postId",
-    element: <PostPage />,
-  },
-]);
+const NotFoundPage = () => {
+  return <h1>Not Found</h1>;
+};
 
 export interface UserLoginInfo {
   userPid: string;
@@ -64,7 +59,14 @@ export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AppContext.Provider value={{ userLoginInfo, setUserLoginInfo }}>
-        <RouterProvider router={router} />
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/post">
+            <Route path=":postId" element={<PostPage />} />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
       </AppContext.Provider>
       <ReactQueryDevtools />
     </QueryClientProvider>
