@@ -20,7 +20,7 @@ export interface GetPostByIdResponse {
 }
 export interface GetPostByUserRequest { 'pid' : string }
 export interface GetPostByUserResponse { 'posts' : Array<Post> }
-export interface GetPostRepliesRequest { 'post_reply_ids' : Array<string> }
+export interface GetPostRepliesRequest { 'post_id' : string }
 export interface GetPostRepliesResponse {
   'error' : [] | [ServerError],
   'post_replies' : Array<PostReply>,
@@ -37,6 +37,9 @@ export interface NftToken {
   'token_index' : number,
   'token_id' : string,
   'canister_id' : string,
+  'collection_name' : string,
+  'original_image_url' : string,
+  'original_thumbnail_url' : string,
 }
 export interface Post {
   'id' : string,

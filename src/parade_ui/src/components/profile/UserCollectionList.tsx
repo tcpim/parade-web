@@ -29,8 +29,8 @@ import {
   Collection,
   Token,
 } from "../../hooks/useUserCollectionList";
-import { useCreatePost, CreatePostProps } from "../../hooks/useCreatePost";
 import { PostCreationForm } from "../Post/PostCreationForm";
+import { NftInfo } from "../../types/nft";
 
 interface NftCardProps {
   data: {
@@ -107,32 +107,29 @@ interface CollectionListProps {
   userAccount: string;
 }
 
-interface PostFormNftData {
-  collectionCanisterId: string;
-  collectionName: string;
-  tokenIndex: number;
-  tokenIdentifier: string;
-}
-
 export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
   const { data, isLoading, isError, error } =
     useUserCollectionList(userAccount);
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
   const [openForm, setOpenForm] = useState<boolean>(false);
-  const [postFormNftData, setPostFormNftData] = useState<PostFormNftData>({
-    collectionCanisterId: "",
-    collectionName: "",
-    tokenIndex: 0,
-    tokenIdentifier: "",
+  const [postFormNftInfo, setPostFormNftInfo] = useState<NftInfo>({
+    nftCanisterId: "",
+    nftCollectionName: "",
+    nftTokenIndex: 0,
+    nftTokenIdentifier: "",
+    nftOriginalImageUrl: "",
+    nftOriginalThumbnailUrl: "",
   });
 
   const handleOpenForm = (collection: Collection, token: Token) => {
     setOpenForm(true);
-    setPostFormNftData({
-      collectionCanisterId: collection.canisterId,
-      collectionName: collection.collectionName,
-      tokenIndex: token.index,
-      tokenIdentifier: token.identifier,
+    setPostFormNftInfo({
+      nftCanisterId: collection.canisterId,
+      nftCollectionName: collection.collectionName,
+      nftTokenIndex: token.index,
+      nftTokenIdentifier: token.identifier,
+      nftOriginalImageUrl: token.originalImage,
+      nftOriginalThumbnailUrl: token.smallImage,
     });
   };
 
@@ -231,10 +228,7 @@ export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
         <PostCreationForm
           open={openForm}
           handleCloseForm={handleCloseForm}
-          nftCanisterId={postFormNftData.collectionCanisterId}
-          nftCollectionName={postFormNftData.collectionName}
-          nftTokenIndex={postFormNftData.tokenIndex}
-          nftTokenIdentifier={postFormNftData.tokenIdentifier}
+          nftInfo={postFormNftInfo}
         />
       )}
     </Box>

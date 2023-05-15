@@ -14,14 +14,11 @@ import Paper, { PaperProps } from "@mui/material/Paper";
 import Draggable from "react-draggable";
 import { useCreatePost } from "../../hooks/useCreatePost";
 import { AppContext } from "../../App";
-import { CreatePostRequest } from "../../../backend_declarations/main_server/main_server.did";
+import { NftInfo } from "../../types/nft";
 
 export interface PostCreationFormProps {
   open: boolean;
-  nftCanisterId: string;
-  nftCollectionName: string;
-  nftTokenIndex: number;
-  nftTokenIdentifier: string;
+  nftInfo: NftInfo;
   handleCloseForm: () => void;
 }
 
@@ -38,10 +35,7 @@ function PaperComponent(props: PaperProps) {
 
 export const PostCreationForm = ({
   open,
-  nftCanisterId,
-  nftCollectionName,
-  nftTokenIndex,
-  nftTokenIdentifier,
+  nftInfo,
   handleCloseForm,
 }: PostCreationFormProps) => {
   const [words, setWords] = useState("");
@@ -49,16 +43,10 @@ export const PostCreationForm = ({
 
   const createPostMutation = useCreatePost({
     userPid: appContext.userLoginInfo.userPid,
-    nftCanisterId,
-    nftTokenIndex,
-    nftTokenIdentifier,
+    nftInfo,
     words: words,
     isPublicPost: true,
   });
-
-  console.log(
-    `isSuccess ${createPostMutation.isSuccess}, isLoading ${createPostMutation.isLoading}, isError ${createPostMutation.isError}}, tokenIndex ${nftTokenIndex}, tokenIdentifier ${nftTokenIdentifier}`
-  );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWords(event.target.value);

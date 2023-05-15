@@ -3,6 +3,9 @@ export const idlFactory = ({ IDL }) => {
     'token_index' : IDL.Nat16,
     'token_id' : IDL.Text,
     'canister_id' : IDL.Text,
+    'collection_name' : IDL.Text,
+    'original_image_url' : IDL.Text,
+    'original_thumbnail_url' : IDL.Text,
   });
   const CreatePostRequest = IDL.Record({
     'club_ids' : IDL.Opt(IDL.Vec(IDL.Text)),
@@ -40,9 +43,7 @@ export const idlFactory = ({ IDL }) => {
     'post' : IDL.Opt(Post),
     'error' : IDL.Opt(ServerError),
   });
-  const GetPostRepliesRequest = IDL.Record({
-    'post_reply_ids' : IDL.Vec(IDL.Text),
-  });
+  const GetPostRepliesRequest = IDL.Record({ 'post_id' : IDL.Text });
   const PostReply = IDL.Record({
     'id' : IDL.Text,
     'post_id' : IDL.Text,

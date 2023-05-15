@@ -6,12 +6,11 @@ import {
   NftToken,
 } from "../../backend_declarations/main_server/main_server.did";
 import { useMutation } from "@tanstack/react-query";
+import { NftInfo } from "../types/nft";
 
 export interface CreatePostProps {
   userPid: string;
-  nftCanisterId: string;
-  nftTokenIndex: number;
-  nftTokenIdentifier: string;
+  nftInfo: NftInfo;
   words: string;
   isPublicPost: boolean;
 }
@@ -20,9 +19,12 @@ const getCreatePostRequest = (
   createPostProps: CreatePostProps
 ): CreatePostRequest => {
   const nft: NftToken = {
-    canister_id: createPostProps.nftCanisterId,
-    token_index: createPostProps.nftTokenIndex,
-    token_id: createPostProps.nftTokenIdentifier,
+    canister_id: createPostProps.nftInfo.nftCanisterId,
+    token_index: createPostProps.nftInfo.nftTokenIndex,
+    token_id: createPostProps.nftInfo.nftTokenIdentifier,
+    original_image_url: createPostProps.nftInfo.nftOriginalImageUrl,
+    original_thumbnail_url: createPostProps.nftInfo.nftOriginalThumbnailUrl,
+    collection_name: createPostProps.nftInfo.nftCollectionName,
   };
   return {
     created_by: createPostProps.userPid,
