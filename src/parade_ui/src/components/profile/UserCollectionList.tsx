@@ -1,102 +1,65 @@
 import { useUserCollectionList } from "../../hooks/useUserCollectionList";
 import { useContext, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { AppContext } from "../../App";
-import Typography from "@mui/material/Typography";
-import {
-  getAllUserNFTs,
-  getNFTInfo,
-  getNFTActor,
-  NFTCollection,
-  getCachedUserNFTs,
-} from "@psychedelic/dab-js";
 import List from "@mui/material/List";
 import Stack from "@mui/material/Stack";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
 import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import CardContent from "@mui/material/CardContent";
-import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import CircularProgress from "@mui/material/CircularProgress";
-import {
-  CollectionListData,
-  Collection,
-  Token,
-} from "../../hooks/useUserCollectionList";
+import { Collection, Token } from "../../hooks/useUserCollectionList";
 import { PostCreationForm } from "../Post/PostCreationForm";
-import { NftInfo } from "../../types/nft";
+import { NftInfo } from "../Nft/nft";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import { styled } from "@mui/material/styles";
+import { NftImage } from "../Nft/NftImage";
 
-interface NftCardProps {
-  data: {
-    index: string;
-    name?: string;
-    imageUrl: string;
-    standard?: string;
-    canisterId: string;
-  };
+export interface NftImageProps {
+  index: string;
+  name?: string;
+  imageUrl: string;
+  standard?: string;
+  canisterId: string;
 }
 
-const NftCard = ({ data }: NftCardProps) => {
+export const NftCard = ({
+  index,
+  name,
+  imageUrl,
+  standard,
+  canisterId,
+}: NftImageProps) => {
   const CardContentNoPadding = styled(CardContent)(`
-        padding: 0;
-        &:last-child {
-            padding-bottom: 0px;
-        };
-        display: flex;
-        justify-content: space-between;
-        button {
-            justify-content: center;
-            min-width: 25%;
-        }
-        & .MuiTypography-root {
-            display:flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-    `);
-
-  const svgCanisters = new Set<string>([
-    "skjpp-haaaa-aaaae-qac7q-cai",
-    "pk6rk-6aaaa-aaaae-qaazq-cai",
-  ]);
-
-  const MediaComponent = () => {
-    if (data.imageUrl.endsWith(".mp4")) {
-      return (
-        <CardMedia
-          component="video"
-          src={data.imageUrl}
-          autoPlay
-          controls
-          loop
-        />
-      );
-    } else if (svgCanisters.has(data.canisterId)) {
-      return <CardMedia component="iframe" height="300" src={data.imageUrl} />;
-    } else {
-      return (
-        <CardMedia
-          component="img"
-          image={data.imageUrl}
-          height="300"
-          width="300"
-        />
-      );
-    }
-  };
+          padding: 0;
+          &:last-child {
+              padding-bottom: 0px;
+          };
+          display: flex;
+          justify-content: space-between;
+          button {
+              justify-content: center;
+              min-width: 25%;
+          }
+          & .MuiTypography-root {
+              display:flex;
+              flex-direction: column;
+              justify-content: center;
+          }
+      `);
 
   return (
     <Card sx={{ maxWidth: 350, mr: 1, mt: 1 }}>
-      {MediaComponent()}
+      <NftImage imageUrl={imageUrl} canisterId={canisterId} />
       <CardContentNoPadding>
         <Typography variant="subtitle2" component="div">
-          {data.name ? data.name : "#".concat(data.index)}
+          {name ? name : "#".concat(index)}
         </Typography>
       </CardContentNoPadding>
     </Card>
@@ -204,11 +167,9 @@ export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
                   <Box>
                     <NftCard
                       key={token.index.toString()}
-                      data={{
-                        imageUrl: token.smallImage,
-                        index: token.index.toString(),
-                        canisterId: collection.canisterId,
-                      }}
+                      imageUrl={token.smallImage}
+                      index={token.index.toString()}
+                      canisterId={collection.canisterId}
                     />
                     <Button
                       size="small"

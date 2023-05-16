@@ -14,7 +14,7 @@ import Paper, { PaperProps } from "@mui/material/Paper";
 import Draggable from "react-draggable";
 import { useCreatePost } from "../../hooks/useCreatePost";
 import { AppContext } from "../../App";
-import { NftInfo } from "../../types/nft";
+import { NftInfo } from "../Nft/nft";
 
 export interface PostCreationFormProps {
   open: boolean;

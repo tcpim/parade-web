@@ -6,7 +6,7 @@ import {
   NftToken,
 } from "../../backend_declarations/main_server/main_server.did";
 import { useMutation } from "@tanstack/react-query";
-import { NftInfo } from "../types/nft";
+import { NftInfo } from "../components/Nft/nft";
 
 export interface CreatePostProps {
   userPid: string;

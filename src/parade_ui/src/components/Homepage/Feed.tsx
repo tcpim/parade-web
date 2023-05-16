@@ -47,6 +47,7 @@ export const Feed = () => {
               replies={post.replies.length}
               nftCanisterId={post.nfts[0].canister_id}
               nftTokenIndex={post.nfts[0].token_index}
+              nftImageUrl={post.nfts[0].original_thumbnail_url}
             />
           ))}
         </Fragment>

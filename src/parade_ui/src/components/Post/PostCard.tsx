@@ -6,9 +6,12 @@ import {
   Typography,
   IconButton,
   Chip,
+  CardMedia,
+  Box,
 } from "@mui/material";
 import { ChatBubbleOutline, Favorite } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { NftImage } from "../Nft/NftImage";
 
 interface PostCardProps {
   postId: string;
@@ -18,6 +21,7 @@ interface PostCardProps {
   replies: number;
   nftCanisterId: string;
   nftTokenIndex: number;
+  nftImageUrl: string;
 }
 
 export const PostCard = ({
@@ -28,6 +32,7 @@ export const PostCard = ({
   replies,
   nftCanisterId,
   nftTokenIndex,
+  nftImageUrl,
 }: PostCardProps) => {
   const navigate = useNavigate();
 
@@ -39,12 +44,17 @@ export const PostCard = ({
     <Card sx={{ marginBottom: 20 }}>
       <CardContent>
         <Typography variant="h6" component="div">
-          {createdBy}
+          Created by: {createdBy}
         </Typography>
         <Typography color="text.secondary">{timeAgo}</Typography>
         <Typography variant="body2" component="p">
           {"NFT:  " + nftCanisterId + ": " + nftTokenIndex}
         </Typography>
+      </CardContent>
+      <Box marginLeft="200px" maxWidth="350px">
+        <NftImage imageUrl={nftImageUrl} canisterId={nftCanisterId} />
+      </Box>
+      <CardContent>
         <Typography variant="body2" component="p">
           {content}
         </Typography>
