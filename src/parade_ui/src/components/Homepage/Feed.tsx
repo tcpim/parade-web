@@ -1,42 +1,43 @@
-import { useState, useEffect, useContext, Fragment } from "react";
+import { Fragment } from "react";
 import { useStreetPosts } from "../../hooks/useStreetPosts";
 import { Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { PostCard } from "../Post/PostCard";
-import { AppContext } from "../../App";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
 
 export const Feed = () => {
-  const { data, error, status, fetchNextPage, isLoading, isFetchingNextPage } =
-    useStreetPosts();
+  const streetPostsQuery = useStreetPosts();
 
   useScrollToBottomAction(
     document,
     () => {
-      if (isFetchingNextPage) return;
-      fetchNextPage();
+      if (streetPostsQuery.isFetchingNextPage) return;
+      streetPostsQuery.fetchNextPage();
     },
     200
   );
 
-  if (isLoading) {
+  if (streetPostsQuery.isLoading) {
     return (
       <Box>
         <CircularProgress />
       </Box>
     );
-  } else if (status === "error") {
+  } else if (
+    streetPostsQuery.status === "error" ||
+    streetPostsQuery.data === undefined
+  ) {
     return (
       <Typography color="error" align="center" variant="h6" gutterBottom>
-        {error?.message}
+        {streetPostsQuery.error?.message}
       </Typography>
     );
   }
 
   return (
     <Box sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
-      {data?.pages.map((page, index) => (
+      {streetPostsQuery.data.pages.map((page, index) => (
         <Fragment key={index}>
           {page.posts.map((post) => (
             <PostCard
@@ -52,7 +53,7 @@ export const Feed = () => {
           ))}
         </Fragment>
       ))}
-      {isFetchingNextPage && (
+      {streetPostsQuery.isFetchingNextPage && (
         <Box>
           <CircularProgress />
         </Box>

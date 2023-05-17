@@ -15,8 +15,10 @@ import { usePostDetail } from "../../hooks/usePostDetail";
 import CircularProgress from "@mui/material/CircularProgress";
 import { NftImage } from "../Nft/NftImage";
 import { useCreatePostReply } from "../../hooks/useCreatePostReply";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../../App";
+import { usePostRepiles } from "../../hooks/usePostReplies";
+import { PostRepliesMemo } from "./PostReplies";
 
 interface PostDetailProps {
   postId: string;
@@ -24,31 +26,39 @@ interface PostDetailProps {
 
 const PostDetail = ({ postId }: PostDetailProps) => {
   const appContext = useContext(AppContext);
+  const postDetailQuery = usePostDetail(postId);
+  const [reply, setReply] = useState("");
 
-  const { isLoading, isSuccess, isError, data } = usePostDetail(postId);
   const replyPostmutation = useCreatePostReply({
     postId: postId,
-    words: "test reply!",
+    words: reply,
     userPid: appContext.userLoginInfo.userPid,
   });
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setReply(event.target.value);
+  };
 
   const handleReplySubmit = () => {
     replyPostmutation.mutate();
   };
 
-  if (isLoading) {
+  if (postDetailQuery.isLoading) {
     return (
       <Box>
         <CircularProgress />
       </Box>
     );
-  } else if (data === undefined || data?.post.length === 0) {
+  } else if (
+    postDetailQuery.data === undefined ||
+    postDetailQuery.data?.post.length === 0
+  ) {
     return <h1>No post found</h1>;
   }
 
-  const post = data.post[0];
+  const post = postDetailQuery.data.post[0];
   return (
-    <Container sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
+    <Box sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
       <Typography variant="h6" gutterBottom>
         Created by: {post?.created_by}
       </Typography>
@@ -67,12 +77,20 @@ const PostDetail = ({ postId }: PostDetailProps) => {
           placeholder="Show your reaction!"
           fullWidth
           multiline
+          onChange={handleInputChange}
         />
-        <Button variant="contained" onClick={handleReplySubmit}>
-          Reply
-        </Button>
+        {replyPostmutation.isLoading ? (
+          <Button>
+            <CircularProgress />
+          </Button>
+        ) : (
+          <Button variant="contained" onClick={handleReplySubmit}>
+            Reply
+          </Button>
+        )}
       </Box>
-    </Container>
+      <PostRepliesMemo postId={postId} />
+    </Box>
   );
 };
 

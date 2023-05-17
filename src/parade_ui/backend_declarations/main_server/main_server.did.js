@@ -31,8 +31,10 @@ export const idlFactory = ({ IDL }) => {
     'ReactEmojiError' : IDL.Text,
     'CreatePostGeneralError' : IDL.Text,
     'ReplyPostError' : IDL.Text,
+    'GetStreetPostsError' : IDL.Text,
     'GetPostRepliesError' : IDL.Text,
     'DeletePostError' : IDL.Text,
+    'GetPostByUserError' : IDL.Text,
   });
   const CreatePostResponse = IDL.Record({
     'post' : Post,
@@ -43,7 +45,11 @@ export const idlFactory = ({ IDL }) => {
     'post' : IDL.Opt(Post),
     'error' : IDL.Opt(ServerError),
   });
-  const GetPostRepliesRequest = IDL.Record({ 'post_id' : IDL.Text });
+  const GetPostRepliesRequest = IDL.Record({
+    'post_id' : IDL.Text,
+    'offset' : IDL.Int32,
+    'limit' : IDL.Opt(IDL.Int32),
+  });
   const PostReply = IDL.Record({
     'id' : IDL.Text,
     'post_id' : IDL.Text,
@@ -54,18 +60,23 @@ export const idlFactory = ({ IDL }) => {
     'words' : IDL.Text,
   });
   const GetPostRepliesResponse = IDL.Record({
+    'offset' : IDL.Int32,
     'error' : IDL.Opt(ServerError),
     'post_replies' : IDL.Vec(PostReply),
   });
-  const GetPostByUserRequest = IDL.Record({ 'pid' : IDL.Text });
-  const GetPostByUserResponse = IDL.Record({ 'posts' : IDL.Vec(Post) });
-  const GetStreetPostsRequest = IDL.Record({
+  const GetPostByUserRequest = IDL.Record({
+    'user' : IDL.Text,
     'offset' : IDL.Int32,
     'limit' : IDL.Opt(IDL.Int32),
   });
-  const GetStreetPostsResponse = IDL.Record({
+  const PostList = IDL.Record({
     'offset' : IDL.Int32,
+    'error' : IDL.Opt(ServerError),
     'posts' : IDL.Vec(Post),
+  });
+  const GetStreetPostsRequest = IDL.Record({
+    'offset' : IDL.Int32,
+    'limit' : IDL.Opt(IDL.Int32),
   });
   const ReactEmojiRequest = IDL.Record({
     'post_id' : IDL.Opt(IDL.Text),
@@ -97,12 +108,12 @@ export const idlFactory = ({ IDL }) => {
       ),
     'get_posts_by_user' : IDL.Func(
         [GetPostByUserRequest],
-        [GetPostByUserResponse],
+        [PostList],
         ['query'],
       ),
     'get_street_posts' : IDL.Func(
         [GetStreetPostsRequest],
-        [GetStreetPostsResponse],
+        [PostList],
         ['query'],
       ),
     'react_emoji' : IDL.Func([ReactEmojiRequest], [DeletePostResponse], []),

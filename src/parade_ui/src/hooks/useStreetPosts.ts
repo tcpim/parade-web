@@ -2,10 +2,10 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useMainServer } from "./useMainServer";
 import {
   GetStreetPostsRequest,
-  GetStreetPostsResponse,
+  PostList,
 } from "../../backend_declarations/main_server/main_server.did";
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 10;
 const getFetchRequest = (offset: number): GetStreetPostsRequest => {
   return {
     offset: offset,
@@ -16,16 +16,7 @@ const getFetchRequest = (offset: number): GetStreetPostsRequest => {
 export const useStreetPosts = () => {
   const mainServer = useMainServer();
 
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    isFetching,
-    isFetchingNextPage,
-    status,
-  } = useInfiniteQuery<GetStreetPostsResponse, Error>({
+  const streetPostsQuery = useInfiniteQuery<PostList, Error>({
     queryKey: ["streetPosts"],
     queryFn: async ({ pageParam = 0 }) => {
       const request = getFetchRequest(pageParam);
@@ -43,14 +34,5 @@ export const useStreetPosts = () => {
     keepPreviousData: true,
   });
 
-  return {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    isFetching,
-    isFetchingNextPage,
-    status,
-  };
+  return streetPostsQuery;
 };
