@@ -7,6 +7,7 @@ import {
 } from "../../backend_declarations/main_server/main_server.did";
 import { useMutation } from "@tanstack/react-query";
 import { NftInfo } from "../components/Nft/nft";
+import { v4 as uuidv4 } from "uuid";
 
 export interface CreatePostProps {
   userPid: string;
@@ -27,6 +28,7 @@ const getCreatePostRequest = (
     collection_name: createPostProps.nftInfo.nftCollectionName,
   };
   return {
+    post_id: uuidv4(),
     created_by: createPostProps.userPid,
     created_ts: BigInt(Date.now()),
     words: createPostProps.words,

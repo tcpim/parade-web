@@ -8,6 +8,7 @@ export const idlFactory = ({ IDL }) => {
     'original_thumbnail_url' : IDL.Text,
   });
   const CreatePostRequest = IDL.Record({
+    'post_id' : IDL.Text,
     'club_ids' : IDL.Opt(IDL.Vec(IDL.Text)),
     'nfts' : IDL.Vec(NftToken),
     'created_by' : IDL.Text,
@@ -87,6 +88,7 @@ export const idlFactory = ({ IDL }) => {
   });
   const ReplyPostRequest = IDL.Record({
     'post_id' : IDL.Text,
+    'reply_id' : IDL.Text,
     'nfts' : IDL.Vec(NftToken),
     'user' : IDL.Text,
     'created_ts' : IDL.Nat64,

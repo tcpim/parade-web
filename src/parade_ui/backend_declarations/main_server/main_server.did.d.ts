@@ -2,6 +2,7 @@ import type { Principal } from "@dfinity/principal";
 import type { ActorMethod } from "@dfinity/agent";
 
 export interface CreatePostRequest {
+  post_id: string;
   club_ids: [] | [Array<string>];
   nfts: Array<NftToken>;
   created_by: string;
@@ -81,6 +82,7 @@ export interface ReactEmojiRequest {
 }
 export interface ReplyPostRequest {
   post_id: string;
+  reply_id: string;
   nfts: Array<NftToken>;
   user: string;
   created_ts: bigint;

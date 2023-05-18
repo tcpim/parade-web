@@ -12,11 +12,12 @@ interface PostRepliesProps {
 const PAGE_SIZE = 20;
 
 const getPostRepliesRequest = (
-  props: PostRepliesProps
+  postId: string,
+  offset: number
 ): GetPostRepliesRequest => {
   return {
-    post_id: props.postId,
-    offset: 0,
+    post_id: postId,
+    offset: offset,
     limit: [PAGE_SIZE],
   };
 };
@@ -25,8 +26,8 @@ export const usePostRepiles = (props: PostRepliesProps) => {
   const mainServer = useMainServer();
   const postRepliesQuery = useInfiniteQuery<GetPostRepliesResponse, Error>({
     queryKey: ["postReplies", props.postId],
-    queryFn: async () => {
-      const request = getPostRepliesRequest(props);
+    queryFn: async ({ pageParam = 0 }) => {
+      const request = getPostRepliesRequest(props.postId, pageParam);
       const response = await mainServer.get_post_replies(request);
       return response;
     },
