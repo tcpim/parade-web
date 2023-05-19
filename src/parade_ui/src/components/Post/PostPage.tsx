@@ -80,9 +80,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
           onChange={handleInputChange}
         />
         {replyPostmutation.isLoading ? (
-          <Button>
-            <CircularProgress />
-          </Button>
+          <CircularProgress />
         ) : (
           <Button variant="contained" onClick={handleReplySubmit}>
             Reply

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, Fragment } from "react";
 import {
   Box,
   DialogContentText,
@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  CircularProgress,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import Paper, { PaperProps } from "@mui/material/Paper";
@@ -86,28 +87,15 @@ export const PostCreationForm = ({
         />
       </DialogContent>
       <DialogActions>
-        {!createPostMutation.isSuccess && (
-          <Button onClick={handleCloseForm}>Cancel</Button>
-        )}
-        {!createPostMutation.isSuccess && (
-          <Button
-            type="submit"
-            color="primary"
-            onClick={handleSubmit}
-            disabled={createPostMutation.isLoading}
-          >
-            Submit
-          </Button>
-        )}
-        {createPostMutation.isSuccess && (
-          <Button
-            type="submit"
-            color="primary"
-            onClick={handleCloseFormResetMutation}
-            disabled={createPostMutation.isLoading}
-          >
-            Done
-          </Button>
+        {createPostMutation.isLoading ? (
+          <CircularProgress />
+        ) : createPostMutation.isSuccess ? (
+          <Button onClick={handleCloseFormResetMutation}>Done</Button>
+        ) : (
+          <Fragment>
+            <Button onClick={handleCloseForm}>Cancel</Button>
+            <Button onClick={handleSubmit}>Submit</Button>
+          </Fragment>
         )}
       </DialogActions>
     </Dialog>

@@ -69,7 +69,9 @@ const PostReplies = ({ postId }: PostRepliesProps) => {
       {postRepliesQuery.data?.pages.map((page, index) => (
         <Fragment key={index}>
           {page.post_replies.map((reply) => (
-            <PostReplyCard reply={reply} />
+            <Fragment key={reply.id}>
+              <PostReplyCard reply={reply} />
+            </Fragment>
           ))}
         </Fragment>
       ))}
