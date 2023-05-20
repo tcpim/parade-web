@@ -11,6 +11,7 @@ import {
 import { PostReply } from "../../../backend_declarations/main_server/main_server.did";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
 import { getTimeperiod } from "../../utils/getTimePeriod";
+import { Emojis } from "./Emojis";
 
 interface PostRepliesProps {
   postId: string;
@@ -32,6 +33,9 @@ const PostReplyCard = ({ reply }: PostReplyCardProps) => {
         </Typography>
         <Typography variant="body1" component="p">
           {reply.words}
+        </Typography>
+        <Typography variant="body2">
+          <Emojis replyId={reply.id} emojis={reply.emoji_reactions} />
         </Typography>
       </CardContent>
     </Card>
