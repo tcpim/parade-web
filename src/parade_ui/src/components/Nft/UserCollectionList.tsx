@@ -13,13 +13,13 @@ import AddIcon from "@mui/icons-material/Add";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Collection, Token } from "../../hooks/useUserCollectionList";
 import { PostCreationForm } from "../Post/PostCreationForm";
-import { NftInfo } from "../Nft/nft";
+import { NftInfo } from "./nft";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import { styled } from "@mui/material/styles";
-import { NftImage } from "../Nft/NftImage";
+import { NftImage } from "./NftImage";
 
 export interface NftImageProps {
   index: string;
@@ -164,7 +164,7 @@ export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
             <Collapse in={isExpanded[index]} timeout="auto">
               <Stack direction="row" sx={{ ml: 1, flexWrap: "wrap" }}>
                 {collection.tokens.map((token) => (
-                  <Box>
+                  <Box key={token.index}>
                     <NftCard
                       key={token.index.toString()}
                       imageUrl={token.smallImage}
