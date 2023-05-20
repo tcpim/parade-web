@@ -19,6 +19,7 @@ import { useContext, useState } from "react";
 import { AppContext } from "../../App";
 import { usePostRepiles } from "../../hooks/usePostReplies";
 import { PostRepliesMemo } from "./PostReplies";
+import { Emojis } from "./Emojis";
 
 interface PostDetailProps {
   postId: string;
@@ -71,6 +72,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
       <Typography variant="h5" component="p">
         {post.words}
       </Typography>
+      <Emojis postId={postId} emojis={post.emoji_reactions} />
       <Box display="flex" justifyContent="start" width="600px">
         <TextField
           id="reply"

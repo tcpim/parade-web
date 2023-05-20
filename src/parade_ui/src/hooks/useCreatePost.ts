@@ -41,9 +41,9 @@ const getCreatePostRequest = (
 export function useCreatePost(createPostProps: CreatePostProps) {
   const mainServer = useMainServer();
 
-  const mutation = useMutation(async () => {
+  const mutation = useMutation(() => {
     const request = getCreatePostRequest(createPostProps);
-    return await mainServer.create_post(request);
+    return mainServer.create_post(request);
   });
 
   return mutation;

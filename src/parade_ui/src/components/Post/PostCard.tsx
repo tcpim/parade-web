@@ -12,6 +12,7 @@ import {
 import { ChatBubbleOutline, Favorite } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { NftImage } from "../Nft/NftImage";
+import { Emojis } from "./Emojis";
 
 interface PostCardProps {
   postId: string;
@@ -19,6 +20,7 @@ interface PostCardProps {
   timeAgo: string;
   content: string;
   replies: number;
+  emojis: Array<[string, number]>;
   nftCanisterId: string;
   nftTokenIndex: number;
   nftImageUrl: string;
@@ -30,6 +32,7 @@ export const PostCard = ({
   timeAgo,
   content,
   replies,
+  emojis,
   nftCanisterId,
   nftTokenIndex,
   nftImageUrl,
@@ -41,7 +44,7 @@ export const PostCard = ({
   };
 
   return (
-    <Card sx={{ marginBottom: 20 }}>
+    <Card sx={{ marginBottom: 10 }}>
       <CardContent>
         <Typography variant="h6" component="div">
           Created by: {createdBy}
@@ -58,6 +61,9 @@ export const PostCard = ({
         <Typography variant="body2" component="p">
           {content}
         </Typography>
+      </CardContent>
+      <CardContent>
+        <Emojis postId={postId} emojis={emojis} />
       </CardContent>
       <CardActions disableSpacing onClick={handlePostClick}>
         <IconButton aria-label="number of replies">

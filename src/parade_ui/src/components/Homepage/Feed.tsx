@@ -40,16 +40,19 @@ export const Feed = () => {
       {streetPostsQuery.data.pages.map((page, index) => (
         <Fragment key={index}>
           {page.posts.map((post) => (
-            <PostCard
-              postId={post.id}
-              createdBy={post.created_by}
-              timeAgo={"5m"}
-              content={post.words}
-              replies={post.replies.length}
-              nftCanisterId={post.nfts[0].canister_id}
-              nftTokenIndex={post.nfts[0].token_index}
-              nftImageUrl={post.nfts[0].original_thumbnail_url}
-            />
+            <Fragment key={post.id}>
+              <PostCard
+                postId={post.id}
+                createdBy={post.created_by}
+                timeAgo={"5m"}
+                content={post.words}
+                replies={post.replies.length}
+                emojis={post.emoji_reactions}
+                nftCanisterId={post.nfts[0].canister_id}
+                nftTokenIndex={post.nfts[0].token_index}
+                nftImageUrl={post.nfts[0].original_thumbnail_url}
+              />
+            </Fragment>
           ))}
         </Fragment>
       ))}
