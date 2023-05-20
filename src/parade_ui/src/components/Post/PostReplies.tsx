@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { PostReply } from "../../../backend_declarations/main_server/main_server.did";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
+import { getTimeperiod } from "../../utils/getTimePeriod";
 
 interface PostRepliesProps {
   postId: string;
@@ -27,7 +28,7 @@ const PostReplyCard = ({ reply }: PostReplyCardProps) => {
           Replied by: {reply.created_by}
         </Typography>
         <Typography color="text.secondary" gutterBottom>
-          5m
+          {getTimeperiod(reply.created_ts)}
         </Typography>
         <Typography variant="body1" component="p">
           {reply.words}
