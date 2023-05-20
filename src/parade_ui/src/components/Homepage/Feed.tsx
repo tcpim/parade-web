@@ -5,6 +5,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { PostCard } from "../Post/PostCard";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
+import { getTimeperiod } from "../../utils/getTimePeriod";
 
 export const Feed = () => {
   const streetPostsQuery = useStreetPosts();
@@ -44,7 +45,7 @@ export const Feed = () => {
               <PostCard
                 postId={post.id}
                 createdBy={post.created_by}
-                timeAgo={"5m"}
+                timeAgo={getTimeperiod(post.created_ts)}
                 content={post.words}
                 replies={post.replies.length}
                 emojis={post.emoji_reactions}

@@ -20,6 +20,7 @@ import { AppContext } from "../../App";
 import { usePostRepiles } from "../../hooks/usePostReplies";
 import { PostRepliesMemo } from "./PostReplies";
 import { Emojis } from "./Emojis";
+import { getTimeperiod } from "../../utils/getTimePeriod";
 
 interface PostDetailProps {
   postId: string;
@@ -62,6 +63,9 @@ const PostDetail = ({ postId }: PostDetailProps) => {
     <Box sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
       <Typography variant="h6" gutterBottom>
         Created by: {post?.created_by}
+      </Typography>
+      <Typography color="text.secondary">
+        {getTimeperiod(post?.created_ts)}
       </Typography>
       <Box marginLeft="150px" maxWidth="350px">
         <NftImage
