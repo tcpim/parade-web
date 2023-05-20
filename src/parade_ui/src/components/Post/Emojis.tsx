@@ -35,13 +35,10 @@ export interface EmojisProps {
   emojis: Array<[string, number]>;
 }
 
-const getEmojiFromUnicode = (emoji: string) => {
-  return String.fromCodePoint(parseInt(emoji, 16));
-};
-
 export const Emojis = ({ postId, replyId, emojis }: EmojisProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
+  const [emojisCount, setEmojisCount] =
+    useState<Array<[string, number]>>(emojis);
   const appContext = useContext(AppContext);
   const reactEmojiMutation = useReactEmoji({
     postId: postId,
@@ -49,26 +46,55 @@ export const Emojis = ({ postId, replyId, emojis }: EmojisProps) => {
     userPid: appContext.userLoginInfo.userPid,
   });
 
-  const handleEmojiClick = (emoji: any) => {
-    reactEmojiMutation.mutate(emoji.unified);
-  };
-
-  const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // for emoji picker anchor
+  const open = Boolean(anchorEl);
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  // handle click events
+  const handleEmojiClick = (emoji: any) => {
+    reactEmojiMutation.mutate(emoji.unified);
+    increaseEmojiCount(emoji.unified);
+  };
+  const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handlePlusOneClick = (emoji: string) => {
+    reactEmojiMutation.mutate(emoji);
+    increaseEmojiCount(emoji);
+  };
+
+  // helpers
+  const increaseEmojiCount = (emoji: string) => {
+    const index = emojisCount.findIndex((e) => e[0] === emoji);
+    let updatedEmojisCount = [...emojisCount];
+    if (index !== -1) {
+      updatedEmojisCount[index] = [emoji, updatedEmojisCount[index][1] + 1];
+    } else {
+      updatedEmojisCount.push([emoji, 1]);
+    }
+    setEmojisCount(updatedEmojisCount);
+    console.log(updatedEmojisCount);
+  };
+
+  const getEmojiFromUnicode = (emoji: string) => {
+    return String.fromCodePoint(parseInt(emoji, 16));
+  };
+
   return (
-    <Box>
-      {emojis.map((emoji) => (
-        <Container>
+    <Box display="flex" flexWrap="wrap">
+      {emojisCount.map((emoji) => (
+        <IconButton
+          onClick={() => handlePlusOneClick(emoji[0])}
+          color="primary"
+          key={emoji[0]}
+        >
           <Typography display="inline">
             {getEmojiFromUnicode(emoji[0])}
           </Typography>
           <Typography display="inline">{emoji[1]}</Typography>
-        </Container>
+        </IconButton>
       ))}
       <Box>
         <IconButton color="primary" onClick={handleAddButtonClick}>
