@@ -2,9 +2,10 @@ import { Box, Button, Divider, Stack } from "@mui/material";
 import { UserPortfolioMemo } from "../Nft/UserPortfolio";
 import SideBar from "../Sidebar/SideBar";
 import TopBar from "../Topbar/TopBar";
-import { useContext, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { AppContext } from "../../App";
 import { UserPostsMemo } from "../Post/UserPosts";
+import { UserClubCollectionListMemo } from "../Nft/UserClubCollectionList";
 
 type SubPage = "portfolio" | "posts";
 
@@ -30,7 +31,10 @@ const UserPortfolioActivity = () => {
         </Button>
       </Box>
       {subPage === "portfolio" && (
-        <UserPortfolioMemo userAccount={appContext.userLoginInfo.userAccount} />
+        <UserPortfolioMemo
+          userAccount={appContext.userLoginInfo.userAccount}
+          userPid={appContext.userLoginInfo.userPid}
+        />
       )}
       {subPage === "posts" && (
         <UserPostsMemo userPid={appContext.userLoginInfo.userPid} />

@@ -14,14 +14,66 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Collection, Token } from "../../hooks/useUserCollectionList";
 import { PostCreationForm } from "../Post/PostCreationForm";
 import { NftInfo } from "./nft";
-import { NftCard } from "./NftCard";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import { styled } from "@mui/material/styles";
+import { NftImage } from "./NftImage";
+import { useUserColeectionListDab } from "../../hooks/useUserCollectionListDab";
+import { NFTCollection, NFTDetails } from "@psychedelic/dab-js";
 
-interface CollectionListProps {
-  userAccount: string;
+export interface NftImageProps {
+  index: string;
+  name?: string;
+  imageUrl: string;
+  standard?: string;
+  canisterId: string;
 }
 
-export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
-  const userCollectionQuery = useUserCollectionList(userAccount);
+export const NftCard = ({
+  index,
+  name,
+  imageUrl,
+  standard,
+  canisterId,
+}: NftImageProps) => {
+  const CardContentNoPadding = styled(CardContent)(`
+          padding: 0;
+          &:last-child {
+              padding-bottom: 0px;
+          };
+          display: flex;
+          justify-content: space-between;
+          button {
+              justify-content: center;
+              min-width: 25%;
+          }
+          & .MuiTypography-root {
+              display:flex;
+              flex-direction: column;
+              justify-content: center;
+          }
+      `);
+
+  return (
+    <Card sx={{ maxWidth: 350, mr: 1, mt: 1 }}>
+      <NftImage imageUrl={imageUrl} canisterId={canisterId} />
+      <CardContentNoPadding>
+        <Typography variant="subtitle2" component="div">
+          {name ? name : "#".concat(index)}
+        </Typography>
+      </CardContentNoPadding>
+    </Card>
+  );
+};
+
+interface CollectionListProps {
+  userPid: string;
+}
+
+export const UserCollectionListDab = ({ userPid }: CollectionListProps) => {
+  const userCollectionDabQuery = useUserColeectionListDab(userPid);
 
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
   const [openForm, setOpenForm] = useState<boolean>(false);
@@ -34,15 +86,18 @@ export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
     nftOriginalThumbnailUrl: "",
   });
 
-  const handleOpenForm = (collection: Collection, token: Token) => {
+  const handleOpenForm = (
+    collection: NFTCollection,
+    token: NFTDetails<bigint | string>
+  ) => {
     setOpenForm(true);
     setPostFormNftInfo({
       nftCanisterId: collection.canisterId,
-      nftCollectionName: collection.collectionName,
-      nftTokenIndex: token.index,
-      nftTokenIdentifier: token.identifier,
-      nftOriginalImageUrl: token.originalImage,
-      nftOriginalThumbnailUrl: token.smallImage,
+      nftCollectionName: collection.name,
+      nftTokenIndex: parseInt(token.index.toString()),
+      nftTokenIdentifier: token.id ?? "",
+      nftOriginalImageUrl: token.url,
+      nftOriginalThumbnailUrl: token.url,
     });
   };
 
@@ -52,12 +107,12 @@ export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
 
   useEffect(() => {
     const collectionExpandedState: boolean[] = new Array(
-      userCollectionQuery.data?.collections.length
+      userCollectionDabQuery.data?.length
     ).fill(true);
     setIsExpanded(collectionExpandedState);
-  }, [userAccount, userCollectionQuery.data]);
+  }, [userCollectionDabQuery.data]);
 
-  if (userCollectionQuery.isLoading) {
+  if (userCollectionDabQuery.isLoading) {
     return (
       <Box
         sx={{
@@ -70,13 +125,15 @@ export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
         <CircularProgress />
       </Box>
     );
-  } else if (userCollectionQuery.isError) {
+  } else if (userCollectionDabQuery.isError) {
     throw new Error(
       "Failed to fetch userCollectionList from api: " +
-        userCollectionQuery.error.message
+        userCollectionDabQuery.error.message
     );
-  } else if (!userCollectionQuery.data) {
+  } else if (!userCollectionDabQuery.data) {
     return <div>No data is available</div>;
+  } else {
+    console.log(userCollectionDabQuery.data);
   }
 
   const handleCollectionExpansionClick = (index: number) => {
@@ -88,22 +145,22 @@ export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
       }
     });
     setIsExpanded(newExpandedState);
+    console.dir(isExpanded);
   };
 
-  if (userCollectionQuery.data.collections.length == 0) {
+  if (userCollectionDabQuery.data.length == 0) {
     return <Box>You don't have any NFTs</Box>;
   }
   return (
     <Box>
+      <Typography variant="h3">Other NFTs</Typography>
       <List>
-        {userCollectionQuery.data.collections.map((collection, index) => (
+        {userCollectionDabQuery.data.map((collection, index) => (
           <Box key={collection.canisterId}>
-            <Box sx={{ display: "flex", justifyContent: "space-around" }}>
-              <ListItemText
-                primary={
-                  collection.collectionName + ": " + collection.canisterId
-                }
-              />
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography variant="h5">
+                {collection.name + ": " + collection.canisterId}
+              </Typography>
               <ListItemButton
                 sx={{ maxWidth: "10%" }}
                 onClick={() => handleCollectionExpansionClick(index)}
@@ -114,10 +171,10 @@ export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
             <Collapse in={isExpanded[index]} timeout="auto">
               <Stack direction="row" sx={{ ml: 1, flexWrap: "wrap" }}>
                 {collection.tokens.map((token) => (
-                  <Box key={token.index}>
+                  <Box key={token.id}>
                     <NftCard
                       key={token.index.toString()}
-                      imageUrl={token.smallImage}
+                      imageUrl={token.url.replace("type=thumbnail&", "")}
                       index={token.index.toString()}
                       canisterId={collection.canisterId}
                     />

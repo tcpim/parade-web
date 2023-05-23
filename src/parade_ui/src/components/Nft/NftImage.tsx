@@ -1,8 +1,10 @@
 import CardMedia from "@mui/material/CardMedia";
 
 const svgCanisters = new Set<string>([
-  "skjpp-haaaa-aaaae-qac7q-cai",
-  "pk6rk-6aaaa-aaaae-qaazq-cai",
+  "skjpp-haaaa-aaaae-qac7q-cai", // Pineapple punks
+  "pk6rk-6aaaa-aaaae-qaazq-cai", // BTC Flower
+  "4ggk4-mqaaa-aaaae-qad6q-cai", // ICP Flower
+  "dhiaa-ryaaa-aaaae-qabva-cai", // ETH Flower
 ]);
 
 interface NftImageProps {
