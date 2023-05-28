@@ -11,8 +11,11 @@ import AddIcon from "@mui/icons-material/Add";
 import SignpostIcon from "@mui/icons-material/Signpost";
 import YardIcon from "@mui/icons-material/Yard";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const SideBar = () => {
+  const navigate = useNavigate();
+
   return (
     <Box
       bgcolor="rgba(0, 128, 0, 0.2)"
@@ -42,11 +45,11 @@ const SideBar = () => {
           </ListItemButton>
         </ListItem>
         <ListItem divider>
-          <ListItemButton>
+          <ListItemButton onClick={() => navigate("/clubs")}>
             <ListItemIcon>
               <YardIcon />
             </ListItemIcon>
-            <ListItemText primary="Gardens" />
+            <ListItemText primary="Clubs" />
           </ListItemButton>
         </ListItem>
         <ListItem divider>

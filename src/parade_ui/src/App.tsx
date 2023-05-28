@@ -11,6 +11,8 @@ import {
   createBrowserRouter,
   BrowserRouter,
 } from "react-router-dom";
+import { ClubsPage } from "./components/Club/ClubsPage";
+import { Club } from "./components/Club/Club";
 
 const NotFoundPage = () => {
   return <h1>Not Found</h1>;
@@ -62,9 +64,9 @@ export const App = () => {
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/post">
-            <Route path=":postId" element={<PostPage />} />
-          </Route>
+          <Route path="/post/:postId" element={<PostPage />} />
+          <Route path="/clubs" element={<ClubsPage />} />
+          <Route path="/clubs/:clubId" element={<Club />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </AppContext.Provider>

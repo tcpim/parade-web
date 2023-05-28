@@ -14,7 +14,7 @@ import {
   Club,
   Token,
   useUserClubCollectionList,
-} from "../../hooks/useUserClubCollectionList";
+} from "../../hooks/fetch-nft-data/useUserClubCollectionList";
 import { memo, useEffect, useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { NftCard } from "./NftCard";

@@ -15,7 +15,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import Paper, { PaperProps } from "@mui/material/Paper";
 import Draggable from "react-draggable";
-import { useCreatePost } from "../../hooks/useCreatePost";
+import { useCreatePost } from "../../hooks/create-post/useCreatePost";
 import { AppContext } from "../../App";
 import { NftInfo } from "../Nft/nft";
 

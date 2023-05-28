@@ -1,5 +1,5 @@
 import { Fragment, memo } from "react";
-import { usePostRepiles } from "../../hooks/usePostReplies";
+import { usePostRepiles } from "../../hooks/fetch-posts/usePostReplies";
 import {
   Box,
   Card,

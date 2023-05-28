@@ -1,44 +1,48 @@
-import { Fragment } from "react";
-import { useStreetPosts } from "../../hooks/fetch-posts/useStreetPosts";
-import { Box } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
-import { PostCard } from "../Post/PostCard";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { useClubPosts } from "../../hooks/fetch-posts/useClubPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
+import { Fragment } from "react";
+import { PostCard } from "../Post/PostCard";
 import { getTimeperiod } from "../../utils/getTimePeriod";
 
-export const Feed = () => {
-  const streetPostsQuery = useStreetPosts();
+interface ClubFeedProps {
+  clubId: string;
+}
+
+export const ClubFeed = ({ clubId }: ClubFeedProps) => {
+  const clubPostsQuery = useClubPosts(clubId);
 
   useScrollToBottomAction(
     document,
     () => {
-      if (streetPostsQuery.isFetchingNextPage) return;
-      streetPostsQuery.fetchNextPage();
+      if (clubPostsQuery.isFetchingNextPage) return;
+      clubPostsQuery.fetchNextPage();
     },
     200
   );
 
-  if (streetPostsQuery.isLoading) {
+  if (clubId === "") {
+    return <h1>invalid club id</h1>;
+  } else if (clubPostsQuery.isLoading) {
     return (
       <Box>
         <CircularProgress />
       </Box>
     );
   } else if (
-    streetPostsQuery.status === "error" ||
-    streetPostsQuery.data === undefined
+    clubPostsQuery.status === "error" ||
+    clubPostsQuery.data === undefined
   ) {
     return (
       <Typography color="error" align="center" variant="h6" gutterBottom>
-        {streetPostsQuery.error?.message}
+        {clubPostsQuery.error?.message}
       </Typography>
     );
   }
 
   return (
     <Box sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
-      {streetPostsQuery.data.pages.map((page, index) => (
+      {clubPostsQuery.data.pages.map((page, index) => (
         <Fragment key={index}>
           {page.posts.map((post) => (
             <Fragment key={post.id}>
@@ -57,7 +61,7 @@ export const Feed = () => {
           ))}
         </Fragment>
       ))}
-      {streetPostsQuery.isFetchingNextPage && (
+      {clubPostsQuery.isFetchingNextPage && (
         <Box>
           <CircularProgress />
         </Box>

@@ -1,0 +1,2 @@
+export const DEFAULT_PAGE_SIZE_FOR_FEED = 10;
+export const DEFAULT_PAGE_SIZE_FOR_REPLIES = 10;

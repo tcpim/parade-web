@@ -1,18 +1,18 @@
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import { useMainServer } from "./useMainServer";
+import { useMainServer } from "../useMainServer";
 import {
   GetStreetPostsRequest,
   GetStreetPostsResponse,
   PostCreatedTsKey,
-} from "../../backend_declarations/main_server/main_server.did";
+} from "../../../backend_declarations/main_server/main_server.did";
+import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 
-const PAGE_SIZE = 3;
 const getFetchRequest = (
   cursor: [] | [PostCreatedTsKey]
 ): GetStreetPostsRequest => {
   return {
     cursor: cursor,
-    limit: [PAGE_SIZE],
+    limit: [DEFAULT_PAGE_SIZE_FOR_FEED],
   };
 };
 

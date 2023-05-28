@@ -1,12 +1,12 @@
 import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import { useMainServer } from "./useMainServer";
+import { useMainServer } from "../useMainServer";
 import {
   GetUserPostsRequest,
   GetUserPostsResponse,
   UserPostCreatedTsKey,
-} from "../../backend_declarations/main_server/main_server.did";
+} from "../../../backend_declarations/main_server/main_server.did";
+import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 
-const PAGE_SIZE = 20;
 const getFetchRequest = (
   userPid: string,
   cursor: [UserPostCreatedTsKey]
@@ -14,7 +14,7 @@ const getFetchRequest = (
   return {
     user_id: userPid,
     cursor: cursor,
-    limit: [PAGE_SIZE],
+    limit: [DEFAULT_PAGE_SIZE_FOR_FEED],
   };
 };
 

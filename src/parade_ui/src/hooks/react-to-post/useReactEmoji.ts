@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { ReactEmojiRequest } from "../../backend_declarations/main_server/main_server.did";
-import { useMainServer } from "./useMainServer";
+import { ReactEmojiRequest } from "../../../backend_declarations/main_server/main_server.did";
+import { useMainServer } from "../useMainServer";
 
 interface ReactEmojiProps {
   postId?: string;

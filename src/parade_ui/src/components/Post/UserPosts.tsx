@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { Fragment, memo } from "react";
-import { useUserPosts } from "../../hooks/useUserPosts";
+import { useUserPosts } from "../../hooks/fetch-posts/useUserPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
 import { PostCard } from "./PostCard";
 import { getTimeperiod } from "../../utils/getTimePeriod";

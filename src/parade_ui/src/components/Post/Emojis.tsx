@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useContext, useState } from "react";
-import { useReactEmoji } from "../../hooks/useReactEmoji";
+import { useReactEmoji } from "../../hooks/react-to-post/useReactEmoji";
 import { AppContext } from "../../App";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 

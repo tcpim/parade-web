@@ -2,14 +2,13 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import {
   GetPostRepliesRequest,
   GetPostRepliesResponse,
-} from "../../backend_declarations/main_server/main_server.did";
-import { useMainServer } from "./useMainServer";
+} from "../../../backend_declarations/main_server/main_server.did";
+import { useMainServer } from "../useMainServer";
+import { DEFAULT_PAGE_SIZE_FOR_REPLIES } from "../../utils/constants";
 
 interface PostRepliesProps {
   postId: string;
 }
-
-const PAGE_SIZE = 20;
 
 const getPostRepliesRequest = (
   postId: string,
@@ -18,7 +17,7 @@ const getPostRepliesRequest = (
   return {
     post_id: postId,
     offset: offset,
-    limit: [PAGE_SIZE],
+    limit: [DEFAULT_PAGE_SIZE_FOR_REPLIES],
   };
 };
 
@@ -32,7 +31,7 @@ export const usePostRepiles = (props: PostRepliesProps) => {
       return response;
     },
     getNextPageParam: (lastPage, pages) => {
-      if (lastPage.post_replies.length < PAGE_SIZE) {
+      if (lastPage.post_replies.length < DEFAULT_PAGE_SIZE_FOR_REPLIES) {
         return undefined;
       } else {
         return lastPage.offset;

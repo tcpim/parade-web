@@ -4,7 +4,7 @@ import {
   getCachedUserNFTs,
 } from "@psychedelic/dab-js";
 import { useQuery } from "@tanstack/react-query";
-import { clubCanisterIds } from "../components/Nft/nft";
+import { clubCanisterIds } from "../../components/Nft/nft";
 
 const fetchFromDabCache = async (userPid: string): Promise<NFTCollection[]> => {
   return await getCachedUserNFTs({ userPID: userPid, refresh: false }).then(

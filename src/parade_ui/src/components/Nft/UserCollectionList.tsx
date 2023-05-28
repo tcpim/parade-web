@@ -1,4 +1,4 @@
-import { useUserCollectionList } from "../../hooks/useUserCollectionList";
+import { useUserCollectionList } from "../../hooks/fetch-nft-data/useUserCollectionList";
 import { useContext, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import List from "@mui/material/List";
@@ -11,7 +11,10 @@ import ExpandMore from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Collection, Token } from "../../hooks/useUserCollectionList";
+import {
+  Collection,
+  Token,
+} from "../../hooks/fetch-nft-data/useUserCollectionList";
 import { PostCreationForm } from "../Post/PostCreationForm";
 import { NftInfo } from "./nft";
 import { NftCard } from "./NftCard";

@@ -1,12 +1,12 @@
 import { useCallback } from "react";
-import { useMainServer } from "./useMainServer";
+import { useMainServer } from "../useMainServer";
 import {
   CreatePostRequest,
   CreatePostResponse,
   NftToken,
-} from "../../backend_declarations/main_server/main_server.did";
+} from "../../../backend_declarations/main_server/main_server.did";
 import { useMutation } from "@tanstack/react-query";
-import { NftInfo } from "../components/Nft/nft";
+import { NftInfo } from "../../components/Nft/nft";
 import { v4 as uuidv4 } from "uuid";
 
 export interface CreatePostProps {

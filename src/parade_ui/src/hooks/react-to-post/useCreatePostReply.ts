@@ -8,8 +8,8 @@ import {
   GetPostRepliesResponse,
   ReplyPostRequest,
   ReplyPostResponse,
-} from "../../backend_declarations/main_server/main_server.did";
-import { useMainServer } from "./useMainServer";
+} from "../../../backend_declarations/main_server/main_server.did";
+import { useMainServer } from "../useMainServer";
 import { v4 as uuidv4 } from "uuid";
 
 export interface CreatePostReplyProps {
