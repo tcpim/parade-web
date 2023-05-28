@@ -19,6 +19,8 @@ import { memo, useEffect, useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { NftCard } from "./NftCard";
 import { canisterId } from "../../../backend_declarations/main_server";
+import { NftInfo } from "./nft";
+import { PostCreationForm } from "../Post/PostCreationForm";
 
 interface UserClubCollectionListProps {
   userAccount: string;
@@ -29,6 +31,15 @@ const UserClubCollectionList = ({
 }: UserClubCollectionListProps) => {
   const useUserClubCollectionListQuery = useUserClubCollectionList(userAccount);
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
+  const [openForm, setOpenForm] = useState<boolean>(false);
+  const [postFormNftInfo, setPostFormNftInfo] = useState<NftInfo>({
+    nftCanisterId: "",
+    nftCollectionName: "",
+    nftTokenIndex: 0,
+    nftTokenIdentifier: "",
+    nftOriginalImageUrl: "",
+    nftOriginalThumbnailUrl: "",
+  });
 
   useEffect(() => {
     const clubExpandedState: boolean[] = new Array(
@@ -36,6 +47,23 @@ const UserClubCollectionList = ({
     ).fill(true);
     setIsExpanded(clubExpandedState);
   }, [userAccount, useUserClubCollectionListQuery.data]);
+
+  const handleOpenForm = (club: Club, token: any) => {
+    setOpenForm(true);
+    setPostFormNftInfo({
+      nftCanisterId: token.canisterId,
+      nftCollectionName: token.collectionName,
+      nftTokenIndex: token.index,
+      nftTokenIdentifier: token.identifier,
+      nftOriginalImageUrl: token.originalImage,
+      nftOriginalThumbnailUrl: token.smallImage,
+      clubId: club.club_id,
+    });
+  };
+
+  const handleCloseForm = () => {
+    setOpenForm(false);
+  };
 
   if (useUserClubCollectionListQuery.isLoading) {
     return (
@@ -111,6 +139,13 @@ const UserClubCollectionList = ({
                         index={token.index.toString()}
                         canisterId={token.canisterId}
                       />
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={() => handleOpenForm(club, token)}
+                      >
+                        <AddIcon />
+                      </Button>
                     </Box>
                   ))}
                 </Stack>
@@ -119,6 +154,14 @@ const UserClubCollectionList = ({
           );
         })}
       </List>
+      {openForm && (
+        <PostCreationForm
+          open={openForm}
+          handleCloseForm={handleCloseForm}
+          nftInfo={postFormNftInfo}
+          isPublicPost={true}
+        />
+      )}
     </Box>
   );
 };

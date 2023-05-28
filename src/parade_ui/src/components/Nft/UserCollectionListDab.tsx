@@ -197,6 +197,7 @@ export const UserCollectionListDab = ({ userPid }: CollectionListProps) => {
           open={openForm}
           handleCloseForm={handleCloseForm}
           nftInfo={postFormNftInfo}
+          isPublicPost={true}
         />
       )}
     </Box>

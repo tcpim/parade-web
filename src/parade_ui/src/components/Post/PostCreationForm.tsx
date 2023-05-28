@@ -9,6 +9,8 @@ import {
   DialogActions,
   TextField,
   CircularProgress,
+  Checkbox,
+  Typography,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import Paper, { PaperProps } from "@mui/material/Paper";
@@ -20,6 +22,7 @@ import { NftInfo } from "../Nft/nft";
 export interface PostCreationFormProps {
   open: boolean;
   nftInfo: NftInfo;
+  isPublicPost?: boolean;
   handleCloseForm: () => void;
 }
 
@@ -40,13 +43,16 @@ export const PostCreationForm = ({
   handleCloseForm,
 }: PostCreationFormProps) => {
   const [words, setWords] = useState("");
+  const [isPublicPost, setIsPublicPost] = useState(true);
   const appContext = useContext(AppContext);
+
+  const isClubNft = nftInfo.clubId !== undefined;
 
   const createPostMutation = useCreatePost({
     userPid: appContext.userLoginInfo.userPid,
     nftInfo,
-    words: words,
-    isPublicPost: true,
+    words,
+    isPublicPost,
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +60,6 @@ export const PostCreationForm = ({
   };
 
   const handleSubmit = () => {
-    //console.log(`words ${words}, nftCanisterId ${nftCanisterId}, nftCollectionName ${nftCollectionName} nftTokenIndex ${nftTokenIndex}, nftTokenIdentifier ${nftTokenIdentifier}`)
     createPostMutation.mutate();
   };
 
@@ -85,6 +90,10 @@ export const PostCreationForm = ({
           fullWidth
           onChange={handleInputChange}
         />
+        <Box>
+          <Typography>Post to public street?</Typography>
+          <Checkbox />
+        </Box>
       </DialogContent>
       <DialogActions>
         {createPostMutation.isLoading ? (

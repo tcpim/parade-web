@@ -2,13 +2,16 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 import { useMainServer } from "./useMainServer";
 import {
   GetStreetPostsRequest,
-  PostList,
+  GetStreetPostsResponse,
+  PostCreatedTsKey,
 } from "../../backend_declarations/main_server/main_server.did";
 
-const PAGE_SIZE = 10;
-const getFetchRequest = (offset: number): GetStreetPostsRequest => {
+const PAGE_SIZE = 3;
+const getFetchRequest = (
+  cursor: [] | [PostCreatedTsKey]
+): GetStreetPostsRequest => {
   return {
-    offset: offset,
+    cursor: cursor,
     limit: [PAGE_SIZE],
   };
 };
@@ -16,18 +19,18 @@ const getFetchRequest = (offset: number): GetStreetPostsRequest => {
 export const useStreetPosts = () => {
   const mainServer = useMainServer();
 
-  const streetPostsQuery = useInfiniteQuery<PostList, Error>({
+  const streetPostsQuery = useInfiniteQuery<GetStreetPostsResponse, Error>({
     queryKey: ["streetPosts"],
-    queryFn: async ({ pageParam = 0 }) => {
+    queryFn: async ({ pageParam = [] }) => {
       const request = getFetchRequest(pageParam);
       const response = await mainServer.get_street_posts(request);
       return response;
     },
     getNextPageParam: (lastPage, pages) => {
-      if (lastPage.posts.length < PAGE_SIZE) {
+      if (lastPage.next_cursor.length === 0) {
         return undefined;
       } else {
-        return lastPage.offset;
+        return lastPage.next_cursor;
       }
     },
     //staleTime: 1000 * 60,

@@ -5,6 +5,7 @@ export interface NftInfo {
   nftCollectionName: string;
   nftOriginalImageUrl: string;
   nftOriginalThumbnailUrl: string;
+  clubId?: string;
 }
 
 export const clubCanisterIds: Set<string> = new Set<string>();
