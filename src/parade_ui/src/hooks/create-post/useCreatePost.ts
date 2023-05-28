@@ -14,6 +14,7 @@ export interface CreatePostProps {
   nftInfo: NftInfo;
   words: string;
   isPublicPost: boolean;
+  clubIds: string[];
 }
 
 const getCreatePostRequest = (
@@ -34,7 +35,8 @@ const getCreatePostRequest = (
     words: createPostProps.words,
     in_public: createPostProps.isPublicPost,
     nfts: [nft],
-    club_ids: [],
+    club_ids:
+      createPostProps.clubIds.length == 0 ? [] : [createPostProps.clubIds],
   };
 };
 

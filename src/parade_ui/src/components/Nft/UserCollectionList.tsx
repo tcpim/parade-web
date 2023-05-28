@@ -35,6 +35,7 @@ export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
     nftTokenIdentifier: "",
     nftOriginalImageUrl: "",
     nftOriginalThumbnailUrl: "",
+    clubId: "",
   });
 
   const handleOpenForm = (collection: Collection, token: Token) => {
@@ -46,6 +47,7 @@ export const UserCollectionList = ({ userAccount }: CollectionListProps) => {
       nftTokenIdentifier: token.identifier,
       nftOriginalImageUrl: token.originalImage,
       nftOriginalThumbnailUrl: token.smallImage,
+      clubId: "",
     });
   };
 

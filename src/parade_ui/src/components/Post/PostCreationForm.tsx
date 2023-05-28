@@ -43,16 +43,16 @@ export const PostCreationForm = ({
   handleCloseForm,
 }: PostCreationFormProps) => {
   const [words, setWords] = useState("");
-  const [isPublicPost, setIsPublicPost] = useState(true);
+  const isClubNft = !!nftInfo.clubId;
+  const [isPublicPost, setIsPublicPost] = useState(!isClubNft);
   const appContext = useContext(AppContext);
-
-  const isClubNft = nftInfo.clubId !== undefined;
 
   const createPostMutation = useCreatePost({
     userPid: appContext.userLoginInfo.userPid,
     nftInfo,
     words,
     isPublicPost,
+    clubIds: isClubNft ? [nftInfo.clubId] : [],
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,10 +90,15 @@ export const PostCreationForm = ({
           fullWidth
           onChange={handleInputChange}
         />
-        <Box>
-          <Typography>Post to public street?</Typography>
-          <Checkbox />
-        </Box>
+        {isClubNft && (
+          <Box display="flex">
+            <Typography>Post to public street?</Typography>
+            <Checkbox
+              checked={isPublicPost}
+              onChange={() => setIsPublicPost(true)}
+            />
+          </Box>
+        )}
       </DialogContent>
       <DialogActions>
         {createPostMutation.isLoading ? (

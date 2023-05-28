@@ -87,6 +87,7 @@ export const UserCollectionListDab = ({ userPid }: CollectionListProps) => {
     nftTokenIdentifier: "",
     nftOriginalImageUrl: "",
     nftOriginalThumbnailUrl: "",
+    clubId: "",
   });
 
   const handleOpenForm = (
@@ -101,6 +102,7 @@ export const UserCollectionListDab = ({ userPid }: CollectionListProps) => {
       nftTokenIdentifier: token.id ?? "",
       nftOriginalImageUrl: token.url,
       nftOriginalThumbnailUrl: token.url,
+      clubId: "",
     });
   };
 

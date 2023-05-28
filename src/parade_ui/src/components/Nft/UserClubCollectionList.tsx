@@ -39,6 +39,7 @@ const UserClubCollectionList = ({
     nftTokenIdentifier: "",
     nftOriginalImageUrl: "",
     nftOriginalThumbnailUrl: "",
+    clubId: "",
   });
 
   useEffect(() => {
