@@ -4,11 +4,14 @@ import SideBar from "../Sidebar/SideBar";
 import { Feed } from "./Feed";
 import { LeaderBoard } from "./LeaderBoard";
 import Divider from "@mui/material/Divider";
+import { useState } from "react";
 
 const Homepage = () => {
+  const [selectedCollection, setSelectedCollection] = useState("");
+
   return (
     <Box>
-      <TopBar />
+      <TopBar searchCollection={setSelectedCollection} />
       <Stack
         direction="row"
         divider={<Divider orientation="vertical" flexItem />}
@@ -17,7 +20,7 @@ const Homepage = () => {
         sx={{ marginTop: "5%" }}
       >
         <SideBar />
-        <Feed />
+        <Feed canisterId={selectedCollection} />
         <LeaderBoard />
       </Stack>
     </Box>

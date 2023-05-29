@@ -23,7 +23,6 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import { styled } from "@mui/material/styles";
 import { NftImage } from "./NftImage";
-import { useUserColeectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
 
 export interface NftImageProps {
   index: string;

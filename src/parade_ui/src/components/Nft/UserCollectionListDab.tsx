@@ -23,7 +23,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import { styled } from "@mui/material/styles";
 import { NftImage } from "./NftImage";
-import { useUserColeectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
+import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
 import { NFTCollection, NFTDetails } from "@psychedelic/dab-js";
 
 export interface NftImageProps {
@@ -76,7 +76,7 @@ interface CollectionListProps {
 }
 
 export const UserCollectionListDab = ({ userPid }: CollectionListProps) => {
-  const userCollectionDabQuery = useUserColeectionListDab(userPid);
+  const userCollectionDabQuery = useUserCollectionListDab(userPid);
 
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
   const [openForm, setOpenForm] = useState<boolean>(false);

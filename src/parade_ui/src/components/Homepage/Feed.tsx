@@ -6,39 +6,43 @@ import Typography from "@mui/material/Typography";
 import { PostCard } from "../Post/PostCard";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
 import { getTimeperiod } from "../../utils/getTimePeriod";
+import { useCollectionPosts } from "../../hooks/fetch-posts/useCollectionPosts";
 
-export const Feed = () => {
-  const streetPostsQuery = useStreetPosts();
+interface FeedProps {
+  canisterId?: string;
+}
+export const Feed = ({ canisterId }: FeedProps) => {
+  const streetPostsQuery = useStreetPosts(!!canisterId);
+  const collectionPostsQuery = useCollectionPosts(canisterId, !canisterId);
+
+  let queryRes = !canisterId ? streetPostsQuery : collectionPostsQuery;
 
   useScrollToBottomAction(
     document,
     () => {
-      if (streetPostsQuery.isFetchingNextPage) return;
-      streetPostsQuery.fetchNextPage();
+      if (queryRes.isFetchingNextPage) return;
+      queryRes.fetchNextPage();
     },
     200
   );
 
-  if (streetPostsQuery.isLoading) {
+  if (queryRes.isLoading) {
     return (
       <Box>
         <CircularProgress />
       </Box>
     );
-  } else if (
-    streetPostsQuery.status === "error" ||
-    streetPostsQuery.data === undefined
-  ) {
+  } else if (queryRes.status === "error" || queryRes.data === undefined) {
     return (
       <Typography color="error" align="center" variant="h6" gutterBottom>
-        {streetPostsQuery.error?.message}
+        {queryRes.error?.message}
       </Typography>
     );
   }
 
   return (
     <Box sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
-      {streetPostsQuery.data.pages.map((page, index) => (
+      {queryRes.data.pages.map((page, index) => (
         <Fragment key={index}>
           {page.posts.map((post) => (
             <Fragment key={post.id}>
@@ -57,7 +61,7 @@ export const Feed = () => {
           ))}
         </Fragment>
       ))}
-      {streetPostsQuery.isFetchingNextPage && (
+      {queryRes.isFetchingNextPage && (
         <Box>
           <CircularProgress />
         </Box>
