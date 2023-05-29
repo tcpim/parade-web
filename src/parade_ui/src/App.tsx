@@ -1,4 +1,4 @@
-import Homepage from "./components/Homepage/Homepage";
+import { Homepage } from "./components/Homepage/Homepage";
 import { createContext, useState, Dispatch, SetStateAction } from "react";
 import { Profile } from "./components/Profile/Profile";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ import {
 } from "react-router-dom";
 import { ClubsPage } from "./components/Club/ClubsPage";
 import { Club } from "./components/Club/Club";
+import { LayoutWithSideBar } from "./components/Sidebar/SideBar";
 
 const NotFoundPage = () => {
   return <h1>Not Found</h1>;
@@ -62,11 +63,46 @@ export const App = () => {
     <QueryClientProvider client={queryClient}>
       <AppContext.Provider value={{ userLoginInfo, setUserLoginInfo }}>
         <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/post/:postId" element={<PostPage />} />
-          <Route path="/clubs" element={<ClubsPage />} />
-          <Route path="/clubs/:clubId" element={<Club />} />
+          <Route
+            path="/"
+            element={
+              <LayoutWithSideBar>
+                <Homepage />
+              </LayoutWithSideBar>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <LayoutWithSideBar>
+                <Profile />
+              </LayoutWithSideBar>
+            }
+          />
+          <Route
+            path="/post/:postId"
+            element={
+              <LayoutWithSideBar>
+                <PostPage />
+              </LayoutWithSideBar>
+            }
+          />
+          <Route
+            path="/clubs"
+            element={
+              <LayoutWithSideBar>
+                <ClubsPage />
+              </LayoutWithSideBar>
+            }
+          />
+          <Route
+            path="/clubs/:clubId"
+            element={
+              <LayoutWithSideBar>
+                <Club />
+              </LayoutWithSideBar>
+            }
+          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </AppContext.Provider>

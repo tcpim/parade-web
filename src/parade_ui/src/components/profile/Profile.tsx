@@ -1,6 +1,5 @@
 import { Box, Button, Divider, Stack } from "@mui/material";
 import { UserPortfolioMemo } from "../Nft/UserPortfolio";
-import SideBar from "../Sidebar/SideBar";
 import TopBar from "../Topbar/TopBar";
 import { Fragment, useContext, useState } from "react";
 import { AppContext } from "../../App";
@@ -46,9 +45,7 @@ const UserPortfolioActivity = () => {
 export const Profile = () => {
   return (
     <Box>
-      <TopBar />
       <Stack direction="row" justifyContent="space-between" height="100vh">
-        <SideBar />
         <UserPortfolioActivity />
       </Stack>
     </Box>

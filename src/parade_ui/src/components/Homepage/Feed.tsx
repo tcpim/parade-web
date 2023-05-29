@@ -41,7 +41,7 @@ export const Feed = ({ canisterId }: FeedProps) => {
   }
 
   return (
-    <Box sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
+    <Box sx={{ marginLeft: "20%", marginRight: "auto", width: "100" }}>
       {queryRes.data.pages.map((page, index) => (
         <Fragment key={index}>
           {page.posts.map((post) => (

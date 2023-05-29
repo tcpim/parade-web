@@ -8,6 +8,7 @@ import { AppContext, UserLoginInfo, defaultLoginInfo } from "../../App";
 import { Principal } from "@dfinity/principal";
 import { AccountIdentifier } from "@dfinity/nns";
 import { StoicIdentity as stoic } from "ic-stoic-identity";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 
 const WalletConnection = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -84,7 +85,7 @@ const WalletConnection = () => {
     <Box>
       <Button
         variant="contained"
-        sx={{ margin: "4px" }}
+        startIcon={<AccountBalanceWalletIcon />}
         onClick={handleWalletMenuOpen}
       >
         <Typography>{getWalletName()}</Typography>

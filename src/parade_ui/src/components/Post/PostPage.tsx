@@ -7,8 +7,6 @@ import {
   Typography,
 } from "@mui/material";
 import TopBar from "../Topbar/TopBar";
-import SideBar from "../Sidebar/SideBar";
-import { LeaderBoard } from "../Homepage/LeaderBoard";
 import Divider from "@mui/material/Divider";
 import { useParams } from "react-router-dom";
 import { usePostDetail } from "../../hooks/fetch-posts/usePostDetail";
@@ -103,7 +101,6 @@ export const PostPage = () => {
 
   return (
     <Box sx={{ marginTop: "5%" }}>
-      <TopBar />
       <Stack
         direction="row"
         divider={<Divider orientation="vertical" flexItem />}
@@ -111,9 +108,7 @@ export const PostPage = () => {
         height="100vh"
         sx={{ marginTop: "5%" }}
       >
-        <SideBar />
         <PostDetail postId={postId ?? "0"} />
-        <LeaderBoard />
       </Stack>
     </Box>
   );
