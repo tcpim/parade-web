@@ -1,30 +1,23 @@
-import { useUserCollectionList } from "../../hooks/fetch-nft-data/useUserCollectionList";
-import { useContext, useEffect, useState } from "react";
-import { Box } from "@mui/material";
-import List from "@mui/material/List";
-import Stack from "@mui/material/Stack";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import Collapse from "@mui/material/Collapse";
+import AddIcon from "@mui/icons-material/Add";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
-import CircularProgress from "@mui/material/CircularProgress";
-import {
-  Collection,
-  Token,
-} from "../../hooks/fetch-nft-data/useUserCollectionList";
-import { PostCreationForm } from "../Post/PostCreationForm";
-import { NftInfo } from "./nft";
-import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
+import CircularProgress from "@mui/material/CircularProgress";
+import Collapse from "@mui/material/Collapse";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
-import { NftImage } from "./NftImage";
-import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
 import { NFTCollection, NFTDetails } from "@psychedelic/dab-js";
+import { useEffect, useState } from "react";
+import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
+import { PostCreationForm } from "../Post/PostCreationForm";
+import { NftImage } from "./NftImage";
+import { NftInfo } from "./nft";
 
 export interface NftImageProps {
   index: string;

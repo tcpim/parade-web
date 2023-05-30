@@ -1,23 +1,23 @@
-import { useUserCollectionList } from "../../hooks/fetch-nft-data/useUserCollectionList";
-import { useContext, useEffect, useState } from "react";
-import { Box } from "@mui/material";
-import List from "@mui/material/List";
-import Stack from "@mui/material/Stack";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import Collapse from "@mui/material/Collapse";
+import AddIcon from "@mui/icons-material/Add";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 import CircularProgress from "@mui/material/CircularProgress";
+import Collapse from "@mui/material/Collapse";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import Stack from "@mui/material/Stack";
+import { useEffect, useState } from "react";
 import {
   Collection,
   Token,
+  useUserCollectionList,
 } from "../../hooks/fetch-nft-data/useUserCollectionList";
 import { PostCreationForm } from "../Post/PostCreationForm";
-import { NftInfo } from "./nft";
 import { NftCard } from "./NftCard";
+import { NftInfo } from "./nft";
 
 interface CollectionListProps {
   userAccount: string;

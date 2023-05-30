@@ -1,8 +1,7 @@
-import { Fragment, memo, useContext, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { UserCollectionList } from "./UserCollectionList";
-import { UserCollectionListDab } from "./UserCollectionListDab";
+import { Fragment, memo } from "react";
 import { UserClubCollectionListMemo } from "./UserClubCollectionList";
+import { UserCollectionListDab } from "./UserCollectionListDab";
 
 export interface UserPortfolioProps {
   userAccount?: string;

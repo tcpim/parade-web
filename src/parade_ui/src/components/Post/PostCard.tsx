@@ -1,15 +1,12 @@
-import React, { FC } from "react";
+import { ChatBubbleOutline } from "@mui/icons-material";
 import {
-  Card,
-  CardContent,
-  CardActions,
-  Typography,
-  IconButton,
-  Chip,
-  CardMedia,
   Box,
+  Card,
+  CardActions,
+  CardContent,
+  IconButton,
+  Typography,
 } from "@mui/material";
-import { ChatBubbleOutline, Favorite } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { NftImage } from "../Nft/NftImage";
 import { Emojis } from "./Emojis";

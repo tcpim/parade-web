@@ -1,19 +1,10 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import {
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-  Container,
-} from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
-import { useCallback, useContext, useState } from "react";
-import { useReactEmoji } from "../../hooks/react-to-post/useReactEmoji";
+import { Box, IconButton, Menu, Typography } from "@mui/material";
+import { useContext, useState } from "react";
 import { AppContext } from "../../App";
-import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
+import { useReactEmoji } from "../../hooks/react-to-post/useReactEmoji";
 
 interface EmojiPickerProps {
   handleEmojiClick: (emoji: any) => void;

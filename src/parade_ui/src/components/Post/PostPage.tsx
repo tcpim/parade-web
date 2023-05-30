@@ -1,24 +1,15 @@
-import {
-  Box,
-  Button,
-  Container,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import TopBar from "../Topbar/TopBar";
-import Divider from "@mui/material/Divider";
-import { useParams } from "react-router-dom";
-import { usePostDetail } from "../../hooks/fetch-posts/usePostDetail";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import { NftImage } from "../Nft/NftImage";
-import { useCreatePostReply } from "../../hooks/react-to-post/useCreatePostReply";
+import Divider from "@mui/material/Divider";
 import { useContext, useState } from "react";
+import { useParams } from "react-router-dom";
 import { AppContext } from "../../App";
-import { usePostRepiles } from "../../hooks/fetch-posts/usePostReplies";
-import { PostRepliesMemo } from "./PostReplies";
-import { Emojis } from "./Emojis";
+import { usePostDetail } from "../../hooks/fetch-posts/usePostDetail";
+import { useCreatePostReply } from "../../hooks/react-to-post/useCreatePostReply";
 import { getTimeperiod } from "../../utils/getTimePeriod";
+import { NftImage } from "../Nft/NftImage";
+import { Emojis } from "./Emojis";
+import { PostRepliesMemo } from "./PostReplies";
 
 interface PostDetailProps {
   postId: string;

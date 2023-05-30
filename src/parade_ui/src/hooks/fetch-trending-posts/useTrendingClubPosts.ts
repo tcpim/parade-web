@@ -1,29 +1,34 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
-  GetStreetPostsRequest,
-  GetStreetPostsResponse,
-  PostCreatedTsKey,
+  GetTrendingClubPostRequest,
+  GetTrendingClubPostResponse,
+  TrendingPostClubKey,
 } from "../../../backend_declarations/main_server/main_server.did";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 import { useMainServer } from "../useMainServer";
 
 const getFetchRequest = (
-  cursor: [] | [PostCreatedTsKey]
-): GetStreetPostsRequest => {
+  clubId: string,
+  cursor: [] | [TrendingPostClubKey]
+): GetTrendingClubPostRequest => {
   return {
+    club_id: clubId,
     cursor: cursor,
     limit: [DEFAULT_PAGE_SIZE_FOR_FEED],
   };
 };
 
-export const useStreetPosts = (enabled = true) => {
+export const useTrendingClubPosts = (clubId: string, enabled = true) => {
   const mainServer = useMainServer();
 
-  const streetPostsQuery = useInfiniteQuery<GetStreetPostsResponse, Error>({
-    queryKey: ["streetPosts"],
+  const trendingClubPostsQuery = useInfiniteQuery<
+    GetTrendingClubPostResponse,
+    Error
+  >({
+    queryKey: ["trendingClubPosts", clubId],
     queryFn: async ({ pageParam = [] }) => {
-      const request = getFetchRequest(pageParam);
-      const response = await mainServer.get_street_posts(request);
+      const request = getFetchRequest(clubId, pageParam);
+      const response = await mainServer.get_trending_club_posts(request);
       return response;
     },
     getNextPageParam: (lastPage, pages) => {
@@ -38,5 +43,5 @@ export const useStreetPosts = (enabled = true) => {
     enabled: enabled,
   });
 
-  return streetPostsQuery;
+  return trendingClubPostsQuery;
 };

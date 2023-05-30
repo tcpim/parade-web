@@ -1,12 +1,11 @@
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import { useMainServer } from "../useMainServer";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
+  CollectionPostCreatedTsKey,
   GetCollectionPostsRequest,
   GetCollectionPostsResponse,
-  CollectionPostCreatedTsKey,
 } from "../../../backend_declarations/main_server/main_server.did";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
-import { canisterId } from "../../../backend_declarations/main_server";
+import { useMainServer } from "../useMainServer";
 
 const getFetchRequest = (
   canisterId: string,
@@ -19,10 +18,13 @@ const getFetchRequest = (
   };
 };
 
-export const useCollectionPosts = (canisterId = "", disabled = false) => {
+export const useCollectionPosts = (canisterId = "", enabled = true) => {
   const mainServer = useMainServer();
 
-  const clubPostsQuery = useInfiniteQuery<GetCollectionPostsResponse, Error>({
+  const collectionPostsQuery = useInfiniteQuery<
+    GetCollectionPostsResponse,
+    Error
+  >({
     queryKey: ["collectionPosts", canisterId],
     queryFn: async ({ pageParam = [] }) => {
       const request = getFetchRequest(canisterId, pageParam);
@@ -38,8 +40,8 @@ export const useCollectionPosts = (canisterId = "", disabled = false) => {
     },
     //staleTime: 1000 * 60,
     keepPreviousData: true,
-    enabled: !disabled,
+    enabled: enabled,
   });
 
-  return clubPostsQuery;
+  return collectionPostsQuery;
 };

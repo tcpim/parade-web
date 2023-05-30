@@ -1,26 +1,20 @@
-import React, { useContext } from "react";
-import {
-  Box,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  ListItemIcon,
-  Drawer,
-  Typography,
-  Toolbar,
-  Divider,
-  Button,
-} from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import AddIcon from "@mui/icons-material/Add";
 import SignpostIcon from "@mui/icons-material/Signpost";
 import YardIcon from "@mui/icons-material/Yard";
-import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import {
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { AppContext } from "../../App";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import WalletConnection from "../Topbar/WalletConnection";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { RightSideBar } from "./RightSideBar";
 
 interface LayoutWithSideBarProps {

@@ -1,29 +1,34 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
-  GetStreetPostsRequest,
-  GetStreetPostsResponse,
-  PostCreatedTsKey,
+  GetTrendingCollectionPostRequest,
+  GetTrendingCollectionPostResponse,
+  TrendingPostCollectionKey,
 } from "../../../backend_declarations/main_server/main_server.did";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 import { useMainServer } from "../useMainServer";
 
 const getFetchRequest = (
-  cursor: [] | [PostCreatedTsKey]
-): GetStreetPostsRequest => {
+  canisterId: string,
+  cursor: [] | [TrendingPostCollectionKey]
+): GetTrendingCollectionPostRequest => {
   return {
+    canister_id: canisterId,
     cursor: cursor,
     limit: [DEFAULT_PAGE_SIZE_FOR_FEED],
   };
 };
 
-export const useStreetPosts = (enabled = true) => {
+export const useTrendingCollectionPosts = (canisterId = "", enabled = true) => {
   const mainServer = useMainServer();
 
-  const streetPostsQuery = useInfiniteQuery<GetStreetPostsResponse, Error>({
-    queryKey: ["streetPosts"],
+  const trendingCollectionPostsQuery = useInfiniteQuery<
+    GetTrendingCollectionPostResponse,
+    Error
+  >({
+    queryKey: ["trendingCollectionPosts", canisterId],
     queryFn: async ({ pageParam = [] }) => {
-      const request = getFetchRequest(pageParam);
-      const response = await mainServer.get_street_posts(request);
+      const request = getFetchRequest(canisterId, pageParam);
+      const response = await mainServer.get_trending_collection_posts(request);
       return response;
     },
     getNextPageParam: (lastPage, pages) => {
@@ -38,5 +43,5 @@ export const useStreetPosts = (enabled = true) => {
     enabled: enabled,
   });
 
-  return streetPostsQuery;
+  return trendingCollectionPostsQuery;
 };

@@ -67,7 +67,7 @@ module.exports = {
   output: {
     filename: "index.js",
     path: path.join(__dirname, "dist", frontendDirectory),
-    publicPath: "/",  // used to adapt to react router
+    publicPath: "/", // used to adapt to react router
   },
 
   // Depending in the language or framework you are using for
@@ -78,8 +78,9 @@ module.exports = {
   module: {
     rules: [
       { test: /\.(ts|tsx|jsx)$/, loader: "ts-loader" },
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] }
-    ]
+      { test: /\.css$/, use: ["style-loader", "css-loader"] },
+      { test: /\.(png|jpeg|gif)$/, use: ["file-loader"] },
+    ],
   },
   plugins: [
     new HtmlWebpackPlugin({

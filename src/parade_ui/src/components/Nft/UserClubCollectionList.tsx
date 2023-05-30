@@ -1,3 +1,5 @@
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 import {
   Box,
   Button,
@@ -5,22 +7,17 @@ import {
   Collapse,
   List,
   ListItemButton,
-  ListItemText,
   Stack,
   Typography,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import { memo, useEffect, useState } from "react";
 import {
   Club,
-  Token,
   useUserClubCollectionList,
 } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
-import { memo, useEffect, useState } from "react";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { NftCard } from "./NftCard";
-import { canisterId } from "../../../backend_declarations/main_server";
-import { NftInfo } from "./nft";
 import { PostCreationForm } from "../Post/PostCreationForm";
+import { NftCard } from "./NftCard";
+import { NftInfo } from "./nft";
 
 interface UserClubCollectionListProps {
   userAccount: string;

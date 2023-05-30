@@ -1,11 +1,11 @@
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import { useMainServer } from "../useMainServer";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
+  ClubPostCreatedTsKey,
   GetClubPostsRequest,
   GetClubPostsResponse,
-  ClubPostCreatedTsKey,
 } from "../../../backend_declarations/main_server/main_server.did";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
+import { useMainServer } from "../useMainServer";
 
 const getFetchRequest = (
   clubId: string,
@@ -18,11 +18,11 @@ const getFetchRequest = (
   };
 };
 
-export const useClubPosts = (clubId: string) => {
+export const useClubPosts = (clubId: string, enabled = true) => {
   const mainServer = useMainServer();
 
   const clubPostsQuery = useInfiniteQuery<GetClubPostsResponse, Error>({
-    queryKey: ["clubPosts"],
+    queryKey: ["clubPosts", clubId],
     queryFn: async ({ pageParam = [] }) => {
       const request = getFetchRequest(clubId, pageParam);
       const response = await mainServer.get_posts_by_club(request);
@@ -37,6 +37,7 @@ export const useClubPosts = (clubId: string) => {
     },
     //staleTime: 1000 * 60,
     keepPreviousData: true,
+    enabled: enabled,
   });
 
   return clubPostsQuery;

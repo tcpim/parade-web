@@ -1,14 +1,13 @@
-import { Fragment, memo } from "react";
-import { usePostRepiles } from "../../hooks/fetch-posts/usePostReplies";
 import {
   Box,
   Card,
   CardContent,
-  CardHeader,
   CircularProgress,
   Typography,
 } from "@mui/material";
+import { Fragment, memo } from "react";
 import { PostReply } from "../../../backend_declarations/main_server/main_server.did";
+import { usePostRepiles } from "../../hooks/fetch-posts/usePostReplies";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
 import { getTimeperiod } from "../../utils/getTimePeriod";
 import { Emojis } from "./Emojis";

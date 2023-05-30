@@ -1,22 +1,21 @@
-import React, { useState, useContext, useEffect, Fragment } from "react";
 import {
   Box,
-  DialogContentText,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  CircularProgress,
   Checkbox,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
   Typography,
 } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
 import Paper, { PaperProps } from "@mui/material/Paper";
+import React, { Fragment, useContext, useState } from "react";
 import Draggable from "react-draggable";
-import { useCreatePost } from "../../hooks/create-post/useCreatePost";
 import { AppContext } from "../../App";
+import { useCreatePost } from "../../hooks/create-post/useCreatePost";
 import { NftInfo } from "../Nft/nft";
 
 export interface PostCreationFormProps {

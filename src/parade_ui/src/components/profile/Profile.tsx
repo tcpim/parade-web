@@ -1,10 +1,8 @@
 import { Box, Button, Divider, Stack } from "@mui/material";
-import { UserPortfolioMemo } from "../Nft/UserPortfolio";
-import TopBar from "../Topbar/TopBar";
-import { Fragment, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../../App";
+import { UserPortfolioMemo } from "../Nft/UserPortfolio";
 import { UserPostsMemo } from "../Post/UserPosts";
-import { UserClubCollectionListMemo } from "../Nft/UserClubCollectionList";
 
 type SubPage = "portfolio" | "posts";
 

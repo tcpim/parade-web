@@ -1,14 +1,14 @@
-import Button from "@mui/material/Button";
+import { AccountIdentifier } from "@dfinity/nns";
+import { Principal } from "@dfinity/principal";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { Box } from "@mui/material";
+import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { MouseEvent, useState, useContext, useMemo } from "react";
 import Typography from "@mui/material/Typography";
-import { AppContext, UserLoginInfo, defaultLoginInfo } from "../../App";
-import { Principal } from "@dfinity/principal";
-import { AccountIdentifier } from "@dfinity/nns";
 import { StoicIdentity as stoic } from "ic-stoic-identity";
-import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import { MouseEvent, useContext, useState } from "react";
+import { AppContext, UserLoginInfo, defaultLoginInfo } from "../../App";
 
 const WalletConnection = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

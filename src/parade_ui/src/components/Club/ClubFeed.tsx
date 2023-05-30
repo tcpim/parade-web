@@ -1,48 +1,80 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Typography,
+} from "@mui/material";
+import { Fragment, useState } from "react";
 import { useClubPosts } from "../../hooks/fetch-posts/useClubPosts";
+import { useTrendingClubPosts } from "../../hooks/fetch-trending-posts/useTrendingClubPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
-import { Fragment } from "react";
-import { PostCard } from "../Post/PostCard";
 import { getTimeperiod } from "../../utils/getTimePeriod";
+import { PostCard } from "../Post/PostCard";
 
 interface ClubFeedProps {
   clubId: string;
 }
 
+export type SubPage = "recent" | "trending";
+
 export const ClubFeed = ({ clubId }: ClubFeedProps) => {
-  const clubPostsQuery = useClubPosts(clubId);
+  const [subPage, setSubPage] = useState<SubPage>("recent");
+  const clubPostsQuery = useClubPosts(clubId, subPage === "recent");
+  const trendingClubPostsQuery = useTrendingClubPosts(
+    clubId,
+    subPage === "trending"
+  );
+
+  const normalizedQuery =
+    subPage === "recent" ? clubPostsQuery : trendingClubPostsQuery;
 
   useScrollToBottomAction(
     document,
     () => {
-      if (clubPostsQuery.isFetchingNextPage) return;
-      clubPostsQuery.fetchNextPage();
+      if (normalizedQuery.isFetchingNextPage) return;
+      normalizedQuery.fetchNextPage();
     },
     200
   );
 
   if (clubId === "") {
     return <h1>invalid club id</h1>;
-  } else if (clubPostsQuery.isLoading) {
+  } else if (normalizedQuery.isLoading) {
     return (
       <Box>
         <CircularProgress />
       </Box>
     );
   } else if (
-    clubPostsQuery.status === "error" ||
-    clubPostsQuery.data === undefined
+    normalizedQuery.status === "error" ||
+    normalizedQuery.data === undefined
   ) {
     return (
       <Typography color="error" align="center" variant="h6" gutterBottom>
-        {clubPostsQuery.error?.message}
+        {normalizedQuery.error?.message}
       </Typography>
     );
   }
 
   return (
-    <Box sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
-      {clubPostsQuery.data.pages.map((page, index) => (
+    <Box sx={{ marginLeft: "20%", marginRight: "auto", width: "100" }}>
+      <Box display="flex" justifyContent="space-evenly">
+        <Button
+          disabled={subPage === "recent"}
+          onClick={() => setSubPage("recent")}
+        >
+          Recent
+        </Button>
+        <Divider orientation="vertical" flexItem />
+        <Button
+          disabled={subPage === "trending"}
+          onClick={() => setSubPage("trending")}
+        >
+          Trending
+        </Button>
+      </Box>
+      {normalizedQuery.data.pages.map((page, index) => (
         <Fragment key={index}>
           {page.posts.map((post) => (
             <Fragment key={post.id}>
@@ -61,7 +93,7 @@ export const ClubFeed = ({ clubId }: ClubFeedProps) => {
           ))}
         </Fragment>
       ))}
-      {clubPostsQuery.isFetchingNextPage && (
+      {normalizedQuery.isFetchingNextPage && (
         <Box>
           <CircularProgress />
         </Box>
