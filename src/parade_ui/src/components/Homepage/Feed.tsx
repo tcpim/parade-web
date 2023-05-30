@@ -78,8 +78,12 @@ export const Feed = () => {
   };
 
   return (
-    <Box sx={{ marginLeft: "20%", marginRight: "20%", width: "100%" }}>
-      <Box sx={{ width: "100%" }}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      sx={{ marginLeft: "15%", marginTop: "5%", marginRight: "15%" }}
+    >
+      <Box>
         <Autocomplete
           color="primary"
           onChange={(event: any, newValue: DABCollection | null) => {
@@ -112,30 +116,33 @@ export const Feed = () => {
           There is no post in this collection yet
         </Typography>
       )}
-      {normallizedQuery.data.pages.map((page: any, index: any) => (
-        <Fragment key={index}>
-          {page.posts.map((post: Post) => (
-            <Fragment key={post.id}>
-              <PostCard
-                postId={post.id}
-                createdBy={post.created_by}
-                timeAgo={getTimeperiod(post.created_ts)}
-                content={post.words}
-                replies={post.replies.length}
-                emojis={post.emoji_reactions}
-                nftCanisterId={post.nfts[0].canister_id}
-                nftTokenIndex={post.nfts[0].token_index}
-                nftImageUrl={post.nfts[0].original_thumbnail_url}
-              />
-            </Fragment>
-          ))}
-        </Fragment>
-      ))}
-      {normallizedQuery.isFetchingNextPage && (
-        <Box>
-          <CircularProgress />
-        </Box>
-      )}
+      <Box alignItems="center">
+        {normallizedQuery.data.pages.map((page: any, index: any) => (
+          <Fragment key={index}>
+            {page.posts.map((post: Post) => (
+              <Fragment key={post.id}>
+                <PostCard
+                  postId={post.id}
+                  createdBy={post.created_by}
+                  timeAgo={getTimeperiod(post.created_ts)}
+                  content={post.words}
+                  replies={post.replies.length}
+                  emojis={post.emoji_reactions}
+                  nftCanisterId={post.nfts[0].canister_id}
+                  nftTokenIndex={post.nfts[0].token_index}
+                  nftImageUrl={post.nfts[0].original_thumbnail_url}
+                />
+              </Fragment>
+            ))}
+          </Fragment>
+        ))}
+
+        {normallizedQuery.isFetchingNextPage && (
+          <Box>
+            <CircularProgress />
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };

@@ -58,7 +58,7 @@ export const LayoutWithSideBar = ({ children }: LayoutWithSideBarProps) => {
               </ListItemButton>
             </ListItem>
             <ListItem>
-              <ListItemButton>
+              <ListItemButton onClick={() => navigate("/post-creator")}>
                 <ListItemIcon>
                   <AddIcon />
                 </ListItemIcon>

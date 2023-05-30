@@ -6,19 +6,17 @@ import {
   Typography,
 } from "@mui/material";
 import { Fragment, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useClubPosts } from "../../hooks/fetch-posts/useClubPosts";
 import { useTrendingClubPosts } from "../../hooks/fetch-trending-posts/useTrendingClubPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
 import { getTimeperiod } from "../../utils/getTimePeriod";
 import { PostCard } from "../Post/PostCard";
 
-interface ClubFeedProps {
-  clubId: string;
-}
-
 export type SubPage = "recent" | "trending";
 
-export const ClubFeed = ({ clubId }: ClubFeedProps) => {
+export const ClubFeed = () => {
+  let { clubId = "" } = useParams();
   const [subPage, setSubPage] = useState<SubPage>("recent");
   const clubPostsQuery = useClubPosts(clubId, subPage === "recent");
   const trendingClubPostsQuery = useTrendingClubPosts(
@@ -58,7 +56,11 @@ export const ClubFeed = ({ clubId }: ClubFeedProps) => {
   }
 
   return (
-    <Box sx={{ marginLeft: "20%", marginRight: "auto", width: "100" }}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      sx={{ marginLeft: "15%", marginTop: "5%", marginRight: "15%" }}
+    >
       <Box display="flex" justifyContent="space-evenly">
         <Button
           disabled={subPage === "recent"}
@@ -74,30 +76,32 @@ export const ClubFeed = ({ clubId }: ClubFeedProps) => {
           Trending
         </Button>
       </Box>
-      {normalizedQuery.data.pages.map((page, index) => (
-        <Fragment key={index}>
-          {page.posts.map((post) => (
-            <Fragment key={post.id}>
-              <PostCard
-                postId={post.id}
-                createdBy={post.created_by}
-                timeAgo={getTimeperiod(post.created_ts)}
-                content={post.words}
-                replies={post.replies.length}
-                emojis={post.emoji_reactions}
-                nftCanisterId={post.nfts[0].canister_id}
-                nftTokenIndex={post.nfts[0].token_index}
-                nftImageUrl={post.nfts[0].original_thumbnail_url}
-              />
-            </Fragment>
-          ))}
-        </Fragment>
-      ))}
-      {normalizedQuery.isFetchingNextPage && (
-        <Box>
-          <CircularProgress />
-        </Box>
-      )}
+      <Box alignItems="center">
+        {normalizedQuery.data.pages.map((page, index) => (
+          <Fragment key={index}>
+            {page.posts.map((post) => (
+              <Fragment key={post.id}>
+                <PostCard
+                  postId={post.id}
+                  createdBy={post.created_by}
+                  timeAgo={getTimeperiod(post.created_ts)}
+                  content={post.words}
+                  replies={post.replies.length}
+                  emojis={post.emoji_reactions}
+                  nftCanisterId={post.nfts[0].canister_id}
+                  nftTokenIndex={post.nfts[0].token_index}
+                  nftImageUrl={post.nfts[0].original_thumbnail_url}
+                />
+              </Fragment>
+            ))}
+          </Fragment>
+        ))}
+        {normalizedQuery.isFetchingNextPage && (
+          <Box>
+            <CircularProgress />
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };

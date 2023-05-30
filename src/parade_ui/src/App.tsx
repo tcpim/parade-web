@@ -1,18 +1,13 @@
-import { Homepage } from "./components/Homepage/Homepage";
-import { createContext, useState, Dispatch, SetStateAction } from "react";
-import { Profile } from "./components/Profile/Profile";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { PostPage } from "./components/Post/PostPage";
-import {
-  Route,
-  Routes,
-  RouterProvider,
-  createBrowserRouter,
-  BrowserRouter,
-} from "react-router-dom";
+import { Dispatch, SetStateAction, createContext, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import { ClubFeed } from "./components/Club/ClubFeed";
 import { ClubsPage } from "./components/Club/ClubsPage";
-import { Club } from "./components/Club/Club";
+import { Feed } from "./components/Homepage/Feed";
+import { PostCreationPage } from "./components/Post/PostCreationPage";
+import { PostPage } from "./components/Post/PostPage";
+import { Profile } from "./components/Profile/Profile";
 import { LayoutWithSideBar } from "./components/Sidebar/SideBar";
 
 const NotFoundPage = () => {
@@ -67,7 +62,7 @@ export const App = () => {
             path="/"
             element={
               <LayoutWithSideBar>
-                <Homepage />
+                <Feed />
               </LayoutWithSideBar>
             }
           />
@@ -88,6 +83,14 @@ export const App = () => {
             }
           />
           <Route
+            path="/post-creator"
+            element={
+              <LayoutWithSideBar>
+                <PostCreationPage />
+              </LayoutWithSideBar>
+            }
+          />
+          <Route
             path="/clubs"
             element={
               <LayoutWithSideBar>
@@ -99,7 +102,7 @@ export const App = () => {
             path="/clubs/:clubId"
             element={
               <LayoutWithSideBar>
-                <Club />
+                <ClubFeed />
               </LayoutWithSideBar>
             }
           />

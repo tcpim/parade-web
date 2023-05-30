@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Stack } from "@mui/material";
+import { Box, Button, Divider } from "@mui/material";
 import { useContext, useState } from "react";
 import { AppContext } from "../../App";
 import { UserPortfolioMemo } from "../Nft/UserPortfolio";
@@ -41,11 +41,5 @@ const UserPortfolioActivity = () => {
 };
 
 export const Profile = () => {
-  return (
-    <Box>
-      <Stack direction="row" justifyContent="space-between" height="100vh">
-        <UserPortfolioActivity />
-      </Stack>
-    </Box>
-  );
+  return <UserPortfolioActivity />;
 };
