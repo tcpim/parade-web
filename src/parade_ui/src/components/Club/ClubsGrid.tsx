@@ -27,7 +27,7 @@ const ClubList = () => {
   );
 };
 
-export const ClubsPage = () => {
+export const ClubsGrid = () => {
   return (
     <Box>
       <Stack

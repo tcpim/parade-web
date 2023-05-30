@@ -2,8 +2,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { ClubFeed } from "./components/Club/ClubFeed";
-import { ClubsPage } from "./components/Club/ClubsPage";
+import { ClubPage } from "./components/Club/ClubPage";
+import { ClubsGrid } from "./components/Club/ClubsGrid";
 import { Feed } from "./components/Homepage/Feed";
 import { PostCreationPage } from "./components/Post/PostCreationPage";
 import { PostPage } from "./components/Post/PostPage";
@@ -94,7 +94,7 @@ export const App = () => {
             path="/clubs"
             element={
               <LayoutWithSideBar>
-                <ClubsPage />
+                <ClubsGrid />
               </LayoutWithSideBar>
             }
           />
@@ -102,7 +102,7 @@ export const App = () => {
             path="/clubs/:clubId"
             element={
               <LayoutWithSideBar>
-                <ClubFeed />
+                <ClubPage />
               </LayoutWithSideBar>
             }
           />

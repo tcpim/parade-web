@@ -56,11 +56,7 @@ export const ClubFeed = () => {
   }
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      sx={{ marginLeft: "15%", marginTop: "5%", marginRight: "15%" }}
-    >
+    <Fragment>
       <Box display="flex" justifyContent="space-evenly">
         <Button
           disabled={subPage === "recent"}
@@ -102,6 +98,6 @@ export const ClubFeed = () => {
           </Box>
         )}
       </Box>
-    </Box>
+    </Fragment>
   );
 };
