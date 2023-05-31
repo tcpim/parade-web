@@ -84,9 +84,15 @@ export const ClubFeed = () => {
                   content={post.words}
                   replies={post.replies.length}
                   emojis={post.emoji_reactions}
-                  nftCanisterId={post.nfts[0].canister_id}
-                  nftTokenIndex={post.nfts[0].token_index}
-                  nftImageUrl={post.nfts[0].original_thumbnail_url}
+                  nftInfo={
+                    post.nfts.length === 0
+                      ? undefined
+                      : {
+                          nftCanisterId: post.nfts[0].canister_id,
+                          nftTokenIndex: post.nfts[0].token_index,
+                          nftImageUrl: post.nfts[0].original_thumbnail_url,
+                        }
+                  }
                 />
               </Fragment>
             ))}

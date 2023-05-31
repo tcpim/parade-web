@@ -56,12 +56,14 @@ const PostDetail = ({ postId }: PostDetailProps) => {
       <Typography color="text.secondary">
         {getTimeperiod(post?.created_ts)}
       </Typography>
-      <Box marginLeft="150px" maxWidth="350px">
-        <NftImage
-          imageUrl={post?.nfts[0].original_thumbnail_url}
-          canisterId={post.nfts[0].canister_id}
-        />
-      </Box>
+      {post.nfts.length > 0 && (
+        <Box marginLeft="150px" maxWidth="350px">
+          <NftImage
+            imageUrl={post.nfts[0].original_thumbnail_url}
+            canisterId={post.nfts[0].canister_id}
+          />
+        </Box>
+      )}
       <Typography variant="h5" component="p">
         {post.words}
       </Typography>

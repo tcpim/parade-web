@@ -18,6 +18,10 @@ interface PostCardProps {
   content: string;
   replies: number;
   emojis: Array<[string, number]>;
+  nftInfo?: PostNftInfo;
+}
+
+interface PostNftInfo {
   nftCanisterId: string;
   nftTokenIndex: number;
   nftImageUrl: string;
@@ -30,9 +34,7 @@ export const PostCard = ({
   content,
   replies,
   emojis,
-  nftCanisterId,
-  nftTokenIndex,
-  nftImageUrl,
+  nftInfo,
 }: PostCardProps) => {
   const navigate = useNavigate();
 
@@ -47,13 +49,20 @@ export const PostCard = ({
           Created by: {createdBy}
         </Typography>
         <Typography color="text.secondary">{timeAgo}</Typography>
-        <Typography variant="body2" component="p">
-          {"NFT:  " + nftCanisterId + ": " + nftTokenIndex}
-        </Typography>
+        {nftInfo && (
+          <Typography variant="body2" component="p">
+            {"NFT:  " + nftInfo.nftCanisterId + ": " + nftInfo.nftTokenIndex}
+          </Typography>
+        )}
       </CardContent>
-      <Box marginLeft="200px" maxWidth="350px">
-        <NftImage imageUrl={nftImageUrl} canisterId={nftCanisterId} />
-      </Box>
+      {nftInfo && (
+        <Box marginLeft="200px" maxWidth="350px">
+          <NftImage
+            imageUrl={nftInfo.nftImageUrl}
+            canisterId={nftInfo.nftCanisterId}
+          />
+        </Box>
+      )}
       <CardContent>
         <Typography variant="body2" component="p">
           {content}

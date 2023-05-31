@@ -3,14 +3,13 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+import { v4 as uuidv4 } from "uuid";
 import {
-  CreatePostResponse,
   GetPostRepliesResponse,
   ReplyPostRequest,
   ReplyPostResponse,
 } from "../../../backend_declarations/main_server/main_server.did";
 import { useMainServer } from "../useMainServer";
-import { v4 as uuidv4 } from "uuid";
 
 export interface CreatePostReplyProps {
   userPid: string;
