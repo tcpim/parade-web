@@ -44,6 +44,8 @@ export const PostCreationForm = ({
   const [words, setWords] = useState("");
   const isClubNft = !!nftInfo.clubId;
   const [isPublicPost, setIsPublicPost] = useState(!isClubNft);
+  const [mutationFinished, setMutationFinished] = useState(false);
+
   const appContext = useContext(AppContext);
 
   const createPostMutation = useCreatePost({
@@ -52,6 +54,7 @@ export const PostCreationForm = ({
     words,
     isPublicPost,
     clubIds: isClubNft ? [nftInfo.clubId] : [],
+    onSuccessCallback: () => setMutationFinished(true),
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +105,7 @@ export const PostCreationForm = ({
       <DialogActions>
         {createPostMutation.isLoading ? (
           <CircularProgress />
-        ) : createPostMutation.isSuccess ? (
+        ) : mutationFinished ? (
           <Button onClick={handleCloseFormResetMutation}>Done</Button>
         ) : (
           <Fragment>

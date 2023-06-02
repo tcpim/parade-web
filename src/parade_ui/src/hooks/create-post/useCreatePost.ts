@@ -9,7 +9,7 @@ export interface CreatePostProps {
   nftInfo?: NftInfo;
   words: string;
   isPublicPost: boolean;
-  clubIds: string[];
+  clubIds: string[]; // used by club tweets
   onSuccessCallback?: any;
 }
 

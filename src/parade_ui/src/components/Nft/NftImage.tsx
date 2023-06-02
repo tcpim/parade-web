@@ -17,10 +17,22 @@ export const NftImage = ({ imageUrl, canisterId }: NftImageProps) => {
       <CardMedia component="video" src={imageUrl} autoPlay controls loop />
     );
   } else if (svgCanisters.has(canisterId)) {
-    return <CardMedia component="iframe" height="400" src={imageUrl} />;
+    return (
+      <CardMedia
+        component="iframe"
+        height="400"
+        src={imageUrl}
+        sx={{ objectFit: "contain" }}
+      />
+    );
   } else {
     return (
-      <CardMedia component="img" image={imageUrl} height="400" width="300" />
+      <CardMedia
+        component="img"
+        image={imageUrl}
+        height="400"
+        sx={{ objectFit: "contain" }}
+      />
     );
   }
 };
