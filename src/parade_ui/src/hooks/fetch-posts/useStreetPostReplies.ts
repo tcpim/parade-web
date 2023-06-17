@@ -1,10 +1,10 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   GetPostRepliesRequest,
   GetPostRepliesResponse,
 } from "../../../backend_declarations/main_server/main_server.did";
-import { useMainServer } from "../useMainServer";
 import { DEFAULT_PAGE_SIZE_FOR_REPLIES } from "../../utils/constants";
+import { useMainServer } from "../useMainServer";
 
 interface PostRepliesProps {
   postId: string;
@@ -21,7 +21,7 @@ const getPostRepliesRequest = (
   };
 };
 
-export const usePostRepiles = (props: PostRepliesProps) => {
+export const useStreetPostRepiles = (props: PostRepliesProps) => {
   const mainServer = useMainServer();
   const postRepliesQuery = useInfiniteQuery<GetPostRepliesResponse, Error>({
     queryKey: ["postReplies", props.postId],

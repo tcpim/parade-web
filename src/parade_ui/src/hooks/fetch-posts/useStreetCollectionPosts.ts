@@ -18,7 +18,7 @@ const getFetchRequest = (
   };
 };
 
-export const useCollectionPosts = (canisterId = "", enabled = true) => {
+export const useStreetCollectionPosts = (canisterId = "", enabled = true) => {
   const mainServer = useMainServer();
 
   const collectionPostsQuery = useInfiniteQuery<

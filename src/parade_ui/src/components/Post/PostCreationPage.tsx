@@ -10,7 +10,7 @@ import Checkbox from "@mui/material/Checkbox";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../App";
-import { useCreatePost } from "../../hooks/create-post/useCreatePost";
+import { useCreatePost } from "../../hooks/create-post/useCreateStreetPost";
 import { NftImage } from "../Nft/NftImage";
 import { NftSelector } from "../Nft/NftSelector";
 import { NftInfo } from "../Nft/nft";

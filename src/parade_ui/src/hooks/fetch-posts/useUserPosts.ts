@@ -1,11 +1,11 @@
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
-import { useMainServer } from "../useMainServer";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   GetUserPostsRequest,
   GetUserPostsResponse,
   UserPostCreatedTsKey,
 } from "../../../backend_declarations/main_server/main_server.did";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
+import { useMainServer } from "../useMainServer";
 
 const getFetchRequest = (
   userPid: string,

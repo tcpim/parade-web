@@ -1,7 +1,7 @@
 import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import { AppContext } from "../../App";
-import { useCreatePost } from "../../hooks/create-post/useCreatePost";
+import { useCreatePost } from "../../hooks/create-post/useCreateStreetPost";
 
 interface ClubTweetProps {
   clubId: string;

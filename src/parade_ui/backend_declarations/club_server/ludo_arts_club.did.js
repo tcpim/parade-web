@@ -7,53 +7,48 @@ export const idlFactory = ({ IDL }) => {
     'original_image_url' : IDL.Text,
     'original_thumbnail_url' : IDL.Text,
   });
-  const AddClubPostToStreetRequest = IDL.Record({
-    'post_id' : IDL.Text,
-    'nfts' : IDL.Vec(NftToken),
-    'created_by' : IDL.Text,
-    'created_ts' : IDL.Nat64,
-    'club_id' : IDL.Text,
-  });
-  const UserPostCreatedTsKey = IDL.Record({
-    'post_id' : IDL.Text,
-    'created_ts' : IDL.Nat64,
-    'user_id' : IDL.Text,
-    'club_id' : IDL.Opt(IDL.Text),
-  });
-  const CreateStreetPostRequest = IDL.Record({
+  const CreatePostRequest = IDL.Record({
     'post_id' : IDL.Text,
     'nfts' : IDL.Vec(NftToken),
     'created_by' : IDL.Text,
     'created_ts' : IDL.Nat64,
     'words' : IDL.Text,
+    'in_public' : IDL.Bool,
   });
   const Post = IDL.Record({
     'id' : IDL.Text,
-    'updated_ts' : IDL.Opt(IDL.Nat64),
+    'updated_ts' : IDL.Nat64,
     'emoji_reactions' : IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat32)),
     'nfts' : IDL.Vec(NftToken),
     'created_by' : IDL.Text,
     'created_ts' : IDL.Nat64,
     'replies' : IDL.Vec(IDL.Text),
     'words' : IDL.Text,
+    'in_public' : IDL.Bool,
+    'trending_score' : IDL.Opt(IDL.Nat32),
   });
   const ServerError = IDL.Variant({
     'GetPostError' : IDL.Text,
-    'GetTrendingPostsError' : IDL.Text,
     'ReactEmojiError' : IDL.Text,
     'CreatePostGeneralError' : IDL.Text,
-    'GetPostByCollectionError' : IDL.Text,
     'ReplyPostError' : IDL.Text,
-    'GetStreetPostsError' : IDL.Text,
     'GetPostRepliesError' : IDL.Text,
     'DeletePostError' : IDL.Text,
-    'GetPostByUserError' : IDL.Text,
   });
-  const CreateStreetPostResponse = IDL.Record({
+  const CreatePostResponse = IDL.Record({
     'post' : Post,
     'error' : IDL.Opt(ServerError),
   });
   const DeletePostResponse = IDL.Record({ 'error' : IDL.Opt(ServerError) });
+  const ClubInfo = IDL.Record({
+    'club_description' : IDL.Text,
+    'club_name' : IDL.Text,
+    'club_id' : IDL.Text,
+  });
+  const GetPostByIdResponse = IDL.Record({
+    'post' : IDL.Vec(Post),
+    'error' : IDL.Opt(ServerError),
+  });
   const GetPostRepliesRequest = IDL.Record({
     'post_id' : IDL.Text,
     'offset' : IDL.Int32,
@@ -73,60 +68,38 @@ export const idlFactory = ({ IDL }) => {
     'error' : IDL.Opt(ServerError),
     'post_replies' : IDL.Vec(PostReply),
   });
+  const PostCreatedTsKey = IDL.Record({
+    'post_id' : IDL.Text,
+    'created_ts' : IDL.Nat64,
+  });
+  const GetPostsRequest = IDL.Record({
+    'cursor' : IDL.Opt(PostCreatedTsKey),
+    'limit' : IDL.Opt(IDL.Int32),
+  });
+  const GetPostsResponse = IDL.Record({
+    'error' : IDL.Opt(ServerError),
+    'next_cursor' : IDL.Opt(PostCreatedTsKey),
+    'posts' : IDL.Vec(Post),
+  });
   const CollectionPostCreatedTsKey = IDL.Record({
     'post_id' : IDL.Text,
     'canister_id' : IDL.Text,
     'created_ts' : IDL.Nat64,
-    'club_id' : IDL.Opt(IDL.Text),
   });
   const GetCollectionPostsRequest = IDL.Record({
     'cursor' : IDL.Opt(CollectionPostCreatedTsKey),
     'canister_id' : IDL.Text,
     'limit' : IDL.Opt(IDL.Int32),
   });
-  const ClubPost = IDL.Record({ 'post_id' : IDL.Text, 'club_id' : IDL.Text });
-  const PostType = IDL.Record({
-    'post' : IDL.Opt(Post),
-    'club_post' : IDL.Opt(ClubPost),
-  });
   const GetCollectionPostsResponse = IDL.Record({
     'error' : IDL.Opt(ServerError),
     'next_cursor' : IDL.Opt(CollectionPostCreatedTsKey),
-    'posts' : IDL.Vec(PostType),
-  });
-  const GetUserPostsRequest = IDL.Record({
-    'cursor' : IDL.Opt(UserPostCreatedTsKey),
-    'user_id' : IDL.Text,
-    'limit' : IDL.Opt(IDL.Int32),
-  });
-  const GetUserPostsResponse = IDL.Record({
-    'error' : IDL.Opt(ServerError),
-    'next_cursor' : IDL.Opt(UserPostCreatedTsKey),
-    'posts' : IDL.Vec(PostType),
-  });
-  const GetPostByIdResponse = IDL.Record({
-    'post' : IDL.Opt(Post),
-    'error' : IDL.Opt(ServerError),
-  });
-  const PostCreatedTsKey = IDL.Record({
-    'post_id' : IDL.Text,
-    'created_ts' : IDL.Nat64,
-    'club_id' : IDL.Opt(IDL.Text),
-  });
-  const GetStreetPostsRequest = IDL.Record({
-    'cursor' : IDL.Opt(PostCreatedTsKey),
-    'limit' : IDL.Opt(IDL.Int32),
-  });
-  const GetStreetPostsResponse = IDL.Record({
-    'error' : IDL.Opt(ServerError),
-    'next_cursor' : IDL.Opt(PostCreatedTsKey),
-    'posts' : IDL.Vec(PostType),
+    'posts' : IDL.Vec(Post),
   });
   const TrendingPostKey = IDL.Record({
     'updated_ts' : IDL.Nat64,
     'post_id' : IDL.Text,
     'created_ts' : IDL.Nat64,
-    'club_id' : IDL.Opt(IDL.Text),
     'trending_score' : IDL.Nat32,
   });
   const TrendingPostCollectionKey = IDL.Record({
@@ -141,16 +114,16 @@ export const idlFactory = ({ IDL }) => {
   const GetTrendingCollectionPostResponse = IDL.Record({
     'error' : IDL.Opt(ServerError),
     'next_cursor' : IDL.Opt(TrendingPostCollectionKey),
-    'posts' : IDL.Vec(PostType),
+    'posts' : IDL.Vec(Post),
   });
-  const GetTrendingStreetPostRequest = IDL.Record({
+  const GetTrendingPostRequest = IDL.Record({
     'cursor' : IDL.Opt(TrendingPostKey),
     'limit' : IDL.Opt(IDL.Int32),
   });
-  const GetTrendingStreetPostResponse = IDL.Record({
+  const GetTrendingPostResponse = IDL.Record({
     'error' : IDL.Opt(ServerError),
     'next_cursor' : IDL.Opt(TrendingPostKey),
-    'posts' : IDL.Vec(PostType),
+    'posts' : IDL.Vec(Post),
   });
   const ReactEmojiRequest = IDL.Record({
     'post_id' : IDL.Opt(IDL.Text),
@@ -171,43 +144,22 @@ export const idlFactory = ({ IDL }) => {
     'error' : IDL.Opt(ServerError),
     'reply' : PostReply,
   });
-  const UpdateClubPostStreetTrendingScoreRequest = IDL.Record({
-    'new' : TrendingPostKey,
-    'nft_canister_ids' : IDL.Vec(IDL.Text),
-  });
+  const SetClubInfoRequest = IDL.Record({ 'info' : ClubInfo });
   return IDL.Service({
-    'add_club_post_to_street' : IDL.Func([AddClubPostToStreetRequest], [], []),
-    'add_club_post_to_user' : IDL.Func([UserPostCreatedTsKey], [], []),
-    'create_street_post' : IDL.Func(
-        [CreateStreetPostRequest],
-        [CreateStreetPostResponse],
-        [],
-      ),
+    'create_post' : IDL.Func([CreatePostRequest], [CreatePostResponse], []),
     'delete_all_post' : IDL.Func([], [], []),
     'delete_post' : IDL.Func([IDL.Text], [DeletePostResponse], []),
+    'get_club_info' : IDL.Func([], [ClubInfo], ['query']),
+    'get_post_by_id' : IDL.Func([IDL.Text], [GetPostByIdResponse], ['query']),
     'get_post_replies' : IDL.Func(
         [GetPostRepliesRequest],
         [GetPostRepliesResponse],
         ['query'],
       ),
+    'get_posts' : IDL.Func([GetPostsRequest], [GetPostsResponse], ['query']),
     'get_posts_by_collection' : IDL.Func(
         [GetCollectionPostsRequest],
         [GetCollectionPostsResponse],
-        ['query'],
-      ),
-    'get_posts_by_user' : IDL.Func(
-        [GetUserPostsRequest],
-        [GetUserPostsResponse],
-        ['query'],
-      ),
-    'get_street_post_by_id' : IDL.Func(
-        [IDL.Text],
-        [GetPostByIdResponse],
-        ['query'],
-      ),
-    'get_street_posts' : IDL.Func(
-        [GetStreetPostsRequest],
-        [GetStreetPostsResponse],
         ['query'],
       ),
     'get_trending_collection_posts' : IDL.Func(
@@ -215,18 +167,14 @@ export const idlFactory = ({ IDL }) => {
         [GetTrendingCollectionPostResponse],
         ['query'],
       ),
-    'get_trending_street_posts' : IDL.Func(
-        [GetTrendingStreetPostRequest],
-        [GetTrendingStreetPostResponse],
+    'get_trending_posts' : IDL.Func(
+        [GetTrendingPostRequest],
+        [GetTrendingPostResponse],
         ['query'],
       ),
     'react_emoji' : IDL.Func([ReactEmojiRequest], [DeletePostResponse], []),
     'reply_post' : IDL.Func([ReplyPostRequest], [ReplyPostResponse], []),
-    'update_club_post_trending_score' : IDL.Func(
-        [UpdateClubPostStreetTrendingScoreRequest],
-        [],
-        [],
-      ),
+    'set_club_info' : IDL.Func([SetClubInfoRequest], [], []),
   });
 };
 export const init = ({ IDL }) => { return []; };
