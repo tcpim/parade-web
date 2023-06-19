@@ -15,8 +15,8 @@ import Paper, { PaperProps } from "@mui/material/Paper";
 import React, { Fragment, useContext, useState } from "react";
 import Draggable from "react-draggable";
 import { AppContext } from "../../App";
-import { useCreatePost } from "../../hooks/create-post/useCreateStreetPost";
-import { NftInfo } from "../Nft/nft";
+import { useCreatePost } from "../../hooks/create-post/useCreatePost";
+import { NftInfo } from "../../types/nft";
 
 export interface PostCreationFormProps {
   open: boolean;
@@ -52,8 +52,9 @@ export const PostCreationForm = ({
     userPid: appContext.userLoginInfo.userPid,
     nftInfo,
     words,
-    isPublicPost,
-    clubIds: isClubNft ? [nftInfo.clubId] : [],
+    clubInfo: isClubNft
+      ? { clubId: nftInfo.clubId ?? "", isPublic: isPublicPost }
+      : undefined,
     onSuccessCallback: () => setMutationFinished(true),
   });
 

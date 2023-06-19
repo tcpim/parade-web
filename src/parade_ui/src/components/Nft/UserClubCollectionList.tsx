@@ -15,9 +15,9 @@ import {
   Club,
   useUserClubCollectionList,
 } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
+import { NftInfo } from "../../types/nft";
 import { PostCreationForm } from "../Post/PostCreationForm";
 import { NftCard } from "./NftCard";
-import { NftInfo } from "./nft";
 
 interface UserClubCollectionListProps {
   userAccount: string;

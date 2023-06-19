@@ -29,7 +29,7 @@ export const idlFactory = ({ IDL }) => {
   });
   const Post = IDL.Record({
     'id' : IDL.Text,
-    'updated_ts' : IDL.Opt(IDL.Nat64),
+    'updated_ts' : IDL.Nat64,
     'emoji_reactions' : IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat32)),
     'nfts' : IDL.Vec(NftToken),
     'created_by' : IDL.Text,
@@ -104,10 +104,7 @@ export const idlFactory = ({ IDL }) => {
     'next_cursor' : IDL.Opt(UserPostCreatedTsKey),
     'posts' : IDL.Vec(PostType),
   });
-  const GetPostByIdResponse = IDL.Record({
-    'post' : IDL.Opt(Post),
-    'error' : IDL.Opt(ServerError),
-  });
+  const GetPostByIdResponse = IDL.Record({ 'post' : IDL.Opt(Post) });
   const PostCreatedTsKey = IDL.Record({
     'post_id' : IDL.Text,
     'created_ts' : IDL.Nat64,

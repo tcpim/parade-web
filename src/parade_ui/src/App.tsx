@@ -83,6 +83,14 @@ export const App = () => {
             }
           />
           <Route
+            path="/club/:clubId/post/:postId"
+            element={
+              <LayoutWithSideBar>
+                <PostPage />
+              </LayoutWithSideBar>
+            }
+          />
+          <Route
             path="/post-creator"
             element={
               <LayoutWithSideBar>

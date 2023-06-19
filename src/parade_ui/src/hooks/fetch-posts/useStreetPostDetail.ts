@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetPostByIdResponse } from "../../../backend_declarations/main_server/main_server.did";
 import { useMainServer } from "../useMainServer";
 
-export const useStreetPostDetail = (postId: string) => {
+export const useStreetPostDetail = (postId: string, enabled: boolean) => {
   const server = useMainServer();
 
   const postDetailQuery = useQuery<GetPostByIdResponse, Error>({
@@ -11,6 +11,7 @@ export const useStreetPostDetail = (postId: string) => {
       const response = await server.get_street_post_by_id(postId);
       return response;
     },
+    enabled: enabled,
   });
 
   return postDetailQuery;

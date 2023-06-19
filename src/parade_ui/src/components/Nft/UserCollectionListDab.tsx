@@ -15,9 +15,9 @@ import { styled } from "@mui/material/styles";
 import { NFTCollection, NFTDetails } from "@psychedelic/dab-js";
 import { useEffect, useState } from "react";
 import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
+import { NftInfo } from "../../types/nft";
 import { PostCreationForm } from "../Post/PostCreationForm";
 import { NftImage } from "./NftImage";
-import { NftInfo } from "./nft";
 
 export interface NftImageProps {
   index: string;

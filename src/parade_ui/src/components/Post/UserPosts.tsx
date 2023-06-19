@@ -43,9 +43,9 @@ const UserPosts = ({ userPid }: UserPostsProps) => {
       {userPostQuery.data.pages.map((page, index) => (
         <Fragment key={index}>
           {page.posts.map((post) => (
-            <Fragment key={post.id}>
+            <Fragment key={post.post_id}>
               <PostCard
-                postId={post.id}
+                postId={post.post_id}
                 createdBy={post.created_by}
                 timeAgo={getTimeperiod(post.created_ts)}
                 content={post.words}
@@ -54,12 +54,13 @@ const UserPosts = ({ userPid }: UserPostsProps) => {
                 nftInfo={
                   post.nfts.length > 0
                     ? {
-                        nftCanisterId: post.nfts[0].canister_id,
-                        nftTokenIndex: post.nfts[0].token_index,
-                        nftImageUrl: post.nfts[0].original_thumbnail_url,
+                        nftCanisterId: post.nfts[0].nftCanisterId,
+                        nftTokenIndex: post.nfts[0].nftTokenIndex,
+                        nftImageUrl: post.nfts[0].nftOriginalThumbnailUrl,
                       }
                     : undefined
                 }
+                clubId={post.clubId}
               />
             </Fragment>
           ))}

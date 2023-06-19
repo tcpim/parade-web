@@ -19,6 +19,7 @@ interface PostCardProps {
   replies: number;
   emojis: Array<[string, number]>;
   nftInfo?: PostNftInfo;
+  clubId?: string;
 }
 
 interface PostNftInfo {
@@ -35,11 +36,17 @@ export const PostCard = ({
   replies,
   emojis,
   nftInfo,
+  clubId = "",
 }: PostCardProps) => {
   const navigate = useNavigate();
 
+  console.log("!!!!!!!!!1", clubId);
   const handlePostClick = () => {
-    navigate("/post/" + postId);
+    if (clubId) {
+      navigate("/club/" + clubId + "/post/" + postId);
+    } else {
+      navigate("/post/" + postId);
+    }
   };
 
   return (
@@ -69,7 +76,7 @@ export const PostCard = ({
         </Typography>
       </CardContent>
       <CardContent>
-        <Emojis postId={postId} emojis={emojis} />
+        <Emojis postId={postId} emojis={emojis} clubId={clubId} />
       </CardContent>
       <CardActions disableSpacing onClick={handlePostClick}>
         <IconButton aria-label="number of replies">

@@ -4,7 +4,8 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { Box, IconButton, Menu, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { AppContext } from "../../App";
-import { useReactEmoji } from "../../hooks/react-to-post/useReactEmoji";
+import { useReactEmojiClub } from "../../hooks/react-to-post/useReactEmojiClub";
+import { useReactEmojiStreet } from "../../hooks/react-to-post/useReactEmojiStreet";
 
 interface EmojiPickerProps {
   handleEmojiClick: (emoji: any) => void;
@@ -23,19 +24,27 @@ const EmojiPicker = ({ handleEmojiClick }: EmojiPickerProps) => {
 export interface EmojisProps {
   postId?: string;
   replyId?: string;
+  clubId?: string;
   emojis: Array<[string, number]>;
 }
 
-export const Emojis = ({ postId, replyId, emojis }: EmojisProps) => {
+export const Emojis = ({ postId, replyId, emojis, clubId }: EmojisProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [emojisCount, setEmojisCount] =
     useState<Array<[string, number]>>(emojis);
   const appContext = useContext(AppContext);
-  const reactEmojiMutation = useReactEmoji({
+  const streetMutation = useReactEmojiStreet({
     postId: postId,
     replyId: replyId,
     userPid: appContext.userLoginInfo.userPid,
   });
+  const clubMutation = useReactEmojiClub({
+    postId: postId,
+    replyId: replyId,
+    userPid: appContext.userLoginInfo.userPid,
+    clubId: clubId ?? "",
+  });
+  const mutation = clubId ? clubMutation : streetMutation;
 
   // for emoji picker anchor
   const open = Boolean(anchorEl);
@@ -45,14 +54,14 @@ export const Emojis = ({ postId, replyId, emojis }: EmojisProps) => {
 
   // handle click events
   const handleEmojiClick = (emoji: any) => {
-    reactEmojiMutation.mutate(emoji.unified);
+    mutation.mutate(emoji.unified);
     increaseEmojiCount(emoji.unified);
   };
   const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handlePlusOneClick = (emoji: string) => {
-    reactEmojiMutation.mutate(emoji);
+    mutation.mutate(emoji);
     increaseEmojiCount(emoji);
   };
 

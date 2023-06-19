@@ -1,13 +1,3 @@
-export interface NftInfo {
-  nftCanisterId: string;
-  nftTokenIndex: number;
-  nftTokenIdentifier: string;
-  nftCollectionName: string;
-  nftOriginalImageUrl: string;
-  nftOriginalThumbnailUrl: string;
-  clubId: string;
-}
-
 export const clubCanisterIds: Set<string> = new Set<string>();
 
 // Add items to the hashSet

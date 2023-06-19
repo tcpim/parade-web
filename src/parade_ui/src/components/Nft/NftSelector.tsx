@@ -15,8 +15,8 @@ import {
   useUserClubCollectionList,
 } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
 import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
+import { NftInfo } from "../../types/nft";
 import { NftImage } from "./NftImage";
-import { NftInfo } from "./nft";
 
 interface NftSelectorProps {
   onNftSelected: (nft: NftInfo) => void;

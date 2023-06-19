@@ -6,11 +6,6 @@ import {
 import { DEFAULT_PAGE_SIZE_FOR_REPLIES } from "../../utils/constants";
 import { useClubServer } from "../useClubServer";
 
-interface PostRepliesProps {
-  postId: string;
-  clubId: string;
-}
-
 const getPostRepliesRequest = (
   postId: string,
   offset: number
@@ -22,13 +17,17 @@ const getPostRepliesRequest = (
   };
 };
 
-export const useClubPostRepiles = (props: PostRepliesProps) => {
-  const server = useClubServer(props.clubId);
+export const useClubPostRepiles = (
+  postId: string,
+  clubId: string,
+  enabled: boolean
+) => {
+  const server = useClubServer(clubId);
 
   const postRepliesQuery = useInfiniteQuery<GetPostRepliesResponse, Error>({
-    queryKey: ["postReplies", props.postId],
+    queryKey: ["clubPostReplies", postId],
     queryFn: async ({ pageParam = 0 }) => {
-      const request = getPostRepliesRequest(props.postId, pageParam);
+      const request = getPostRepliesRequest(postId, pageParam);
       const response = await server.get_post_replies(request);
       return response;
     },
@@ -40,6 +39,7 @@ export const useClubPostRepiles = (props: PostRepliesProps) => {
       }
     },
     keepPreviousData: true,
+    enabled: enabled,
   });
 
   return postRepliesQuery;

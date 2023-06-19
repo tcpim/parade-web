@@ -24,8 +24,8 @@ export const idlFactory = ({ IDL }) => {
     'created_ts' : IDL.Nat64,
     'replies' : IDL.Vec(IDL.Text),
     'words' : IDL.Text,
+    'club_id' : IDL.Text,
     'in_public' : IDL.Bool,
-    'trending_score' : IDL.Opt(IDL.Nat32),
   });
   const ServerError = IDL.Variant({
     'GetPostError' : IDL.Text,
@@ -45,10 +45,8 @@ export const idlFactory = ({ IDL }) => {
     'club_name' : IDL.Text,
     'club_id' : IDL.Text,
   });
-  const GetPostByIdResponse = IDL.Record({
-    'post' : IDL.Vec(Post),
-    'error' : IDL.Opt(ServerError),
-  });
+  const GetPostByIdResponse = IDL.Record({ 'post' : IDL.Opt(Post) });
+  const GetPostByIdsResponse = IDL.Record({ 'posts' : IDL.Vec(IDL.Opt(Post)) });
   const GetPostRepliesRequest = IDL.Record({
     'post_id' : IDL.Text,
     'offset' : IDL.Int32,
@@ -151,6 +149,11 @@ export const idlFactory = ({ IDL }) => {
     'delete_post' : IDL.Func([IDL.Text], [DeletePostResponse], []),
     'get_club_info' : IDL.Func([], [ClubInfo], ['query']),
     'get_post_by_id' : IDL.Func([IDL.Text], [GetPostByIdResponse], ['query']),
+    'get_post_by_ids' : IDL.Func(
+        [IDL.Vec(IDL.Text)],
+        [GetPostByIdsResponse],
+        ['query'],
+      ),
     'get_post_replies' : IDL.Func(
         [GetPostRepliesRequest],
         [GetPostRepliesResponse],

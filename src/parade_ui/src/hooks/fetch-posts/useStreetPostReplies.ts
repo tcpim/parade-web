@@ -6,10 +6,6 @@ import {
 import { DEFAULT_PAGE_SIZE_FOR_REPLIES } from "../../utils/constants";
 import { useMainServer } from "../useMainServer";
 
-interface PostRepliesProps {
-  postId: string;
-}
-
 const getPostRepliesRequest = (
   postId: string,
   offset: number
@@ -21,12 +17,12 @@ const getPostRepliesRequest = (
   };
 };
 
-export const useStreetPostRepiles = (props: PostRepliesProps) => {
+export const useStreetPostRepiles = (postId: string, enabled: boolean) => {
   const mainServer = useMainServer();
   const postRepliesQuery = useInfiniteQuery<GetPostRepliesResponse, Error>({
-    queryKey: ["postReplies", props.postId],
+    queryKey: ["postReplies", postId],
     queryFn: async ({ pageParam = 0 }) => {
-      const request = getPostRepliesRequest(props.postId, pageParam);
+      const request = getPostRepliesRequest(postId, pageParam);
       const response = await mainServer.get_post_replies(request);
       return response;
     },
@@ -38,6 +34,7 @@ export const useStreetPostRepiles = (props: PostRepliesProps) => {
       }
     },
     keepPreviousData: true,
+    enabled: enabled,
   });
 
   return postRepliesQuery;

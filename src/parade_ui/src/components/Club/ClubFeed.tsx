@@ -93,6 +93,7 @@ export const ClubFeed = () => {
                           nftImageUrl: post.nfts[0].original_thumbnail_url,
                         }
                   }
+                  clubId={post.club_id}
                 />
               </Fragment>
             ))}

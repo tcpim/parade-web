@@ -8,14 +8,13 @@ import {
   GetPostRepliesResponse,
   ReplyPostRequest,
   ReplyPostResponse,
-} from "../../../backend_declarations/club_server/ludo_arts_club.did";
-import { useClubServer } from "../useClubServer";
+} from "../../../backend_declarations/main_server/main_server.did";
+import { useMainServer } from "../useMainServer";
 
 export interface CreatePostReplyProps {
   userPid: string;
   postId: string;
   words: string;
-  clubId: string;
 }
 
 const getReplyPostRequest = (props: CreatePostReplyProps): ReplyPostRequest => {
@@ -29,8 +28,8 @@ const getReplyPostRequest = (props: CreatePostReplyProps): ReplyPostRequest => {
   };
 };
 
-export const useCreateStreetPostReply = (props: CreatePostReplyProps) => {
-  const mainServer = useClubServer(props.clubId);
+export const useReplyStreetPost = (props: CreatePostReplyProps) => {
+  const mainServer = useMainServer();
   const queryClient = useQueryClient();
 
   const addReply = (

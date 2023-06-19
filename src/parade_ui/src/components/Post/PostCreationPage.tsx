@@ -10,10 +10,11 @@ import Checkbox from "@mui/material/Checkbox";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../App";
-import { useCreatePost } from "../../hooks/create-post/useCreateStreetPost";
+import { useCreatePost } from "../../hooks/create-post/useCreatePost";
+import { NftInfo } from "../../types/nft";
+import { Post } from "../../types/post";
 import { NftImage } from "../Nft/NftImage";
 import { NftSelector } from "../Nft/NftSelector";
-import { NftInfo } from "../Nft/nft";
 
 export const PostCreationPage = () => {
   const navigate = useNavigate();
@@ -23,12 +24,15 @@ export const PostCreationPage = () => {
   const [words, setWords] = useState("");
   const [createPostFinished, setCreatePostFinished] = useState(false);
 
+  const clubId = selectedNft?.clubId;
+
   const createPostMutation = useCreatePost({
     userPid: appContext.userLoginInfo.userPid,
     nftInfo: selectedNft,
     words: words,
-    isPublicPost: postToStreetChecked || selectedNft?.clubId === "",
-    clubIds: selectedNft ? [selectedNft.clubId] : [],
+    clubInfo: clubId
+      ? { clubId: clubId, isPublic: postToStreetChecked }
+      : undefined,
     onSuccessCallback: () => handlePostCreationFinished(),
   });
 
@@ -38,6 +42,16 @@ export const PostCreationPage = () => {
 
   const handlePostCreationFinished = () => {
     setCreatePostFinished(true);
+  };
+
+  const handleCheckPostClicked = (post?: Post) => {
+    if (post) {
+      if (post.clubId) {
+        navigate(`/club/${post.clubId}/post/${post.post_id}`);
+      } else {
+        navigate(`/post/${post.post_id}`);
+      }
+    }
   };
 
   return (
@@ -98,9 +112,7 @@ export const PostCreationPage = () => {
             <Button
               sx={{ marginTop: 1 }}
               variant="contained"
-              onClick={() =>
-                navigate("/post/" + createPostMutation.data?.post.id)
-              }
+              onClick={() => handleCheckPostClicked(createPostMutation.data)}
             >
               Check your post
             </Button>

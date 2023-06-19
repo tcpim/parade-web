@@ -8,13 +8,14 @@ import {
   GetPostRepliesResponse,
   ReplyPostRequest,
   ReplyPostResponse,
-} from "../../../backend_declarations/main_server/main_server.did";
-import { useMainServer } from "../useMainServer";
+} from "../../../backend_declarations/club_server/ludo_arts_club.did";
+import { useClubServer } from "../useClubServer";
 
 export interface CreatePostReplyProps {
   userPid: string;
   postId: string;
   words: string;
+  clubId: string;
 }
 
 const getReplyPostRequest = (props: CreatePostReplyProps): ReplyPostRequest => {
@@ -28,15 +29,15 @@ const getReplyPostRequest = (props: CreatePostReplyProps): ReplyPostRequest => {
   };
 };
 
-export const useCreatePostReply = (props: CreatePostReplyProps) => {
-  const mainServer = useMainServer();
+export const useReplyClubPost = (props: CreatePostReplyProps) => {
+  const clubServer = useClubServer(props.clubId);
   const queryClient = useQueryClient();
 
   const addReply = (
     props: CreatePostReplyProps
   ): Promise<ReplyPostResponse> => {
     const request = getReplyPostRequest(props);
-    return mainServer.reply_post(request);
+    return clubServer.reply_post(request);
   };
 
   const mutation = useMutation(() => addReply(props), {

@@ -15,9 +15,9 @@ import {
   Token,
   useUserCollectionList,
 } from "../../hooks/fetch-nft-data/useUserCollectionList";
+import { NftInfo } from "../../types/nft";
 import { PostCreationForm } from "../Post/PostCreationForm";
 import { NftCard } from "./NftCard";
-import { NftInfo } from "./nft";
 
 interface CollectionListProps {
   userAccount: string;

@@ -4,8 +4,10 @@ import Divider from "@mui/material/Divider";
 import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../../App";
-import { usePostDetail } from "../../hooks/fetch-posts/usePostDetail";
-import { useCreatePostReply } from "../../hooks/react-to-post/useCreatePostReply";
+import { useClubPostDetail } from "../../hooks/fetch-posts/useClubPostDetail";
+import { useStreetPostDetail } from "../../hooks/fetch-posts/useStreetPostDetail";
+import { useReplyClubPost } from "../../hooks/react-to-post/useReplyClubPost";
+import { useReplyStreetPost } from "../../hooks/react-to-post/useReplyStreetPost";
 import { getTimeperiod } from "../../utils/getTimePeriod";
 import { NftImage } from "../Nft/NftImage";
 import { Emojis } from "./Emojis";
@@ -13,17 +15,30 @@ import { PostRepliesMemo } from "./PostReplies";
 
 interface PostDetailProps {
   postId: string;
+  clubId?: string;
 }
 
-const PostDetail = ({ postId }: PostDetailProps) => {
+const PostDetail = ({ postId, clubId }: PostDetailProps) => {
   const appContext = useContext(AppContext);
-  const postDetailQuery = usePostDetail(postId);
+  const streetQuery = useStreetPostDetail(postId, clubId === undefined);
+  const clubQuery = useClubPostDetail(
+    postId,
+    clubId ?? "",
+    clubId !== undefined
+  );
+  const query = clubId ? clubQuery : streetQuery;
   const [reply, setReply] = useState("");
 
-  const replyPostmutation = useCreatePostReply({
+  const streetMutation = useReplyStreetPost({
     postId: postId,
     words: reply,
     userPid: appContext.userLoginInfo.userPid,
+  });
+  const clubMutation = useReplyClubPost({
+    postId: postId,
+    words: reply,
+    userPid: appContext.userLoginInfo.userPid,
+    clubId: clubId ?? "",
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,23 +46,24 @@ const PostDetail = ({ postId }: PostDetailProps) => {
   };
 
   const handleReplySubmit = () => {
-    replyPostmutation.mutate();
+    clubId ? clubMutation.mutate() : streetMutation.mutate();
   };
 
-  if (postDetailQuery.isLoading) {
+  const isMutationLoading = () => {
+    return clubId ? clubMutation.isLoading : streetMutation.isLoading;
+  };
+
+  if (query.isLoading) {
     return (
       <Box>
         <CircularProgress />
       </Box>
     );
-  } else if (
-    postDetailQuery.data === undefined ||
-    postDetailQuery.data?.post.length === 0
-  ) {
+  } else if (query.data === undefined || query.data?.post.length === 0) {
     return <h1>No post found</h1>;
   }
 
-  const post = postDetailQuery.data.post[0];
+  const post = query.data.post[0];
   return (
     <Box sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
       <Typography variant="h6" gutterBottom>
@@ -67,7 +83,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
       <Typography variant="h5" component="p">
         {post.words}
       </Typography>
-      <Emojis postId={postId} emojis={post.emoji_reactions} />
+      <Emojis postId={postId} emojis={post.emoji_reactions} clubId={clubId} />
       <Box display="flex" justifyContent="start" width="600px">
         <TextField
           id="reply"
@@ -76,7 +92,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
           multiline
           onChange={handleInputChange}
         />
-        {replyPostmutation.isLoading ? (
+        {isMutationLoading() ? (
           <CircularProgress />
         ) : (
           <Button variant="contained" onClick={handleReplySubmit}>
@@ -91,6 +107,7 @@ const PostDetail = ({ postId }: PostDetailProps) => {
 
 export const PostPage = () => {
   let { postId } = useParams();
+  let { clubId } = useParams();
 
   return (
     <Box sx={{ marginTop: "5%" }}>
@@ -101,7 +118,7 @@ export const PostPage = () => {
         height="100vh"
         sx={{ marginTop: "5%" }}
       >
-        <PostDetail postId={postId ?? "0"} />
+        <PostDetail postId={postId ?? "0"} clubId={clubId} />
       </Stack>
     </Box>
   );

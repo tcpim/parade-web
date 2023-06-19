@@ -3,13 +3,13 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { DABCollection } from "@psychedelic/dab-js";
 import { Fragment, useState } from "react";
-import { Post } from "../../../backend_declarations/main_server/main_server.did";
 import { useAllCollectionsDab } from "../../hooks/fetch-nft-data/useAllCollectionsDab";
-import { useCollectionPosts } from "../../hooks/fetch-posts/useCollectionPosts";
+import { useStreetCollectionPosts } from "../../hooks/fetch-posts/useStreetCollectionPosts";
 import { useStreetPosts } from "../../hooks/fetch-posts/useStreetPosts";
 import { useTrendingCollectionPosts } from "../../hooks/fetch-trending-posts/useTrendingCollectionPosts";
 import { useTrendingStreetPosts } from "../../hooks/fetch-trending-posts/useTrendingStreetPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
+import { Post } from "../../types/post";
 import { getTimeperiod } from "../../utils/getTimePeriod";
 import { PostCard } from "../Post/PostCard";
 
@@ -26,7 +26,7 @@ export const Feed = () => {
   const trendingStreetPostsQuery = useTrendingStreetPosts(
     selectedCollection === "" && subPage === "trending"
   );
-  const collectionPostsQuery = useCollectionPosts(
+  const collectionPostsQuery = useStreetCollectionPosts(
     selectedCollection,
     selectedCollection !== "" && subPage === "recent"
   );
@@ -120,19 +120,20 @@ export const Feed = () => {
         {normallizedQuery.data.pages.map((page: any, index: any) => (
           <Fragment key={index}>
             {page.posts.map((post: Post) => (
-              <Fragment key={post.id}>
+              <Fragment key={post.post_id}>
                 <PostCard
-                  postId={post.id}
+                  postId={post.post_id}
                   createdBy={post.created_by}
                   timeAgo={getTimeperiod(post.created_ts)}
                   content={post.words}
                   replies={post.replies.length}
                   emojis={post.emoji_reactions}
                   nftInfo={{
-                    nftCanisterId: post.nfts[0].canister_id,
-                    nftTokenIndex: post.nfts[0].token_index,
-                    nftImageUrl: post.nfts[0].original_thumbnail_url,
+                    nftCanisterId: post.nfts[0].nftCanisterId,
+                    nftTokenIndex: post.nfts[0].nftTokenIndex,
+                    nftImageUrl: post.nfts[0].nftOriginalThumbnailUrl,
                   }}
+                  clubId={post.clubId}
                 />
               </Fragment>
             ))}

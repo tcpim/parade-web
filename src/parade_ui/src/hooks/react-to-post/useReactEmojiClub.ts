@@ -9,7 +9,7 @@ interface ReactEmojiProps {
   clubId: string;
 }
 
-export const useReactEmojiStreet = (props: ReactEmojiProps) => {
+export const useReactEmojiClub = (props: ReactEmojiProps) => {
   const server = useClubServer(props.clubId);
 
   const addEmoji = (props: ReactEmojiProps, emoji: string) => {

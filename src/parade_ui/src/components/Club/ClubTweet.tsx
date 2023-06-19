@@ -1,7 +1,7 @@
 import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import { AppContext } from "../../App";
-import { useCreatePost } from "../../hooks/create-post/useCreateStreetPost";
+import { useCreateClubPost } from "../../hooks/create-post/useCreateClubPost";
 
 interface ClubTweetProps {
   clubId: string;
@@ -10,11 +10,11 @@ export const ClubTweet = ({ clubId }: ClubTweetProps) => {
   const appContext = useContext(AppContext);
   const [words, setWords] = useState("");
 
-  const createPostMutation = useCreatePost({
+  const createPostMutation = useCreateClubPost({
     userPid: appContext.userLoginInfo.userPid,
     words,
-    isPublicPost: false,
-    clubIds: [clubId],
+    inPublic: false,
+    clubId: clubId,
     onSuccessCallback: () => setWords(""),
   });
 

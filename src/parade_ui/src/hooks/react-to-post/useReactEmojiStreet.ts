@@ -8,7 +8,7 @@ interface ReactEmojiProps {
   userPid: string;
 }
 
-export const useReactEmoji = (props: ReactEmojiProps) => {
+export const useReactEmojiStreet = (props: ReactEmojiProps) => {
   const mainServer = useMainServer();
 
   const addEmoji = (props: ReactEmojiProps, emoji: string) => {
