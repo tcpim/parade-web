@@ -1,9 +1,6 @@
 import { ActorSubclass } from "@dfinity/agent";
-import {
-  QueryClient,
-  useInfiniteQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 import {
   CollectionPostCreatedTsKey,
   GetCollectionPostsRequest,
@@ -12,7 +9,7 @@ import {
 import { Post } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 import { useMainServer } from "../useMainServer";
-import { getPostFromPostTypes } from "./helper";
+import { useGetPostFromPostTypes } from "./useGetPostFromPostTypes";
 
 interface StreetCollectionPostsPage {
   posts: Array<Post>;
@@ -21,42 +18,38 @@ interface StreetCollectionPostsPage {
 
 const getFetchRequest = (
   canisterId: string,
-  cursor: [] | [CollectionPostCreatedTsKey]
+  cursor: [] | [CollectionPostCreatedTsKey],
+  limit: number
 ): GetCollectionPostsRequest => {
   return {
     canister_id: canisterId,
     cursor: cursor,
-    limit: [DEFAULT_PAGE_SIZE_FOR_FEED],
+    limit: [limit],
   };
 };
 
 export const useStreetCollectionPosts = (canisterId = "", enabled = true) => {
   const mainServer = useMainServer();
-  const queryClient = useQueryClient();
+  const getPosts = useGetPostFromPostTypes();
 
-  const queryFunction = async (
-    cursor: [] | [CollectionPostCreatedTsKey],
-    server: ActorSubclass<MainServer>,
-    queryClient: QueryClient
-  ): Promise<StreetCollectionPostsPage> => {
-    const len = DEFAULT_PAGE_SIZE_FOR_FEED;
-    const request = getFetchRequest(canisterId, cursor);
-    const collectionPosts = await server.get_posts_by_collection(request);
+  const queryFunction = useCallback(
+    async (
+      cursor: [] | [CollectionPostCreatedTsKey],
+      server: ActorSubclass<MainServer>
+    ): Promise<StreetCollectionPostsPage> => {
+      const len = DEFAULT_PAGE_SIZE_FOR_FEED;
+      const request = getFetchRequest(canisterId, cursor, len);
+      const collectionPosts = await server.get_posts_by_collection(request);
+      const posts = await getPosts(len, collectionPosts.posts);
 
-    const next_cursor = collectionPosts.next_cursor;
-
-    const posts = await getPostFromPostTypes(
-      len,
-      collectionPosts.posts,
-      queryClient
-    );
-
-    const result: StreetCollectionPostsPage = {
-      posts: posts,
-      next_cursor: next_cursor,
-    };
-    return result;
-  };
+      const result: StreetCollectionPostsPage = {
+        posts: posts,
+        next_cursor: collectionPosts.next_cursor,
+      };
+      return result;
+    },
+    [getPosts]
+  );
 
   const collectionPostsQuery = useInfiniteQuery<
     StreetCollectionPostsPage,
@@ -64,7 +57,7 @@ export const useStreetCollectionPosts = (canisterId = "", enabled = true) => {
   >({
     queryKey: ["collectionPosts", canisterId],
     queryFn: async ({ pageParam = [] }) => {
-      return await queryFunction(pageParam, mainServer, queryClient);
+      return await queryFunction(pageParam, mainServer);
     },
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.next_cursor.length === 0) {

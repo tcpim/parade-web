@@ -1,4 +1,5 @@
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 import {
   GetUserPostsRequest,
   UserPostCreatedTsKey,
@@ -6,7 +7,7 @@ import {
 import { Post } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 import { useMainServer } from "../useMainServer";
-import { getPostFromPostTypes } from "./helper";
+import { useGetPostFromPostTypes } from "./useGetPostFromPostTypes";
 
 interface UserPostsPage {
   posts: Array<Post>;
@@ -27,24 +28,23 @@ const getFetchRequest = (
 
 export const useUserPosts = (userPid: string) => {
   const mainServer = useMainServer();
-  const queryClient = useQueryClient();
+  const getPosts = useGetPostFromPostTypes();
 
-  const queryFunction = async (
-    cursor: [UserPostCreatedTsKey] | []
-  ): Promise<UserPostsPage> => {
-    const len = DEFAULT_PAGE_SIZE_FOR_FEED;
-    const request = getFetchRequest(userPid, cursor, len);
-    const userPosts = await mainServer.get_posts_by_user(request);
-    const next_cursor = userPosts.next_cursor;
+  const queryFunction = useCallback(
+    async (cursor: [UserPostCreatedTsKey] | []): Promise<UserPostsPage> => {
+      const len = DEFAULT_PAGE_SIZE_FOR_FEED;
+      const request = getFetchRequest(userPid, cursor, len);
+      const userPosts = await mainServer.get_posts_by_user(request);
+      const posts = await getPosts(len, userPosts.posts);
 
-    const posts = await getPostFromPostTypes(len, userPosts.posts, queryClient);
-
-    const result: UserPostsPage = {
-      posts: posts,
-      next_cursor: next_cursor,
-    };
-    return result;
-  };
+      const result: UserPostsPage = {
+        posts: posts,
+        next_cursor: userPosts.next_cursor,
+      };
+      return result;
+    },
+    [getPosts]
+  );
 
   const userPostsQuery = useInfiniteQuery<UserPostsPage, Error>({
     queryKey: ["userPosts", userPid],

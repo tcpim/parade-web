@@ -1,9 +1,6 @@
 import { ActorSubclass } from "@dfinity/agent";
-import {
-  QueryClient,
-  useInfiniteQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 import {
   GetStreetPostsRequest,
   _SERVICE as MainServer,
@@ -12,7 +9,7 @@ import {
 import { Post } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 import { useMainServer } from "../useMainServer";
-import { getPostFromPostTypes } from "./helper";
+import { useGetPostFromPostTypes } from "./useGetPostFromPostTypes";
 
 interface StreetPostsPage {
   posts: Array<Post>;
@@ -20,46 +17,42 @@ interface StreetPostsPage {
 }
 
 const getFetchRequest = (
-  cursor: [] | [PostCreatedTsKey]
+  cursor: [] | [PostCreatedTsKey],
+  limit: number
 ): GetStreetPostsRequest => {
   return {
     cursor: cursor,
-    limit: [DEFAULT_PAGE_SIZE_FOR_FEED],
+    limit: [limit],
   };
 };
 
 export const useStreetPosts = (enabled = true) => {
   const mainServer = useMainServer();
-  const queryClient = useQueryClient();
+  const getPosts = useGetPostFromPostTypes();
 
-  const queryFunction = async (
-    cursor: [] | [PostCreatedTsKey],
-    server: ActorSubclass<MainServer>,
-    queryClient: QueryClient
-  ): Promise<StreetPostsPage> => {
-    const len = DEFAULT_PAGE_SIZE_FOR_FEED;
-    const request = getFetchRequest(cursor);
-    const streetPosts = await server.get_street_posts(request);
+  const queryFunction = useCallback(
+    async (
+      cursor: [] | [PostCreatedTsKey],
+      server: ActorSubclass<MainServer>
+    ): Promise<StreetPostsPage> => {
+      const len = DEFAULT_PAGE_SIZE_FOR_FEED;
+      const request = getFetchRequest(cursor, len);
+      const streetPosts = await server.get_street_posts(request);
+      const posts = await getPosts(len, streetPosts.posts);
 
-    const next_cursor = streetPosts.next_cursor;
-
-    const posts = await getPostFromPostTypes(
-      len,
-      streetPosts.posts,
-      queryClient
-    );
-
-    const result: StreetPostsPage = {
-      posts: posts,
-      next_cursor: next_cursor,
-    };
-    return result;
-  };
+      const result: StreetPostsPage = {
+        posts: posts,
+        next_cursor: streetPosts.next_cursor,
+      };
+      return result;
+    },
+    [getPosts]
+  );
 
   const streetPostsQuery = useInfiniteQuery<StreetPostsPage, Error>({
     queryKey: ["streetPosts"],
     queryFn: async ({ pageParam = [] }) => {
-      return await queryFunction(pageParam, mainServer, queryClient);
+      return await queryFunction(pageParam, mainServer);
     },
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.next_cursor.length === 0) {

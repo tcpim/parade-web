@@ -1,11 +1,12 @@
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 import {
   GetTrendingCollectionPostRequest,
   TrendingPostCollectionKey,
 } from "../../../backend_declarations/main_server/main_server.did";
 import { Post } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
-import { getPostFromPostTypes } from "../fetch-posts/helper";
+import { useGetPostFromPostTypes } from "../fetch-posts/useGetPostFromPostTypes";
 import { useMainServer } from "../useMainServer";
 
 interface TrendingStreetCollectionPostsPage {
@@ -27,28 +28,27 @@ const getFetchRequest = (
 
 export const useTrendingCollectionPosts = (canisterId = "", enabled = true) => {
   const mainServer = useMainServer();
-  const queryClient = useQueryClient();
+  const getPosts = useGetPostFromPostTypes();
 
-  const queryFunction = async (
-    cursor: [] | [TrendingPostCollectionKey]
-  ): Promise<TrendingStreetCollectionPostsPage> => {
-    const len = DEFAULT_PAGE_SIZE_FOR_FEED;
-    const request = getFetchRequest(canisterId, cursor, len);
-    const streetPosts = await mainServer.get_trending_collection_posts(request);
-    const next_cursor = streetPosts.next_cursor;
+  const queryFunction = useCallback(
+    async (
+      cursor: [] | [TrendingPostCollectionKey]
+    ): Promise<TrendingStreetCollectionPostsPage> => {
+      const len = DEFAULT_PAGE_SIZE_FOR_FEED;
+      const request = getFetchRequest(canisterId, cursor, len);
+      const streetPosts = await mainServer.get_trending_collection_posts(
+        request
+      );
+      const posts = await getPosts(len, streetPosts.posts);
 
-    const posts = await getPostFromPostTypes(
-      len,
-      streetPosts.posts,
-      queryClient
-    );
-
-    const result: TrendingStreetCollectionPostsPage = {
-      posts: posts,
-      next_cursor: next_cursor,
-    };
-    return result;
-  };
+      const result: TrendingStreetCollectionPostsPage = {
+        posts: posts,
+        next_cursor: streetPosts.next_cursor,
+      };
+      return result;
+    },
+    [getPosts]
+  );
 
   const trendingCollectionPostsQuery = useInfiniteQuery<
     TrendingStreetCollectionPostsPage,
