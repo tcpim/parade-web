@@ -119,7 +119,7 @@ export const Feed = () => {
         {normallizedQuery.data.pages.map((page: any, index: any) => (
           <Fragment key={index}>
             {page.posts.map((post: Post) => (
-              <Fragment key={post.post_id}>
+              <Fragment key={post.postId}>
                 <PostCard post={post} />
               </Fragment>
             ))}

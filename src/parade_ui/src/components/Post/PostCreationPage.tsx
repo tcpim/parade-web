@@ -57,9 +57,9 @@ export const PostCreationPage = () => {
   const handleCheckPostClicked = (post?: Post) => {
     if (post) {
       if (post.clubId) {
-        navigate(`/club/${post.clubId}/post/${post.post_id}`);
+        navigate(`/club/${post.clubId}/post/${post.postId}`);
       } else {
-        navigate(`/post/${post.post_id}`);
+        navigate(`/post/${post.postId}`);
       }
     }
   };

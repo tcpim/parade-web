@@ -1,7 +1,7 @@
 import { NftInfo } from "./nft";
 
 export interface Post {
-  post_id: string;
+  postId: string;
   created_by: string;
   created_ts: bigint;
   words: string;

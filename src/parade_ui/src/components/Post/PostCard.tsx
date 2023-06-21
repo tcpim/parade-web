@@ -21,9 +21,9 @@ export const PostCard = ({ post }: PostCardProps) => {
 
   const handlePostClick = () => {
     if (post.clubId) {
-      navigate("/club/" + post.clubId + "/post/" + post.post_id);
+      navigate("/club/" + post.clubId + "/post/" + post.postId);
     } else {
-      navigate("/post/" + post.post_id);
+      navigate("/post/" + post.postId);
     }
   };
 
@@ -60,7 +60,7 @@ export const PostCard = ({ post }: PostCardProps) => {
       </CardContent>
       <CardContent>
         <Emojis
-          postId={post.post_id}
+          postId={post.postId}
           emojis={post.emoji_reactions}
           clubId={post.clubId}
         />

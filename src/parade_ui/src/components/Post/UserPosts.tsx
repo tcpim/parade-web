@@ -42,7 +42,7 @@ const UserPosts = ({ userPid }: UserPostsProps) => {
       {userPostQuery.data.pages.map((page, index) => (
         <Fragment key={index}>
           {page.posts.map((post) => (
-            <Fragment key={post.post_id}>
+            <Fragment key={post.postId}>
               <PostCard post={post} />
             </Fragment>
           ))}
