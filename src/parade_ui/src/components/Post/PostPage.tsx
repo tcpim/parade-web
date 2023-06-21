@@ -26,7 +26,9 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
     clubId ?? "",
     clubId !== undefined
   );
+
   const query = clubId ? clubQuery : streetQuery;
+
   const [reply, setReply] = useState("");
 
   const streetMutation = useReplyStreetPost({

@@ -12,3 +12,8 @@ export interface Post {
   clubId?: string;
   isPublic: boolean;
 }
+
+export interface PostsPage<T> {
+  posts: Array<Post>;
+  next_cursor: [T] | [];
+}

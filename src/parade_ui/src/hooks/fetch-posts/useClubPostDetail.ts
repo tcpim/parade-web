@@ -9,6 +9,7 @@ export const useClubPostDetail = (
 ) => {
   const server = useClubServer(clubId);
 
+  console.log("wwwwwww: " + postId + " " + clubId + " " + enabled);
   const postDetailQuery = useQuery<GetPostByIdResponse, Error>({
     queryKey: ["clubPostDetail", postId],
     queryFn: async () => {

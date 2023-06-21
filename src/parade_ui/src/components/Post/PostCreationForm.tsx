@@ -15,7 +15,8 @@ import Paper, { PaperProps } from "@mui/material/Paper";
 import React, { Fragment, useContext, useState } from "react";
 import Draggable from "react-draggable";
 import { AppContext } from "../../App";
-import { useCreatePost } from "../../hooks/create-post/useCreatePost";
+import { useCreateClubPost } from "../../hooks/create-post/useCreateClubPost";
+import { useCreateStreetPost } from "../../hooks/create-post/useCreateStreetPost";
 import { NftInfo } from "../../types/nft";
 
 export interface PostCreationFormProps {
@@ -48,27 +49,35 @@ export const PostCreationForm = ({
 
   const appContext = useContext(AppContext);
 
-  const createPostMutation = useCreatePost({
+  const createStreetPostMutation = useCreateStreetPost({
     userPid: appContext.userLoginInfo.userPid,
-    nftInfo,
-    words,
-    clubInfo: isClubNft
-      ? { clubId: nftInfo.clubId ?? "", isPublic: isPublicPost }
-      : undefined,
+    nftInfo: nftInfo,
+    words: words,
     onSuccessCallback: () => setMutationFinished(true),
   });
+  const createClubPostMutation = useCreateClubPost({
+    userPid: appContext.userLoginInfo.userPid,
+    nftInfo: nftInfo,
+    words: words,
+    clubId: nftInfo.clubId ?? "",
+    inPublic: isPublicPost,
+    onSuccessCallback: () => setMutationFinished(true),
+  });
+  const normalizedMutation = isClubNft
+    ? createClubPostMutation
+    : createStreetPostMutation;
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWords(event.target.value);
   };
 
   const handleSubmit = () => {
-    createPostMutation.mutate();
+    normalizedMutation.mutate();
   };
 
   const handleCloseFormResetMutation = () => {
     handleCloseForm();
-    createPostMutation.reset();
+    normalizedMutation.reset();
   };
 
   return (
@@ -104,7 +113,7 @@ export const PostCreationForm = ({
         )}
       </DialogContent>
       <DialogActions>
-        {createPostMutation.isLoading ? (
+        {normalizedMutation.isLoading ? (
           <CircularProgress />
         ) : mutationFinished ? (
           <Button onClick={handleCloseFormResetMutation}>Done</Button>

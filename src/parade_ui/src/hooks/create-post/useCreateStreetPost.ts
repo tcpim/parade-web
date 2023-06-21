@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 import { CreateStreetPostRequest } from "../../../backend_declarations/main_server/main_server.did";
 import { NftInfo } from "../../types/nft";
+import { Post } from "../../types/post";
+import { convertToPost } from "../../utils/helpers";
 import { useMainServer } from "../useMainServer";
 
 export interface CreateStreetPostProps {
@@ -42,8 +44,10 @@ export function useCreateStreetPost(createPostProps: CreateStreetPostProps) {
   const request = getCreatePostRequest(createPostProps);
 
   const mutation = useMutation(
-    () => {
-      return mainServer.create_street_post(request);
+    async () => {
+      const response = await mainServer.create_street_post(request);
+      const result: Post | undefined = convertToPost(response.post);
+      return result;
     },
     {
       onSuccess: () => {

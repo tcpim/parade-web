@@ -10,7 +10,8 @@ import Checkbox from "@mui/material/Checkbox";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../App";
-import { useCreatePost } from "../../hooks/create-post/useCreatePost";
+import { useCreateClubPost } from "../../hooks/create-post/useCreateClubPost";
+import { useCreateStreetPost } from "../../hooks/create-post/useCreateStreetPost";
 import { NftInfo } from "../../types/nft";
 import { Post } from "../../types/post";
 import { NftImage } from "../Nft/NftImage";
@@ -24,20 +25,29 @@ export const PostCreationPage = () => {
   const [words, setWords] = useState("");
   const [createPostFinished, setCreatePostFinished] = useState(false);
 
-  const clubId = selectedNft?.clubId;
+  const clubId = selectedNft?.clubId ?? "";
 
-  const createPostMutation = useCreatePost({
+  const createStreetPostMutation = useCreateStreetPost({
     userPid: appContext.userLoginInfo.userPid,
     nftInfo: selectedNft,
     words: words,
-    clubInfo: clubId
-      ? { clubId: clubId, isPublic: postToStreetChecked }
-      : undefined,
     onSuccessCallback: () => handlePostCreationFinished(),
   });
 
+  const createClubPostMutation = useCreateClubPost({
+    userPid: appContext.userLoginInfo.userPid,
+    nftInfo: selectedNft,
+    words: words,
+    clubId: clubId,
+    inPublic: postToStreetChecked,
+    onSuccessCallback: () => handlePostCreationFinished(),
+  });
+
+  const normalizedMutation =
+    clubId === "" ? createStreetPostMutation : createClubPostMutation;
+
   const handlePostSubmit = () => {
-    createPostMutation.mutate();
+    normalizedMutation.mutate();
   };
 
   const handlePostCreationFinished = () => {
@@ -45,6 +55,7 @@ export const PostCreationPage = () => {
   };
 
   const handleCheckPostClicked = (post?: Post) => {
+    console.log("??????/", post?.clubId);
     if (post) {
       if (post.clubId) {
         navigate(`/club/${post.clubId}/post/${post.post_id}`);
@@ -52,6 +63,13 @@ export const PostCreationPage = () => {
         navigate(`/post/${post.post_id}`);
       }
     }
+  };
+
+  const handleOnNftSelected = (nftInfo: NftInfo) => {
+    setSelectedNft(nftInfo);
+    setPostToStreetChecked(false);
+    setCreatePostFinished(false);
+    setWords("");
   };
 
   return (
@@ -106,13 +124,13 @@ export const PostCreationPage = () => {
               />
             </Box>
           )}
-          {createPostMutation.isLoading ? (
+          {normalizedMutation.isLoading ? (
             <CircularProgress />
           ) : createPostFinished ? (
             <Button
               sx={{ marginTop: 1 }}
               variant="contained"
-              onClick={() => handleCheckPostClicked(createPostMutation.data)}
+              onClick={() => handleCheckPostClicked(normalizedMutation.data)}
             >
               Check your post
             </Button>
@@ -128,7 +146,7 @@ export const PostCreationPage = () => {
           )}
         </Box>
       </Box>
-      <NftSelector onNftSelected={setSelectedNft} />
+      <NftSelector onNftSelected={handleOnNftSelected} />
     </Box>
   );
 };

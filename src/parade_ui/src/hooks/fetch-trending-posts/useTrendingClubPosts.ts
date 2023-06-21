@@ -1,14 +1,14 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   GetTrendingPostRequest,
-  GetTrendingPostResponse,
   TrendingPostKey,
 } from "../../../backend_declarations/club_server/ludo_arts_club.did";
+import { Post, PostsPage } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
+import { convertToPost } from "../../utils/helpers";
 import { useClubServer } from "../useClubServer";
 
 const getFetchRequest = (
-  clubId: string,
   cursor: [] | [TrendingPostKey]
 ): GetTrendingPostRequest => {
   return {
@@ -21,14 +21,21 @@ export const useTrendingClubPosts = (clubId: string, enabled = true) => {
   const clubServer = useClubServer(clubId);
 
   const trendingClubPostsQuery = useInfiniteQuery<
-    GetTrendingPostResponse,
+    PostsPage<TrendingPostKey>,
     Error
   >({
     queryKey: ["trendingClubPosts", clubId],
     queryFn: async ({ pageParam = [] }) => {
-      const request = getFetchRequest(clubId, pageParam);
+      const request = getFetchRequest(pageParam);
       const response = await clubServer.get_trending_posts(request);
-      return response;
+
+      const result: PostsPage<TrendingPostKey> = {
+        posts: response.posts
+          .map((post) => convertToPost(post))
+          .filter((post) => post !== undefined) as Post[],
+        next_cursor: response.next_cursor,
+      };
+      return result;
     },
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.next_cursor.length === 0) {

@@ -4,15 +4,10 @@ import {
   GetTrendingCollectionPostRequest,
   TrendingPostCollectionKey,
 } from "../../../backend_declarations/main_server/main_server.did";
-import { Post } from "../../types/post";
+import { PostsPage } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 import { useGetPostFromPostTypes } from "../fetch-posts/useGetPostFromPostTypes";
 import { useMainServer } from "../useMainServer";
-
-interface TrendingStreetCollectionPostsPage {
-  posts: Array<Post>;
-  next_cursor: [TrendingPostCollectionKey] | [];
-}
 
 const getFetchRequest = (
   canisterId: string,
@@ -33,7 +28,7 @@ export const useTrendingCollectionPosts = (canisterId = "", enabled = true) => {
   const queryFunction = useCallback(
     async (
       cursor: [] | [TrendingPostCollectionKey]
-    ): Promise<TrendingStreetCollectionPostsPage> => {
+    ): Promise<PostsPage<TrendingPostCollectionKey>> => {
       const len = DEFAULT_PAGE_SIZE_FOR_FEED;
       const request = getFetchRequest(canisterId, cursor, len);
       const streetPosts = await mainServer.get_trending_collection_posts(
@@ -41,7 +36,7 @@ export const useTrendingCollectionPosts = (canisterId = "", enabled = true) => {
       );
       const posts = await getPosts(len, streetPosts.posts);
 
-      const result: TrendingStreetCollectionPostsPage = {
+      const result: PostsPage<TrendingPostCollectionKey> = {
         posts: posts,
         next_cursor: streetPosts.next_cursor,
       };
@@ -51,7 +46,7 @@ export const useTrendingCollectionPosts = (canisterId = "", enabled = true) => {
   );
 
   const trendingCollectionPostsQuery = useInfiniteQuery<
-    TrendingStreetCollectionPostsPage,
+    PostsPage<TrendingPostCollectionKey>,
     Error
   >({
     queryKey: ["trendingCollectionPosts", canisterId],

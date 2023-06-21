@@ -10,7 +10,6 @@ import { useTrendingCollectionPosts } from "../../hooks/fetch-trending-posts/use
 import { useTrendingStreetPosts } from "../../hooks/fetch-trending-posts/useTrendingStreetPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
 import { Post } from "../../types/post";
-import { getTimeperiod } from "../../utils/getTimePeriod";
 import { PostCard } from "../Post/PostCard";
 
 export type SubPage = "recent" | "trending";
@@ -121,20 +120,7 @@ export const Feed = () => {
           <Fragment key={index}>
             {page.posts.map((post: Post) => (
               <Fragment key={post.post_id}>
-                <PostCard
-                  postId={post.post_id}
-                  createdBy={post.created_by}
-                  timeAgo={getTimeperiod(post.created_ts)}
-                  content={post.words}
-                  replies={post.replies.length}
-                  emojis={post.emoji_reactions}
-                  nftInfo={{
-                    nftCanisterId: post.nfts[0].nftCanisterId,
-                    nftTokenIndex: post.nfts[0].nftTokenIndex,
-                    nftImageUrl: post.nfts[0].nftOriginalThumbnailUrl,
-                  }}
-                  clubId={post.clubId}
-                />
+                <PostCard post={post} />
               </Fragment>
             ))}
           </Fragment>

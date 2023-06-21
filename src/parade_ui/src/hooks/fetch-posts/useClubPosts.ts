@@ -1,10 +1,11 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import {
   GetPostsRequest,
-  GetPostsResponse,
   PostCreatedTsKey,
 } from "../../../backend_declarations/club_server/ludo_arts_club.did";
+import { Post, PostsPage } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
+import { convertToPost } from "../../utils/helpers";
 import { useClubServer } from "../useClubServer";
 
 const getFetchRequest = (cursor: [] | [PostCreatedTsKey]): GetPostsRequest => {
@@ -15,14 +16,22 @@ const getFetchRequest = (cursor: [] | [PostCreatedTsKey]): GetPostsRequest => {
 };
 
 export const useClubPosts = (clubId: string, enabled = true) => {
-  const server = useClubServer(clubId);
+  const clubServer = useClubServer(clubId);
 
-  const clubPostsQuery = useInfiniteQuery<GetPostsResponse, Error>({
+  const clubPostsQuery = useInfiniteQuery<PostsPage<PostCreatedTsKey>, Error>({
     queryKey: ["clubPosts", clubId],
     queryFn: async ({ pageParam = [] }) => {
       const request = getFetchRequest(pageParam);
-      const response = await server.get_posts(request);
-      return response;
+      const response = await clubServer.get_posts(request);
+
+      const result: PostsPage<PostCreatedTsKey> = {
+        posts: response.posts
+          .map((post) => convertToPost(post))
+          .filter((post) => post !== undefined) as Post[],
+        next_cursor: response.next_cursor,
+      };
+
+      return result;
     },
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.next_cursor.length === 0) {

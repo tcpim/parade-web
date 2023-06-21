@@ -4,15 +4,10 @@ import {
   GetTrendingStreetPostRequest,
   TrendingPostKey,
 } from "../../../backend_declarations/main_server/main_server.did";
-import { Post } from "../../types/post";
+import { PostsPage } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 import { useGetPostFromPostTypes } from "../fetch-posts/useGetPostFromPostTypes";
 import { useMainServer } from "../useMainServer";
-
-interface TrendingStreetPostsPage {
-  posts: Array<Post>;
-  next_cursor: [TrendingPostKey] | [];
-}
 
 const getFetchRequest = (
   cursor: [] | [TrendingPostKey],
@@ -31,13 +26,13 @@ export const useTrendingStreetPosts = (enabled = true) => {
   const queryFunction = useCallback(
     async (
       cursor: [] | [TrendingPostKey]
-    ): Promise<TrendingStreetPostsPage> => {
+    ): Promise<PostsPage<TrendingPostKey>> => {
       const len = DEFAULT_PAGE_SIZE_FOR_FEED;
       const request = getFetchRequest(cursor, len);
       const streetPosts = await mainServer.get_trending_street_posts(request);
       const posts = await getPosts(len, streetPosts.posts);
 
-      const result: TrendingStreetPostsPage = {
+      const result: PostsPage<TrendingPostKey> = {
         posts: posts,
         next_cursor: streetPosts.next_cursor,
       };
@@ -47,7 +42,7 @@ export const useTrendingStreetPosts = (enabled = true) => {
   );
 
   const trendingStreetPostsQuery = useInfiniteQuery<
-    TrendingStreetPostsPage,
+    PostsPage<TrendingPostKey>,
     Error
   >({
     queryKey: ["trendingStreetPosts"],

@@ -17,7 +17,7 @@ export function useGetPostFromPostTypes(): (
 
   const helper = useCallback(
     async (pageSize: number, posts: Array<PostType>): Promise<Post[]> => {
-      const postArray: Post[] = Array(pageSize);
+      const postArray: (Post | undefined)[] = Array(pageSize);
       const clubPostIdMap: Map<string, [number, string][]> = new Map<
         string,
         [number, string][]
@@ -36,7 +36,7 @@ export function useGetPostFromPostTypes(): (
         }
       });
 
-      // Fetch club posts by IDs and add them to the post array
+      // Fetch club posts by IDs and add them to the post array in the correct index
       const fetchClubPostsPromises = Array.from(clubPostIdMap).map(
         async ([clubId, postIds]) => {
           const clubPostsRes: GetPostByIdsResponse =
@@ -57,7 +57,8 @@ export function useGetPostFromPostTypes(): (
 
       // Wait for all promises to resolve
       await Promise.all(fetchClubPostsPromises);
-      return postArray;
+
+      return postArray.filter((post) => post !== undefined) as Post[];
     },
     [queryClient]
   );

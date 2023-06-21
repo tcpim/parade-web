@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 import { CreatePostRequest } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { NftInfo } from "../../types/nft";
+import { Post } from "../../types/post";
+import { convertToPost } from "../../utils/helpers";
 import { useClubServer } from "../useClubServer";
 
 export interface CreateClubPostProps {
@@ -40,14 +42,22 @@ const getCreatePostRequest = (
 };
 
 export function useCreateClubPost(createPostProps: CreateClubPostProps) {
+  console.log("aaaaaaaa " + createPostProps.clubId);
   const server = useClubServer(createPostProps.clubId);
   const queryClient = useQueryClient();
 
   const request = getCreatePostRequest(createPostProps);
 
   const mutation = useMutation(
-    () => {
-      return server.create_post(request);
+    async () => {
+      if (createPostProps.clubId === "") {
+        throw new Error("clubId is empty");
+      }
+      const response = await server.create_post(request);
+      console.log("~~~~~~" + response.post.club_id);
+      const result: Post | undefined = convertToPost(response.post);
+      console.log("````````~~~~~~````````" + result?.clubId);
+      return result;
     },
     {
       onSuccess: () => {

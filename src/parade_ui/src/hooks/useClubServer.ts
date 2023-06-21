@@ -9,13 +9,13 @@ import {
 export const useClubServer = (clubId: string) => {
   let canister = "";
   switch (clubId) {
-    case "ludo-arts":
+    case "ludo_arts":
       canister = LUDO_ARTS_CLUB_CANISTER;
       break;
-    case "poked-bots":
+    case "poked_bots":
       canister = POKED_BOTS_CLUB_CANISTER;
       break;
-    case "motoko-ghost":
+    case "motoko_ghost":
       canister = MOTOKO_GHOST_CLUB_CANISTER;
       break;
     default:
@@ -23,7 +23,8 @@ export const useClubServer = (clubId: string) => {
       break;
   }
 
-  return useMemo(() => createActor(canister), []);
+  console.log("canister:  " + canister + " clubId: " + clubId);
+  return useMemo(() => createActor(canister), [canister]);
 };
 
 export const getClubServer = (clubId: string) => {

@@ -2,7 +2,6 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { Fragment, memo } from "react";
 import { useUserPosts } from "../../hooks/fetch-posts/useUserPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
-import { getTimeperiod } from "../../utils/getTimePeriod";
 import { PostCard } from "./PostCard";
 
 interface UserPostsProps {
@@ -44,24 +43,7 @@ const UserPosts = ({ userPid }: UserPostsProps) => {
         <Fragment key={index}>
           {page.posts.map((post) => (
             <Fragment key={post.post_id}>
-              <PostCard
-                postId={post.post_id}
-                createdBy={post.created_by}
-                timeAgo={getTimeperiod(post.created_ts)}
-                content={post.words}
-                replies={post.replies.length}
-                emojis={post.emoji_reactions}
-                nftInfo={
-                  post.nfts.length > 0
-                    ? {
-                        nftCanisterId: post.nfts[0].nftCanisterId,
-                        nftTokenIndex: post.nfts[0].nftTokenIndex,
-                        nftImageUrl: post.nfts[0].nftOriginalThumbnailUrl,
-                      }
-                    : undefined
-                }
-                clubId={post.clubId}
-              />
+              <PostCard post={post} />
             </Fragment>
           ))}
         </Fragment>

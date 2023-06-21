@@ -22,13 +22,15 @@ export const converToNftInfo = (
   };
 };
 
-export const convertToPost = (post?: ClubPost | StreetPost): Post => {
+export const convertToPost = (
+  post?: ClubPost | StreetPost
+): Post | undefined => {
   if (!post) {
-    throw new Error("Post is undefined");
+    return undefined;
   }
   const postType = (post as ClubPost).club_id !== undefined ? "club" : "street";
 
-  console.log("postType", postType);
+  console.log("!!!!postType" + postType + "!!!! " + (post as ClubPost).club_id);
   return {
     post_id: post.id,
     clubId: postType === "club" ? (post as ClubPost).club_id : undefined,

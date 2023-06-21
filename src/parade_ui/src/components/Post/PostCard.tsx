@@ -8,44 +8,22 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Post } from "../../types/post";
+import { getTimeperiod } from "../../utils/getTimePeriod";
 import { NftImage } from "../Nft/NftImage";
 import { Emojis } from "./Emojis";
 
 interface PostCardProps {
-  postId: string;
-  createdBy: string;
-  timeAgo: string;
-  content: string;
-  replies: number;
-  emojis: Array<[string, number]>;
-  nftInfo?: PostNftInfo;
-  clubId?: string;
+  post: Post;
 }
-
-interface PostNftInfo {
-  nftCanisterId: string;
-  nftTokenIndex: number;
-  nftImageUrl: string;
-}
-
-export const PostCard = ({
-  postId,
-  createdBy,
-  timeAgo,
-  content,
-  replies,
-  emojis,
-  nftInfo,
-  clubId = "",
-}: PostCardProps) => {
+export const PostCard = ({ post }: PostCardProps) => {
   const navigate = useNavigate();
 
-  console.log("!!!!!!!!!1", clubId);
   const handlePostClick = () => {
-    if (clubId) {
-      navigate("/club/" + clubId + "/post/" + postId);
+    if (post.clubId) {
+      navigate("/club/" + post.clubId + "/post/" + post.post_id);
     } else {
-      navigate("/post/" + postId);
+      navigate("/post/" + post.post_id);
     }
   };
 
@@ -53,36 +31,45 @@ export const PostCard = ({
     <Card sx={{ marginBottom: 10 }}>
       <CardContent>
         <Typography variant="h6" component="div">
-          Created by: {createdBy}
+          Created by: {post.created_by}
         </Typography>
-        <Typography color="text.secondary">{timeAgo}</Typography>
-        {nftInfo && (
+        <Typography color="text.secondary">
+          {getTimeperiod(post.created_ts)}
+        </Typography>
+        {post.nfts[0] && (
           <Typography variant="body2" component="p">
-            {"NFT:  " + nftInfo.nftCanisterId + ": " + nftInfo.nftTokenIndex}
+            {"NFT:  " +
+              post.nfts[0].nftCanisterId +
+              ": " +
+              post.nfts[0].nftTokenIndex}
           </Typography>
         )}
       </CardContent>
-      {nftInfo && (
+      {post.nfts[0] && (
         <Box marginLeft="200px" maxWidth="350px">
           <NftImage
-            imageUrl={nftInfo.nftImageUrl}
-            canisterId={nftInfo.nftCanisterId}
+            imageUrl={post.nfts[0].nftOriginalThumbnailUrl}
+            canisterId={post.nfts[0].nftCanisterId}
           />
         </Box>
       )}
       <CardContent>
         <Typography variant="body2" component="p">
-          {content}
+          {post.words}
         </Typography>
       </CardContent>
       <CardContent>
-        <Emojis postId={postId} emojis={emojis} clubId={clubId} />
+        <Emojis
+          postId={post.post_id}
+          emojis={post.emoji_reactions}
+          clubId={post.clubId}
+        />
       </CardContent>
       <CardActions disableSpacing onClick={handlePostClick}>
         <IconButton aria-label="number of replies">
           <ChatBubbleOutline />
         </IconButton>
-        <Typography>{replies}</Typography>
+        <Typography>{post.replies}</Typography>
       </CardActions>
     </Card>
   );

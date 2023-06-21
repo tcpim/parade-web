@@ -10,7 +10,6 @@ import { useParams } from "react-router-dom";
 import { useClubPosts } from "../../hooks/fetch-posts/useClubPosts";
 import { useTrendingClubPosts } from "../../hooks/fetch-trending-posts/useTrendingClubPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
-import { getTimeperiod } from "../../utils/getTimePeriod";
 import { PostCard } from "../Post/PostCard";
 
 export type SubPage = "recent" | "trending";
@@ -76,25 +75,8 @@ export const ClubFeed = () => {
         {normalizedQuery.data.pages.map((page, index) => (
           <Fragment key={index}>
             {page.posts.map((post) => (
-              <Fragment key={post.id}>
-                <PostCard
-                  postId={post.id}
-                  createdBy={post.created_by}
-                  timeAgo={getTimeperiod(post.created_ts)}
-                  content={post.words}
-                  replies={post.replies.length}
-                  emojis={post.emoji_reactions}
-                  nftInfo={
-                    post.nfts.length === 0
-                      ? undefined
-                      : {
-                          nftCanisterId: post.nfts[0].canister_id,
-                          nftTokenIndex: post.nfts[0].token_index,
-                          nftImageUrl: post.nfts[0].original_thumbnail_url,
-                        }
-                  }
-                  clubId={post.club_id}
-                />
+              <Fragment key={post.post_id}>
+                <PostCard post={post} />
               </Fragment>
             ))}
           </Fragment>
