@@ -4,7 +4,7 @@ import {
   GetPostRepliesResponse,
 } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { DEFAULT_PAGE_SIZE_FOR_REPLIES } from "../../utils/constants";
-import { useClubServer } from "../useClubServer";
+import { getClubServer } from "../useClubServer";
 
 const getPostRepliesRequest = (
   postId: string,
@@ -22,13 +22,11 @@ export const useClubPostRepiles = (
   clubId: string,
   enabled: boolean
 ) => {
-  const server = useClubServer(clubId);
-
   const postRepliesQuery = useInfiniteQuery<GetPostRepliesResponse, Error>({
     queryKey: ["clubPostReplies", postId],
     queryFn: async ({ pageParam = 0 }) => {
       const request = getPostRepliesRequest(postId, pageParam);
-      const response = await server.get_post_replies(request);
+      const response = await getClubServer(clubId).get_post_replies(request);
       return response;
     },
     getNextPageParam: (lastPage, pages) => {

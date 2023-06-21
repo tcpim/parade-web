@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { ReactEmojiRequest } from "../../../backend_declarations/club_server/ludo_arts_club.did";
-import { useClubServer } from "../useClubServer";
+import { getClubServer } from "../useClubServer";
 
 interface ReactEmojiProps {
   postId?: string;
@@ -10,8 +10,6 @@ interface ReactEmojiProps {
 }
 
 export const useReactEmojiClub = (props: ReactEmojiProps) => {
-  const server = useClubServer(props.clubId);
-
   const addEmoji = (props: ReactEmojiProps, emoji: string) => {
     const request: ReactEmojiRequest = {
       post_id: props.postId === undefined ? [] : [props.postId],
@@ -21,8 +19,7 @@ export const useReactEmojiClub = (props: ReactEmojiProps) => {
       created_ts: BigInt(Date.now()),
     };
 
-    console.log(request);
-    return server.react_emoji(request);
+    return getClubServer(props.clubId).react_emoji(request);
   };
 
   const reactEmojiMutation = useMutation((emoji: string) =>

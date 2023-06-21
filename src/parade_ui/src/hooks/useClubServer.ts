@@ -1,48 +1,24 @@
-import { useMemo } from "react";
+import { ActorSubclass } from "@dfinity/agent";
 import { createActor } from "../../backend_declarations/club_server";
+import { _SERVICE } from "../../backend_declarations/club_server/ludo_arts_club.did";
 import {
   LUDO_ARTS_CLUB_CANISTER,
   MOTOKO_GHOST_CLUB_CANISTER,
   POKED_BOTS_CLUB_CANISTER,
 } from "../../backend_declarations/config";
 
-export const useClubServer = (clubId: string) => {
-  let canister = "";
-  switch (clubId) {
-    case "ludo_arts":
-      canister = LUDO_ARTS_CLUB_CANISTER;
-      break;
-    case "poked_bots":
-      canister = POKED_BOTS_CLUB_CANISTER;
-      break;
-    case "motoko_ghost":
-      canister = MOTOKO_GHOST_CLUB_CANISTER;
-      break;
-    default:
-      canister = LUDO_ARTS_CLUB_CANISTER; // default to ludo flowers
-      break;
-  }
-
-  console.log("canister:  " + canister + " clubId: " + clubId);
-  return useMemo(() => createActor(canister), [canister]);
-};
+const CLUBS: ReadonlyMap<string, ActorSubclass<_SERVICE>> = new Map([
+  ["ludo-arts", createActor(LUDO_ARTS_CLUB_CANISTER)],
+  ["poked-bots", createActor(POKED_BOTS_CLUB_CANISTER)],
+  ["motoko-ghost", createActor(MOTOKO_GHOST_CLUB_CANISTER)],
+]);
 
 export const getClubServer = (clubId: string) => {
-  let canister = "";
-  switch (clubId) {
-    case "ludo-arts":
-      canister = LUDO_ARTS_CLUB_CANISTER;
-      break;
-    case "poked-bots":
-      canister = POKED_BOTS_CLUB_CANISTER;
-      break;
-    case "motoko-ghost":
-      canister = MOTOKO_GHOST_CLUB_CANISTER;
-      break;
-    default:
-      canister = LUDO_ARTS_CLUB_CANISTER; // default to ludo flowers
-      break;
+  console.log("getClubServer", clubId);
+  const server = CLUBS.get(clubId);
+  if (server === undefined) {
+    throw new Error("Invalid club id to get club server");
   }
 
-  return createActor(canister);
+  return server;
 };

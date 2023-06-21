@@ -30,7 +30,6 @@ export const convertToPost = (
   }
   const postType = (post as ClubPost).club_id !== undefined ? "club" : "street";
 
-  console.log("!!!!postType" + postType + "!!!! " + (post as ClubPost).club_id);
   return {
     post_id: post.id,
     clubId: postType === "club" ? (post as ClubPost).club_id : undefined,

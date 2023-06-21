@@ -6,7 +6,7 @@ import {
 import { Post, PostsPage } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 import { convertToPost } from "../../utils/helpers";
-import { useClubServer } from "../useClubServer";
+import { getClubServer } from "../useClubServer";
 
 const getFetchRequest = (cursor: [] | [PostCreatedTsKey]): GetPostsRequest => {
   return {
@@ -16,13 +16,11 @@ const getFetchRequest = (cursor: [] | [PostCreatedTsKey]): GetPostsRequest => {
 };
 
 export const useClubPosts = (clubId: string, enabled = true) => {
-  const clubServer = useClubServer(clubId);
-
   const clubPostsQuery = useInfiniteQuery<PostsPage<PostCreatedTsKey>, Error>({
     queryKey: ["clubPosts", clubId],
     queryFn: async ({ pageParam = [] }) => {
       const request = getFetchRequest(pageParam);
-      const response = await clubServer.get_posts(request);
+      const response = await getClubServer(clubId).get_posts(request);
 
       const result: PostsPage<PostCreatedTsKey> = {
         posts: response.posts

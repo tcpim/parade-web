@@ -75,7 +75,6 @@ export const Emojis = ({ postId, replyId, emojis, clubId }: EmojisProps) => {
       updatedEmojisCount.push([emoji, 1]);
     }
     setEmojisCount(updatedEmojisCount);
-    console.log(updatedEmojisCount);
   };
 
   const getEmojiFromUnicode = (emoji: string) => {

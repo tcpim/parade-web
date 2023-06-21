@@ -20,7 +20,6 @@ export const useReactEmojiStreet = (props: ReactEmojiProps) => {
       created_ts: BigInt(Date.now()),
     };
 
-    console.log(request);
     return mainServer.react_emoji(request);
   };
 

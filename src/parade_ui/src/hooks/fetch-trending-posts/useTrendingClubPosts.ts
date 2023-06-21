@@ -6,7 +6,7 @@ import {
 import { Post, PostsPage } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 import { convertToPost } from "../../utils/helpers";
-import { useClubServer } from "../useClubServer";
+import { getClubServer } from "../useClubServer";
 
 const getFetchRequest = (
   cursor: [] | [TrendingPostKey]
@@ -18,8 +18,6 @@ const getFetchRequest = (
 };
 
 export const useTrendingClubPosts = (clubId: string, enabled = true) => {
-  const clubServer = useClubServer(clubId);
-
   const trendingClubPostsQuery = useInfiniteQuery<
     PostsPage<TrendingPostKey>,
     Error
@@ -27,7 +25,7 @@ export const useTrendingClubPosts = (clubId: string, enabled = true) => {
     queryKey: ["trendingClubPosts", clubId],
     queryFn: async ({ pageParam = [] }) => {
       const request = getFetchRequest(pageParam);
-      const response = await clubServer.get_trending_posts(request);
+      const response = await getClubServer(clubId).get_trending_posts(request);
 
       const result: PostsPage<TrendingPostKey> = {
         posts: response.posts

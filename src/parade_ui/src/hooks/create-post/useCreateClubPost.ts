@@ -4,7 +4,7 @@ import { CreatePostRequest } from "../../../backend_declarations/club_server/lud
 import { NftInfo } from "../../types/nft";
 import { Post } from "../../types/post";
 import { convertToPost } from "../../utils/helpers";
-import { useClubServer } from "../useClubServer";
+import { getClubServer } from "../useClubServer";
 
 export interface CreateClubPostProps {
   clubId: string;
@@ -42,8 +42,6 @@ const getCreatePostRequest = (
 };
 
 export function useCreateClubPost(createPostProps: CreateClubPostProps) {
-  console.log("aaaaaaaa " + createPostProps.clubId);
-  const server = useClubServer(createPostProps.clubId);
   const queryClient = useQueryClient();
 
   const request = getCreatePostRequest(createPostProps);
@@ -53,10 +51,10 @@ export function useCreateClubPost(createPostProps: CreateClubPostProps) {
       if (createPostProps.clubId === "") {
         throw new Error("clubId is empty");
       }
-      const response = await server.create_post(request);
-      console.log("~~~~~~" + response.post.club_id);
+      const response = await getClubServer(createPostProps.clubId).create_post(
+        request
+      );
       const result: Post | undefined = convertToPost(response.post);
-      console.log("````````~~~~~~````````" + result?.clubId);
       return result;
     },
     {

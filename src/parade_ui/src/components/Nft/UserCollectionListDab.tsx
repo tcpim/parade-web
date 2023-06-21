@@ -130,8 +130,6 @@ export const UserCollectionListDab = ({ userPid }: CollectionListProps) => {
     );
   } else if (!userCollectionDabQuery.data) {
     return <div>No data is available</div>;
-  } else {
-    console.log(userCollectionDabQuery.data);
   }
 
   const handleCollectionExpansionClick = (index: number) => {
