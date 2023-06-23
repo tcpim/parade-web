@@ -24,9 +24,13 @@ const decodeUint8ArrayToImage = (avatar?: UserAvatarType) => {
 
 interface UserAvatarProps {
   size?: number;
+  withCamera?: boolean;
 }
 
-export const UserAvatar = ({ size = 100 }: UserAvatarProps) => {
+export const UserAvatar = ({
+  size = 100,
+  withCamera = false,
+}: UserAvatarProps) => {
   const appContext = useContext(AppContext);
   const userInfo = useGetUser(appContext.userLoginInfo.userPid);
   const [newImage, setNewImage] = useState("");
@@ -99,7 +103,7 @@ export const UserAvatar = ({ size = 100 }: UserAvatarProps) => {
         onChange={handleImageUpload}
       />
 
-      <label htmlFor="avatar-button-file">
+      <label htmlFor="avatar-button-file" hidden={!withCamera}>
         <IconButton
           style={{
             position: "absolute",

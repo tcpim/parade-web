@@ -1,6 +1,7 @@
 import { Box, Button, Divider } from "@mui/material";
 import { useContext, useState } from "react";
 import { AppContext } from "../../App";
+import { UserPortfolioMemo } from "../Nft/UserPortfolio";
 import { UserPostsMemo } from "../Post/UserPosts";
 import { UserAvatar } from "./Avatar";
 import { UserInfo } from "./UserInfo";
@@ -20,7 +21,7 @@ const UserPortfolioActivity = () => {
         width="80%"
         marginBottom="20px"
       >
-        <UserAvatar />
+        <UserAvatar withCamera={true} />
         <UserInfo />
       </Box>
       <Box display="flex" justifyContent="space-evenly">
@@ -39,11 +40,10 @@ const UserPortfolioActivity = () => {
         </Button>
       </Box>
       {subPage === "portfolio" && (
-        // <UserPortfolioMemo
-        //   userAccount={appContext.userLoginInfo.userAccount}
-        //   userPid={appContext.userLoginInfo.userPid}
-        // />
-        <div></div>
+        <UserPortfolioMemo
+          userAccount={appContext.userLoginInfo.userAccount}
+          userPid={appContext.userLoginInfo.userPid}
+        />
       )}
       {subPage === "posts" && (
         <UserPostsMemo userPid={appContext.userLoginInfo.userPid} />

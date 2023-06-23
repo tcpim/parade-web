@@ -12,6 +12,7 @@ import { useGetUser } from "../../hooks/user/useGetUser";
 import { Post } from "../../types/post";
 import { getTimeperiod } from "../../utils/getTimePeriod";
 import { NftImage } from "../Nft/NftImage";
+import { UserAvatar } from "../Profile/Avatar";
 import { Emojis } from "./Emojis";
 
 interface PostCardProps {
@@ -32,9 +33,12 @@ export const PostCard = ({ post }: PostCardProps) => {
   return (
     <Card sx={{ marginBottom: 10 }}>
       <CardContent>
-        <Typography variant="h6" component="div">
-          Created by: {post.created_by}
-        </Typography>
+        <Box display="flex">
+          <UserAvatar size={50} />
+          <Typography variant="h6" component="span" marginLeft="10px">
+            {userInfoQuery.data?.username}
+          </Typography>
+        </Box>
         <Typography color="text.secondary">
           {getTimeperiod(post.created_ts)}
         </Typography>
