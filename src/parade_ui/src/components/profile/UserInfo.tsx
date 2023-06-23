@@ -1,5 +1,11 @@
 import SaveIcon from "@mui/icons-material/Save";
-import { Box, IconButton, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useContext, useState } from "react";
 import { AppContext } from "../../App";
 import { useGetUser } from "../../hooks/user/useGetUser";
@@ -21,12 +27,31 @@ export const UserInfo = () => {
   const userBio = userInfoQuery.data?.bio;
 
   const handleSaveUsername = () => {
-    console.log("???????");
     setUserNameMutation.mutate();
   };
 
   const handleSaveBio = () => {
     setUserBioMutation.mutate();
+  };
+
+  const userNameButton = () => {
+    if (setUserNameMutation.data?.error[0]) {
+      setUserNameMutation.reset();
+      return (
+        <Typography color="red">
+          user name exists. please choose another one
+        </Typography>
+      );
+    } else if (setUserNameMutation.isLoading) {
+      return <CircularProgress />;
+    }
+    if (newUsername !== "") {
+      return (
+        <IconButton onClick={handleSaveUsername}>
+          <SaveIcon fontSize="small" />
+        </IconButton>
+      );
+    }
   };
 
   return (
@@ -53,11 +78,7 @@ export const UserInfo = () => {
           onBlur={() => setEditingUsername(false)}
           onChange={(e) => setNewUsername(e.target.value)}
         />
-        {newUsername !== "" && (
-          <IconButton onClick={handleSaveUsername}>
-            <SaveIcon fontSize="small" />
-          </IconButton>
-        )}
+        {userNameButton()}
       </Box>
       <Box display="flex">
         <Typography alignContent="center" marginRight="5px" marginTop="3px">
