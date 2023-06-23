@@ -36,7 +36,6 @@ export const UserInfo = () => {
 
   const userNameButton = () => {
     if (setUserNameMutation.data?.error[0]) {
-      setUserNameMutation.reset();
       return (
         <Typography color="red">
           user name exists. please choose another one
