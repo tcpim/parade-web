@@ -1,8 +1,7 @@
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import { Box, IconButton } from "@mui/material";
+import { Avatar, Box, IconButton } from "@mui/material";
 import imageCompression from "browser-image-compression";
 import React, { useContext, useEffect, useState } from "react";
-import Avatar from "react-avatar";
 import { AppContext } from "../../App";
 import { useGetUser } from "../../hooks/user/useGetUser";
 import { useSetUserAvatar } from "../../hooks/user/useSetUserInfo";
@@ -25,13 +24,9 @@ const decodeUint8ArrayToImage = (avatar?: UserAvatarType) => {
 
 interface UserAvatarProps {
   size?: number;
-  name?: string;
 }
 
-export const UserAvatar = ({
-  size = 100,
-  name = "Anonymous",
-}: UserAvatarProps) => {
+export const UserAvatar = ({ size = 100 }: UserAvatarProps) => {
   const appContext = useContext(AppContext);
   const userInfo = useGetUser(appContext.userLoginInfo.userPid);
   const [newImage, setNewImage] = useState("");
@@ -90,12 +85,12 @@ export const UserAvatar = ({
   return (
     <Box sx={{ position: "relative", width: size, height: size }}>
       <Avatar
-        round={true}
-        size={size.toString()}
-        name={name}
+        sx={{ width: size, height: size }}
+        alt="Anonymous"
         src={imageUploaded ? newImage : existingImage}
-      />
-
+      >
+        A
+      </Avatar>
       <input
         accept="image/png, image/jpeg"
         style={{ display: "none" }}

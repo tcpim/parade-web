@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   SetUserAvatarRequest,
   SetUserBioRequest,
@@ -16,6 +16,7 @@ export function useSetUserName(userId: string, newUsername: string) {
         user_id: userId,
         new_name: newUsername,
       };
+      console.log("!!1request", request.new_name);
       return mainServer.set_user_name(request);
     },
   });
@@ -23,6 +24,7 @@ export function useSetUserName(userId: string, newUsername: string) {
 
 export function useSetUserBio(userId: string, newBio: string) {
   const mainServer = useMainServer();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (): Promise<SetUserInfoResponse> => {
@@ -30,7 +32,11 @@ export function useSetUserBio(userId: string, newBio: string) {
         user_id: userId,
         bio: newBio,
       };
+      console.log("!!1request", request.bio);
       return mainServer.set_user_bio(request);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getUser", userId]);
     },
   });
 }
@@ -41,6 +47,7 @@ export function useSetUserAvatar(
   mime: string
 ) {
   const mainServer = useMainServer();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (): Promise<SetUserInfoResponse> => {
@@ -50,6 +57,9 @@ export function useSetUserAvatar(
         mime_type: mime,
       };
       return mainServer.set_user_avatar(request);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getUser", userId]);
     },
   });
 }

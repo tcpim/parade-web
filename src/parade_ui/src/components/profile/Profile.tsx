@@ -1,9 +1,9 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider } from "@mui/material";
 import { useContext, useState } from "react";
 import { AppContext } from "../../App";
-import { UserPortfolioMemo } from "../Nft/UserPortfolio";
 import { UserPostsMemo } from "../Post/UserPosts";
 import { UserAvatar } from "./Avatar";
+import { UserInfo } from "./UserInfo";
 
 type SubPage = "portfolio" | "posts";
 
@@ -17,20 +17,11 @@ const UserPortfolioActivity = () => {
         display="flex"
         justifyContent="center"
         marginLeft="10%"
-        width="50%"
+        width="80%"
         marginBottom="20px"
       >
         <UserAvatar />
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
-          marginLeft="20%"
-        >
-          <Typography>Principal ID</Typography>
-          <Typography>User ID</Typography>
-          <Typography>User Bio</Typography>
-        </Box>
+        <UserInfo />
       </Box>
       <Box display="flex" justifyContent="space-evenly">
         <Button
@@ -48,10 +39,11 @@ const UserPortfolioActivity = () => {
         </Button>
       </Box>
       {subPage === "portfolio" && (
-        <UserPortfolioMemo
-          userAccount={appContext.userLoginInfo.userAccount}
-          userPid={appContext.userLoginInfo.userPid}
-        />
+        // <UserPortfolioMemo
+        //   userAccount={appContext.userLoginInfo.userAccount}
+        //   userPid={appContext.userLoginInfo.userPid}
+        // />
+        <div></div>
       )}
       {subPage === "posts" && (
         <UserPostsMemo userPid={appContext.userLoginInfo.userPid} />

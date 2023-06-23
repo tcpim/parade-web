@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useGetUser } from "../../hooks/user/useGetUser";
 import { Post } from "../../types/post";
 import { getTimeperiod } from "../../utils/getTimePeriod";
 import { NftImage } from "../Nft/NftImage";
@@ -18,6 +19,7 @@ interface PostCardProps {
 }
 export const PostCard = ({ post }: PostCardProps) => {
   const navigate = useNavigate();
+  const userInfoQuery = useGetUser(post.created_by);
 
   const handlePostClick = () => {
     if (post.clubId) {
