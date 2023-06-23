@@ -40,6 +40,7 @@ export const idlFactory = ({ IDL }) => {
   const ServerError = IDL.Variant({
     'GetPostError' : IDL.Text,
     'GetTrendingPostsError' : IDL.Text,
+    'SetUserInfoError' : IDL.Text,
     'ReactEmojiError' : IDL.Text,
     'CreatePostGeneralError' : IDL.Text,
     'GetPostByCollectionError' : IDL.Text,
@@ -149,6 +150,17 @@ export const idlFactory = ({ IDL }) => {
     'next_cursor' : IDL.Opt(TrendingPostKey),
     'posts' : IDL.Vec(PostType),
   });
+  const UserAvatar = IDL.Record({
+    'data' : IDL.Vec(IDL.Nat8),
+    'mime_type' : IDL.Text,
+  });
+  const User = IDL.Record({
+    'id' : IDL.Text,
+    'bio' : IDL.Opt(IDL.Text),
+    'user_name' : IDL.Opt(IDL.Text),
+    'avatar' : IDL.Opt(UserAvatar),
+  });
+  const GetUserInfoResponse = IDL.Record({ 'user' : IDL.Opt(User) });
   const ReactEmojiRequest = IDL.Record({
     'post_id' : IDL.Opt(IDL.Text),
     'reply_id' : IDL.Opt(IDL.Text),
@@ -168,6 +180,23 @@ export const idlFactory = ({ IDL }) => {
     'error' : IDL.Opt(ServerError),
     'reply' : PostReply,
   });
+  const SetUserAvatarRequest = IDL.Record({
+    'mime_type' : IDL.Text,
+    'user_id' : IDL.Text,
+    'avatar' : IDL.Vec(IDL.Nat8),
+  });
+  const SetUserInfoResponse = IDL.Record({
+    'user' : User,
+    'error' : IDL.Opt(ServerError),
+  });
+  const SetUserBioRequest = IDL.Record({
+    'bio' : IDL.Text,
+    'user_id' : IDL.Text,
+  });
+  const SetUserNameRequest = IDL.Record({
+    'user_id' : IDL.Text,
+    'new_name' : IDL.Text,
+  });
   const UpdateClubPostStreetTrendingScoreRequest = IDL.Record({
     'new' : TrendingPostKey,
     'nft_canister_ids' : IDL.Vec(IDL.Text),
@@ -180,7 +209,9 @@ export const idlFactory = ({ IDL }) => {
         [CreateStreetPostResponse],
         [],
       ),
+    'create_user' : IDL.Func([IDL.Text], [], []),
     'delete_all_post' : IDL.Func([], [], []),
+    'delete_all_users' : IDL.Func([], [], []),
     'delete_post' : IDL.Func([IDL.Text], [DeletePostResponse], []),
     'get_post_replies' : IDL.Func(
         [GetPostRepliesRequest],
@@ -217,8 +248,16 @@ export const idlFactory = ({ IDL }) => {
         [GetTrendingStreetPostResponse],
         ['query'],
       ),
+    'get_user_info' : IDL.Func([IDL.Text], [GetUserInfoResponse], ['query']),
     'react_emoji' : IDL.Func([ReactEmojiRequest], [DeletePostResponse], []),
     'reply_post' : IDL.Func([ReplyPostRequest], [ReplyPostResponse], []),
+    'set_user_avatar' : IDL.Func(
+        [SetUserAvatarRequest],
+        [SetUserInfoResponse],
+        [],
+      ),
+    'set_user_bio' : IDL.Func([SetUserBioRequest], [SetUserInfoResponse], []),
+    'set_user_name' : IDL.Func([SetUserNameRequest], [SetUserInfoResponse], []),
     'update_club_post_trending_score' : IDL.Func(
         [UpdateClubPostStreetTrendingScoreRequest],
         [],

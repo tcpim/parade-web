@@ -3,9 +3,8 @@ import {
   GetPostsRequest,
   PostCreatedTsKey,
 } from "../../../backend_declarations/club_server/ludo_arts_club.did";
-import { Post, PostsPage } from "../../types/post";
+import { Post, PostsPage, convertToPost } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
-import { convertToPost } from "../../utils/helpers";
 import { getClubServer } from "../useClubServer";
 
 const getFetchRequest = (cursor: [] | [PostCreatedTsKey]): GetPostsRequest => {

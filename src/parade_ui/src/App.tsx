@@ -9,6 +9,7 @@ import { PostCreationPage } from "./components/Post/PostCreationPage";
 import { PostPage } from "./components/Post/PostPage";
 import { Profile } from "./components/Profile/Profile";
 import { LayoutWithSideBar } from "./components/Sidebar/SideBar";
+import { User } from "./types/user";
 
 const NotFoundPage = () => {
   return <h1>Not Found</h1>;
@@ -17,6 +18,7 @@ const NotFoundPage = () => {
 export interface UserLoginInfo {
   userPid: string;
   userAccount: string;
+  userInfo?: User;
   walletConnected: boolean;
   walletType: "Plug" | "Stoic" | "";
 }

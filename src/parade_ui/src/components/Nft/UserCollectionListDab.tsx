@@ -124,9 +124,11 @@ export const UserCollectionListDab = ({ userPid }: CollectionListProps) => {
       </Box>
     );
   } else if (userCollectionDabQuery.isError) {
-    throw new Error(
-      "Failed to fetch userCollectionList from api: " +
-        userCollectionDabQuery.error.message
+    return (
+      <div>
+        {"Failed to fetch userCollectionList from dab api: " +
+          userCollectionDabQuery.error.message}
+      </div>
     );
   } else if (!userCollectionDabQuery.data) {
     return <div>No data is available</div>;

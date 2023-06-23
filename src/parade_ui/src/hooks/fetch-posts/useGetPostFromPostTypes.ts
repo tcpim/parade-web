@@ -2,8 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { GetPostByIdsResponse } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { PostType } from "../../../backend_declarations/main_server/main_server.did";
-import { Post } from "../../types/post";
-import { convertToPost } from "../../utils/helpers";
+import { Post, convertToPost } from "../../types/post";
 import { getClubServer } from "../useClubServer";
 
 /**

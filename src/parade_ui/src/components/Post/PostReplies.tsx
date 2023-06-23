@@ -9,9 +9,8 @@ import { Fragment, memo } from "react";
 import { useClubPostRepiles } from "../../hooks/fetch-posts/useClubPostReplies";
 import { useStreetPostRepiles } from "../../hooks/fetch-posts/useStreetPostReplies";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
-import { NftInfo } from "../../types/nft";
+import { NftInfo, converToNftInfo } from "../../types/nft";
 import { getTimeperiod } from "../../utils/getTimePeriod";
-import { converToNftInfo } from "../../utils/helpers";
 import { Emojis } from "./Emojis";
 
 interface PostRepliesProps {
