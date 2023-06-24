@@ -21,7 +21,10 @@ const UserPortfolioActivity = () => {
         width="80%"
         marginBottom="20px"
       >
-        <UserAvatar withCamera={true} />
+        <UserAvatar
+          canChange={true}
+          userId={appContext.userLoginInfo.userPid}
+        />
         <UserInfo />
       </Box>
       <Box display="flex" justifyContent="space-evenly">

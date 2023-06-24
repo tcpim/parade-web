@@ -34,9 +34,9 @@ export const PostCard = ({ post }: PostCardProps) => {
     <Card sx={{ marginBottom: 10 }}>
       <CardContent>
         <Box display="flex">
-          <UserAvatar size={50} />
+          <UserAvatar size={50} userId={post.created_by} />
           <Typography variant="h6" component="span" marginLeft="10px">
-            {userInfoQuery.data?.username}
+            {userInfoQuery.data?.username ?? userInfoQuery.data?.userId}
           </Typography>
         </Box>
         <Typography color="text.secondary">

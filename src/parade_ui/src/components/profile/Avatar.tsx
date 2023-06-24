@@ -1,8 +1,7 @@
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Avatar, Box, IconButton } from "@mui/material";
 import imageCompression from "browser-image-compression";
-import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../App";
+import React, { useEffect, useState } from "react";
 import { useGetUser } from "../../hooks/user/useGetUser";
 import { useSetUserAvatar } from "../../hooks/user/useSetUserInfo";
 import { UserAvatar as UserAvatarType } from "../../types/user";
@@ -24,15 +23,16 @@ const decodeUint8ArrayToImage = (avatar?: UserAvatarType) => {
 
 interface UserAvatarProps {
   size?: number;
-  withCamera?: boolean;
+  canChange?: boolean;
+  userId: string;
 }
 
 export const UserAvatar = ({
   size = 100,
-  withCamera = false,
+  canChange = false,
+  userId,
 }: UserAvatarProps) => {
-  const appContext = useContext(AppContext);
-  const userInfo = useGetUser(appContext.userLoginInfo.userPid);
+  const userInfo = useGetUser(userId);
   const [newImage, setNewImage] = useState("");
   const [newImageType, setNewImageType] = useState("");
   const [imageUploaded, setImageUploaded] = useState(false);
@@ -41,7 +41,7 @@ export const UserAvatar = ({
 
   const setUserAvatarMutation = useSetUserAvatar(
     // only update avatar, so don't need to set other fields
-    appContext.userLoginInfo.userPid,
+    userId,
     encodeImageToUint8Array(newImage),
     newImageType
   );
@@ -103,7 +103,7 @@ export const UserAvatar = ({
         onChange={handleImageUpload}
       />
 
-      <label htmlFor="avatar-button-file" hidden={!withCamera}>
+      <label htmlFor="avatar-button-file" hidden={!canChange}>
         <IconButton
           style={{
             position: "absolute",
