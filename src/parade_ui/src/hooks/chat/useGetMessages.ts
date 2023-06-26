@@ -27,14 +27,22 @@ export const useGetMessages = (clubId: string) => {
         next_cursor: response.next_cursor,
       };
 
+      console.log("!! finish fetching");
+      for (const message of result.messages) {
+        console.log("!! useGetMessages", message.words);
+      }
+
       return result;
     },
-    getNextPageParam: (lastPage, pages) => {
+    getPreviousPageParam: (lastPage, pages) => {
       if (lastPage.next_cursor.length === 0) {
+        console.log("!! no more page");
         return undefined;
       } else {
+        console.log("!! next page cursor" + lastPage.next_cursor[0].toString());
         return lastPage.next_cursor;
       }
     },
+    keepPreviousData: true,
   });
 };

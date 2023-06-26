@@ -1,4 +1,4 @@
-import {useEffect, useRef} from "react";
+import { useEffect, useRef } from "react";
 
 /*
 From: https://ui.dev/c/react-query/infinite-queries
@@ -12,29 +12,74 @@ We also use a little trick to make sure our callback doesn't make the useEffect 
 We place the callback into a ref and use a different useEffect to update that ref whenever the callback changes. 
 Then, in our handleScroll function, we call the function in the ref instead, which saves us from needing to remove and re-add the event listener.
 */
-export function useScrollToBottomAction(container: any, callback: any, offset = 0) {
-    const callbackRef = useRef(callback);
-  
-    useEffect(() => {
-      callbackRef.current = callback;
-    }, [callback]);
-  
-    useEffect(() => {
-      const handleScroll = () => {
-        let scrollContainer =
-          container === document ? document.scrollingElement : container;
-        if (
-          scrollContainer.scrollTop + scrollContainer.clientHeight >=
-          scrollContainer.scrollHeight - offset
-        ) {
-          callbackRef.current();
-        }
-      };
-  
-      container.addEventListener("scroll", handleScroll, {passive:true});
-  
-      return () => {
-        container.removeEventListener("scroll", handleScroll);
-      };
-    }, [container, offset]);
-  }
+export function useScrollToBottomAction(
+  container: any,
+  callback: any,
+  offset = 0
+) {
+  const callbackRef = useRef(callback);
+
+  useEffect(() => {
+    callbackRef.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      let scrollContainer =
+        container === document ? document.scrollingElement : container;
+      if (
+        scrollContainer.scrollTop + scrollContainer.clientHeight >=
+        scrollContainer.scrollHeight - offset
+      ) {
+        callbackRef.current();
+      }
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, [container, offset]);
+}
+
+// export function useScrollToTopAction(): (
+//   container: any,
+//   callback: any,
+//   offset: number
+// ) => number {
+//   const callbackRef = useRef(callback);
+
+//   useEffect(() => {
+//     callbackRef.current = callback;
+//   }, [callback]);
+
+//   useEffect(() => {
+//     if (!container) {
+//       console.log("Container is null");
+//       return;
+//     }
+
+//     const handleScroll = () => {
+//       console.log("Handling scroll");
+//       let scrollContainer =
+//         container === document ? document.scrollingElement : container;
+
+//       // Check if scrolled to the top
+//       const isAtTop = scrollContainer.scrollTop <= offset;
+
+//       if (isAtTop) {
+//         console.log("Scrolled to top");
+//         callbackRef.current();
+//       }
+//     };
+
+//     container.addEventListener("scroll", handleScroll, { passive: true });
+
+//     return () => {
+//       container.removeEventListener("scroll", handleScroll);
+//     };
+//   }, [container, offset]);
+
+//   return 1;
+// }

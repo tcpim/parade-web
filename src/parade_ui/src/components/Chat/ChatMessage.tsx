@@ -12,6 +12,7 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
         backgroundColor: "#f5f5f5",
         marginTop: "10px",
         maxWidth: "80%",
+        marginBottom: "100px",
       }}
     >
       <CardContent>

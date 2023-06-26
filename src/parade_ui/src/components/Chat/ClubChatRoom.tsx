@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Divider, Typography } from "@mui/material";
-import { Fragment } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useGetMessages } from "../../hooks/chat/useGetMessages";
 import { ChatMessage } from "./ChatMessage";
@@ -8,6 +8,44 @@ import { ChatMessageEditor } from "./ChatMessageEditor";
 export const ClubChatRoom = () => {
   const { clubId } = useParams();
   const messagesQuery = useGetMessages(clubId ?? "");
+
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+  const prevScrollPositionRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container) {
+      return;
+    }
+
+    // Scroll to bottom on initial load
+    container.scrollTop = container.scrollHeight;
+
+    // Remain position in previous scroll position when fetched previous page
+    if (prevScrollPositionRef.current) {
+      container.scrollTop =
+        container.scrollHeight - prevScrollPositionRef.current;
+    }
+
+    // Fetch previous page when scrolled to top
+    const handleScroll = () => {
+      // Check if scrolled to the top
+      const isAtTop = container.scrollTop <= 10;
+
+      if (isAtTop) {
+        if (messagesQuery.isFetchingPreviousPage) return;
+        prevScrollPositionRef.current =
+          container.scrollHeight - container.scrollTop;
+        messagesQuery.fetchPreviousPage();
+      }
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+    };
+  }, [messagesContainerRef.current, messagesQuery.data]);
 
   if (clubId === undefined) {
     throw new Error("clubId is undefined");
@@ -46,26 +84,34 @@ export const ClubChatRoom = () => {
         <Typography variant="h6">{clubId}'s chat room</Typography>
       </Box>
       <Divider orientation="horizontal" />
-      {messagesQuery.isFetchingNextPage && (
-        <Box>
-          <CircularProgress />
+      <Box ref={messagesContainerRef} sx={{ flex: "1", overflow: "auto" }}>
+        {messagesQuery.isFetchingNextPage && (
+          <Box>
+            <CircularProgress />
+          </Box>
+        )}
+        <Box alignItems="center">
+          {messagesQuery.data.pages.map((page, index) => (
+            <Fragment key={index}>
+              {page.messages
+                .slice()
+                .reverse()
+                .map((msg) => (
+                  <Fragment key={msg.id}>
+                    <ChatMessage message={msg} />
+                  </Fragment>
+                ))}
+            </Fragment>
+          ))}
         </Box>
-      )}
-      <Box alignItems="center">
-        {messagesQuery.data.pages.map((page, index) => (
-          <Fragment key={index}>
-            {page.messages
-              .slice()
-              .reverse()
-              .map((msg) => (
-                <Fragment key={msg.id}>
-                  <ChatMessage message={msg} />
-                </Fragment>
-              ))}
-          </Fragment>
-        ))}
       </Box>
-      <Box sx={{ marginTop: "auto", marginBottom: "10px", marginLeft: "10px" }}>
+      <Box
+        sx={{
+          marginTop: "auto",
+          marginBottom: "10px",
+          marginLeft: "10px",
+        }}
+      >
         <ChatMessageEditor clubId={clubId} />
       </Box>
     </Box>
