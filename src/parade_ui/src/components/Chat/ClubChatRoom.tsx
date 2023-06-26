@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Divider, Typography } from "@mui/material";
-import { Fragment, useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetMessages } from "../../hooks/chat/useGetMessages";
 import { ChatMessage } from "./ChatMessage";
@@ -11,6 +11,14 @@ export const ClubChatRoom = () => {
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const prevScrollPositionRef = useRef<number | null>(null);
+  const [shouldRemainPosition, setShouldRemainPosition] = useState(true);
+
+  const container = messagesContainerRef.current;
+  if (container) {
+    console.log(
+      "top: " + container.scrollTop + ", height: " + container.scrollHeight
+    );
+  }
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -21,8 +29,8 @@ export const ClubChatRoom = () => {
     // Scroll to bottom on initial load
     container.scrollTop = container.scrollHeight;
 
-    // Remain position in previous scroll position when fetched previous page
-    if (prevScrollPositionRef.current) {
+    // Remain position in previous scroll position after fetched previous page
+    if (prevScrollPositionRef.current && shouldRemainPosition) {
       container.scrollTop =
         container.scrollHeight - prevScrollPositionRef.current;
     }
@@ -42,10 +50,21 @@ export const ClubChatRoom = () => {
 
     container.addEventListener("scroll", handleScroll, { passive: true });
 
+    setShouldRemainPosition(true);
     return () => {
       container.removeEventListener("scroll", handleScroll);
     };
   }, [messagesContainerRef.current, messagesQuery.data]);
+
+  // Scroll to bottom when new message is added
+  const scrollToBottom = () => {
+    const container = messagesContainerRef.current;
+    if (!container) {
+      return;
+    }
+    container.scrollTop = container.scrollHeight;
+    setShouldRemainPosition(false);
+  };
 
   if (clubId === undefined) {
     throw new Error("clubId is undefined");
@@ -112,7 +131,7 @@ export const ClubChatRoom = () => {
           marginLeft: "10px",
         }}
       >
-        <ChatMessageEditor clubId={clubId} />
+        <ChatMessageEditor clubId={clubId} scrollToBottom={scrollToBottom} />
       </Box>
     </Box>
   );

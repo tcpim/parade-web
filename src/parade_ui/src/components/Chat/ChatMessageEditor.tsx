@@ -6,9 +6,13 @@ import { useSendMessage } from "../../hooks/chat/useSendMessage";
 
 export interface ChatMessageEditorProps {
   clubId: string;
+  scrollToBottom: () => void;
 }
 
-export const ChatMessageEditor = ({ clubId }: ChatMessageEditorProps) => {
+export const ChatMessageEditor = ({
+  clubId,
+  scrollToBottom,
+}: ChatMessageEditorProps) => {
   const appContext = useContext(AppContext);
   const [message, setMessage] = useState("");
 
@@ -20,6 +24,7 @@ export const ChatMessageEditor = ({ clubId }: ChatMessageEditorProps) => {
     sender: userId,
     onSuccessCallback: () => {
       setMessage("");
+      scrollToBottom();
     },
   });
 
