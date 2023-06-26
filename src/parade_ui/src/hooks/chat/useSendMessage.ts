@@ -1,6 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 import { SendClubMessageRequest } from "../../../backend_declarations/club_server/ludo_arts_club.did";
+import { Message, MessagePage } from "../../types/message";
 import { getClubServer } from "../useClubServer";
 
 const getSendClubMessageRequest = (message: string, sender: string) => {
@@ -25,6 +30,7 @@ export const useSendMessage = ({
   clubId,
   onSuccessCallback,
 }: SendMessageProps) => {
+  const queryClient = useQueryClient();
   const clubServer = getClubServer(clubId);
   const request = getSendClubMessageRequest(message, sender);
 
@@ -35,6 +41,37 @@ export const useSendMessage = ({
     onSuccess: () => {
       // attach new message
       onSuccessCallback();
+
+      // update query data to include the new message
+      const newMessage: Message = {
+        id: request.message_id,
+        sender: request.sender,
+        created_ts: request.created_ts,
+        words: request.words,
+        updated_ts: request.created_ts,
+        emoji_reactions: [],
+      };
+
+      queryClient.setQueryData<InfiniteData<MessagePage>>(
+        ["clubMessages", clubId],
+        (oldData) => {
+          if (oldData === undefined) {
+            return undefined;
+          }
+          console.log("try to update pages");
+          const oldLastPage: MessagePage =
+            oldData.pages[oldData.pages.length - 1];
+
+          const newLastPage: MessagePage = {
+            ...oldLastPage,
+            messages: [newMessage, ...oldLastPage.messages],
+          };
+          return {
+            pages: [...oldData.pages.slice(0, -1), newLastPage],
+            pageParams: oldData.pageParams,
+          };
+        }
+      );
     },
   });
 
