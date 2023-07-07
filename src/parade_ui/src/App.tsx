@@ -9,7 +9,7 @@ import { Feed } from "./components/Homepage/Feed";
 import { PostCreationPage } from "./components/Post/PostCreationPage";
 import { PostPage } from "./components/Post/PostPage";
 import { Profile } from "./components/Profile/Profile";
-import { TopSideBarLayout } from "./components/Topbar/TopSideBar";
+import { TopSideBarLayout } from "./components/Topbar/TopSideBarLayout";
 import { User } from "./types/user";
 
 const NotFoundPage = () => {

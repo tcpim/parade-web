@@ -8,8 +8,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../../assets/logo.png";
-import { Icon } from "./TopSideBar";
-import WalletConnection from "./WalletConnection";
+import { Icon } from "./TopSideBarLayout";
+import { Wallet } from "./Wallet";
 
 interface TopBarProps {
   className?: string;
@@ -17,7 +17,7 @@ interface TopBarProps {
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: 8rem 1fr 8rem;
+  grid-template-columns: 8rem 1fr 12rem;
   align-items: center;
   justify-items: center;
   margin: 0 1rem;
@@ -84,12 +84,12 @@ export const TopBar = ({ className }: TopBarProps) => {
       <TopBarIcons>
         <TooltipWrapper onClick={() => navigate("/clubs")} tooltipText="Clubs">
           <IconButton>
-            <Icon as={HiOutlineUserGroup} size={1.5} />
+            <Icon as={HiOutlineUserGroup} size={2} />
           </IconButton>
         </TooltipWrapper>
         <TooltipWrapper onClick={() => navigate("/")} tooltipText="Street">
           <IconButton>
-            <Icon as={HiOutlineGlobeAlt} size={1.5} />
+            <Icon as={HiOutlineGlobeAlt} size={2} />
           </IconButton>
         </TooltipWrapper>
         <TooltipWrapper
@@ -97,12 +97,12 @@ export const TopBar = ({ className }: TopBarProps) => {
           tooltipText="Create"
         >
           <IconButton>
-            <Icon as={HiOutlinePlus} size={1.5} />
+            <Icon as={HiOutlinePlus} size={2} />
           </IconButton>
         </TooltipWrapper>
       </TopBarIcons>
       <Login>
-        <WalletConnection />
+        <Wallet />
       </Login>
     </Wrapper>
   );

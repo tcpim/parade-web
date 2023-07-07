@@ -19,6 +19,7 @@ const Wrapper = styled.div`
   grid-template-areas:
     "topbar topbar"
     "navbar main-content";
+  isolation: isolate;
 `;
 
 const StyledTopBar = styled(TopBar)`
@@ -26,14 +27,19 @@ const StyledTopBar = styled(TopBar)`
   position: fixed;
   padding-top: 1rem;
   width: 100%;
+  z-index: 2;
+  background-color: white;
 `;
 
 const StyledNavBar = styled(NavBar)`
   grid-area: navbar;
+  position: fixed;
+  top: 5em;
 `;
 
 const StyledChildren = styled.div`
   grid-area: main-content;
+  z-index: 1;
 `;
 
 interface TopSideBarProps {

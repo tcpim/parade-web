@@ -6,7 +6,7 @@ import {
 } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Icon } from "./TopSideBar";
+import { Icon } from "./TopSideBarLayout";
 
 const Wrapper = styled.ol`
   padding-top: 8rem;
