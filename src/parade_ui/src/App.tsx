@@ -10,6 +10,7 @@ import { PostCreationPage } from "./components/Post/PostCreationPage";
 import { PostPage } from "./components/Post/PostPage";
 import { Profile } from "./components/Profile/Profile";
 import { LayoutWithSideBar } from "./components/Sidebar/SideBar";
+import { TopSideBar } from "./components/Topbar/TopSideBar";
 import { User } from "./types/user";
 
 const NotFoundPage = () => {
@@ -123,6 +124,14 @@ export const App = () => {
               <LayoutWithSideBar>
                 <ClubChatRoom />
               </LayoutWithSideBar>
+            }
+          />
+          <Route
+            path="/test"
+            element={
+              <TopSideBar>
+                <ClubsGrid />
+              </TopSideBar>
             }
           />
           <Route path="*" element={<NotFoundPage />} />

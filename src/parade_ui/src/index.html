@@ -8,7 +8,25 @@
     * {
       font-family: "Roboto", sans-serif;
       margin: 0;
+      font-size: 16px;
     }
+
+    /* Use a more-intuitive box-sizing model. */
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    /* Allow percentage-based heights in the application */
+    html, body {
+      height: 100%;
+    }
+
+    /* Avoid text overflows */
+    p, h1, h2, h3, h4, h5, h6 {
+      overflow-wrap: break-word;
+    }
+
+
   </style>
 </head>
 

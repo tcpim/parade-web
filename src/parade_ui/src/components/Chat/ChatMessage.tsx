@@ -21,7 +21,7 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
         backgroundColor: "#dbf5ff",
       }
     : {
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "hsla(100,100%,50%,.5)",
         marginRight: "auto",
         marginLeft: "10px",
       };
