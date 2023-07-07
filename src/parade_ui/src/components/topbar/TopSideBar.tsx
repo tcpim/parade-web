@@ -23,6 +23,9 @@ const Wrapper = styled.div`
 
 const StyledTopBar = styled(TopBar)`
   grid-area: topbar;
+  position: fixed;
+  padding-top: 1rem;
+  width: 100%;
 `;
 
 const StyledNavBar = styled(NavBar)`
@@ -37,7 +40,7 @@ interface TopSideBarProps {
   children: ReactNode;
 }
 
-export const TopSideBar = ({ children }: TopSideBarProps) => {
+export const TopSideBarLayout = ({ children }: TopSideBarProps) => {
   return (
     <Wrapper>
       <StyledTopBar />

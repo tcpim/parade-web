@@ -17,11 +17,9 @@ const ListItem = styled.li`
   list-style: none;
   margin-left: 1rem;
   margin-bottom: 1rem;
-  margin-right: 1rem;
-  padding-right: 8rem;
+  margin-right: 4rem;
   padding-left: 1rem;
   font-size: 1.5rem;
-
   display: grid;
   grid-template-columns: 4rem 1fr;
   align-items: center;
@@ -30,7 +28,7 @@ const ListItem = styled.li`
   border-radius: 2rem;
 
   &:hover {
-    background-color: #d6d5d6db;
+    background-color: rgba(214, 213, 214, 0.5);
   }
 `;
 

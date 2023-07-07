@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../../assets/logo.png";
 import { Icon } from "./TopSideBar";
+import WalletConnection from "./WalletConnection";
 
 interface TopBarProps {
   className?: string;
@@ -61,7 +62,7 @@ const TooltipWrapper = ({
 
 const IconButton = styled.div`
   &:hover {
-    background-color: #d5d5d6db;
+    background-color: rgba(213, 213, 214, 0.5);
   }
 
   padding: 0.5rem 2rem;
@@ -79,25 +80,30 @@ export const TopBar = ({ className }: TopBarProps) => {
 
   return (
     <Wrapper className={className}>
-      <Logo src={logo}></Logo>
+      <Logo src={logo} onClick={() => navigate("/")}></Logo>
       <TopBarIcons>
         <TooltipWrapper onClick={() => navigate("/clubs")} tooltipText="Clubs">
           <IconButton>
             <Icon as={HiOutlineUserGroup} size={1.5} />
           </IconButton>
         </TooltipWrapper>
-        <TooltipWrapper onClick={() => navigate("/clubs")} tooltipText="Street">
+        <TooltipWrapper onClick={() => navigate("/")} tooltipText="Street">
           <IconButton>
             <Icon as={HiOutlineGlobeAlt} size={1.5} />
           </IconButton>
         </TooltipWrapper>
-        <TooltipWrapper onClick={() => navigate("/clubs")} tooltipText="Create">
+        <TooltipWrapper
+          onClick={() => navigate("/post-creator")}
+          tooltipText="Create"
+        >
           <IconButton>
             <Icon as={HiOutlinePlus} size={1.5} />
           </IconButton>
         </TooltipWrapper>
       </TopBarIcons>
-      <Login>Login</Login>
+      <Login>
+        <WalletConnection />
+      </Login>
     </Wrapper>
   );
 };

@@ -9,8 +9,7 @@ import { Feed } from "./components/Homepage/Feed";
 import { PostCreationPage } from "./components/Post/PostCreationPage";
 import { PostPage } from "./components/Post/PostPage";
 import { Profile } from "./components/Profile/Profile";
-import { LayoutWithSideBar } from "./components/Sidebar/SideBar";
-import { TopSideBar } from "./components/Topbar/TopSideBar";
+import { TopSideBarLayout } from "./components/Topbar/TopSideBar";
 import { User } from "./types/user";
 
 const NotFoundPage = () => {
@@ -65,73 +64,65 @@ export const App = () => {
           <Route
             path="/"
             element={
-              <LayoutWithSideBar>
+              <TopSideBarLayout>
                 <Feed />
-              </LayoutWithSideBar>
+              </TopSideBarLayout>
             }
           />
           <Route
             path="/profile"
             element={
-              <LayoutWithSideBar>
+              <TopSideBarLayout>
                 <Profile />
-              </LayoutWithSideBar>
+              </TopSideBarLayout>
             }
           />
           <Route
             path="/post/:postId"
             element={
-              <LayoutWithSideBar>
+              <TopSideBarLayout>
                 <PostPage />
-              </LayoutWithSideBar>
+              </TopSideBarLayout>
             }
           />
           <Route
             path="/club/:clubId/post/:postId"
             element={
-              <LayoutWithSideBar>
+              <TopSideBarLayout>
                 <PostPage />
-              </LayoutWithSideBar>
+              </TopSideBarLayout>
             }
           />
           <Route
             path="/post-creator"
             element={
-              <LayoutWithSideBar>
+              <TopSideBarLayout>
                 <PostCreationPage />
-              </LayoutWithSideBar>
+              </TopSideBarLayout>
             }
           />
           <Route
             path="/clubs"
             element={
-              <LayoutWithSideBar>
+              <TopSideBarLayout>
                 <ClubsGrid />
-              </LayoutWithSideBar>
+              </TopSideBarLayout>
             }
           />
           <Route
             path="/clubs/:clubId"
             element={
-              <LayoutWithSideBar>
+              <TopSideBarLayout>
                 <ClubPage />
-              </LayoutWithSideBar>
+              </TopSideBarLayout>
             }
           />
           <Route
             path="/clubs/:clubId/chat"
             element={
-              <LayoutWithSideBar>
+              <TopSideBarLayout>
                 <ClubChatRoom />
-              </LayoutWithSideBar>
-            }
-          />
-          <Route
-            path="/test"
-            element={
-              <TopSideBar>
-                <ClubsGrid />
-              </TopSideBar>
+              </TopSideBarLayout>
             }
           />
           <Route path="*" element={<NotFoundPage />} />
