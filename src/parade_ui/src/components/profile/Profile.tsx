@@ -44,6 +44,7 @@ const UserPortfolioActivity = () => {
       </Box>
       {subPage === "portfolio" && (
         <UserPortfolioMemo
+          loggedIn={appContext.userLoginInfo.walletConnected}
           userAccount={appContext.userLoginInfo.userAccount}
           userPid={appContext.userLoginInfo.userPid}
         />

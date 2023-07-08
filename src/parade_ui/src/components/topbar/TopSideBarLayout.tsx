@@ -5,9 +5,10 @@ import { TopBar } from "./TopBar";
 
 interface IconProps {
   size: number;
+  bold: boolean;
 }
 export const Icon = styled.svg<IconProps>`
-  stroke-width: 1.5px;
+  stroke-width: ${(props) => (props.bold ? "2px" : "1.5px")};
   width: ${(props) => props.size}rem;
   height: ${(props) => props.size}rem;
 `;

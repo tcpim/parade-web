@@ -4,7 +4,7 @@ import {
   HiOutlineUser,
   HiOutlineUserGroup,
 } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Icon } from "./TopSideBarLayout";
 
@@ -13,7 +13,10 @@ const Wrapper = styled.ol`
   padding-inline-start: 0;
 `;
 
-const ListItem = styled.li`
+interface ListItemProps {
+  textBold: boolean;
+}
+const ListItem = styled.li<ListItemProps>`
   list-style: none;
   margin-left: 1rem;
   margin-bottom: 1rem;
@@ -27,6 +30,8 @@ const ListItem = styled.li`
   height: 4rem;
   border-radius: 2rem;
 
+  font-weight: ${(props) => (props.textBold ? "bold" : "normal")};
+
   &:hover {
     background-color: rgba(214, 213, 214, 0.5);
   }
@@ -38,23 +43,42 @@ interface NavBarProps {
 
 export const NavBar = ({ className }: NavBarProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   return (
     <Wrapper className={className}>
-      <ListItem onClick={() => navigate("/clubs")}>
-        <Icon as={HiOutlineUserGroup} size={2} />
+      <ListItem
+        onClick={() => navigate("/clubs")}
+        textBold={currentPath === "/clubs"}
+      >
+        <Icon
+          as={HiOutlineUserGroup}
+          size={2}
+          bold={currentPath === "/clubs"}
+        />
         Clubs
       </ListItem>
-      <ListItem onClick={() => navigate("/")}>
-        <Icon as={HiOutlineGlobeAlt} size={2} />
+      <ListItem onClick={() => navigate("/")} textBold={currentPath === "/"}>
+        <Icon as={HiOutlineGlobeAlt} size={2} bold={currentPath === "/"} />
         Street
       </ListItem>
-      <ListItem onClick={() => navigate("/post-creator")}>
-        <Icon as={HiOutlinePlus} size={2} />
+      <ListItem
+        onClick={() => navigate("/post-creator")}
+        textBold={currentPath === "/post-creator"}
+      >
+        <Icon
+          as={HiOutlinePlus}
+          size={2}
+          bold={currentPath === "/post-creator"}
+        />
         Create
       </ListItem>
-      <ListItem onClick={() => navigate("/profile")}>
-        <Icon as={HiOutlineUser} size={2} />
+      <ListItem
+        onClick={() => navigate("/profile")}
+        textBold={currentPath === "/profile"}
+      >
+        <Icon as={HiOutlineUser} size={2} bold={currentPath === "/profile"} />
         Profile
       </ListItem>
     </Wrapper>

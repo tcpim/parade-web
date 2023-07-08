@@ -5,11 +5,11 @@ import {
   HiOutlineUserGroup,
 } from "react-icons/hi";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../../assets/logo.png";
 import { Icon } from "./TopSideBarLayout";
-import { Wallet } from "./Wallet";
+import { WalletProfile } from "./Wallet/WalletProfile";
 
 interface TopBarProps {
   className?: string;
@@ -77,6 +77,8 @@ const Logo = styled.img`
 
 export const TopBar = ({ className }: TopBarProps) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   return (
     <Wrapper className={className}>
@@ -84,12 +86,16 @@ export const TopBar = ({ className }: TopBarProps) => {
       <TopBarIcons>
         <TooltipWrapper onClick={() => navigate("/clubs")} tooltipText="Clubs">
           <IconButton>
-            <Icon as={HiOutlineUserGroup} size={2} />
+            <Icon
+              as={HiOutlineUserGroup}
+              size={2}
+              bold={currentPath === "/clubs"}
+            />
           </IconButton>
         </TooltipWrapper>
         <TooltipWrapper onClick={() => navigate("/")} tooltipText="Street">
           <IconButton>
-            <Icon as={HiOutlineGlobeAlt} size={2} />
+            <Icon as={HiOutlineGlobeAlt} size={2} bold={currentPath === "/"} />
           </IconButton>
         </TooltipWrapper>
         <TooltipWrapper
@@ -97,12 +103,16 @@ export const TopBar = ({ className }: TopBarProps) => {
           tooltipText="Create"
         >
           <IconButton>
-            <Icon as={HiOutlinePlus} size={2} />
+            <Icon
+              as={HiOutlinePlus}
+              size={2}
+              bold={currentPath === "/post-creator"}
+            />
           </IconButton>
         </TooltipWrapper>
       </TopBarIcons>
       <Login>
-        <Wallet />
+        <WalletProfile />
       </Login>
     </Wrapper>
   );
