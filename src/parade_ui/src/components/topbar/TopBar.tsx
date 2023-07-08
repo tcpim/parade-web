@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../../assets/logo.png";
 import { Icon } from "./TopSideBarLayout";
-import { Wallet } from "./Wallet";
+import { WalletProfile } from "./Wallet/WalletProfile";
 
 interface TopBarProps {
   className?: string;
@@ -102,7 +102,7 @@ export const TopBar = ({ className }: TopBarProps) => {
         </TooltipWrapper>
       </TopBarIcons>
       <Login>
-        <Wallet />
+        <WalletProfile />
       </Login>
     </Wrapper>
   );
