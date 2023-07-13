@@ -26,7 +26,7 @@ type HoverStateType = {
   [key: string]: boolean;
 };
 
-const clubTokens = (data?: ClubCollectionListData): Array<NftInfo> => {
+const getClubTokenList = (data?: ClubCollectionListData): Array<NftInfo> => {
   let tokens: Array<NftInfo> = [];
   if (!data) return tokens;
 
@@ -38,15 +38,18 @@ const clubTokens = (data?: ClubCollectionListData): Array<NftInfo> => {
         k++
       ) {
         tokens.push({
-          nftCanisterId: data.clubs[i].collections[j].canisterId,
-          nftTokenIndex: data.clubs[i].collections[j].ownedTokens[k].index,
-          nftTokenIdentifier:
+          canisterId: data.clubs[i].collections[j].canisterId,
+          tokenIndex: data.clubs[i].collections[j].ownedTokens[k].index,
+          tokenIdentifier:
             data.clubs[i].collections[j].ownedTokens[k].identifier,
-          nftCollectionName: data.clubs[i].collections[j].collection_name,
-          nftOriginalImageUrl:
-            data.clubs[i].collections[j].ownedTokens[k].originalImage,
-          nftOriginalThumbnailUrl:
-            data.clubs[i].collections[j].ownedTokens[k].smallImage,
+          collectionName: data.clubs[i].collections[j].collection_name,
+          imageUrl: data.clubs[i].collections[j].ownedTokens[k].image_url,
+          imageThumbnailUrl:
+            data.clubs[i].collections[j].ownedTokens[k].thum_image_url,
+          imageType: data.clubs[i].collections[j].ownedTokens[k].image_type,
+          imageHeightWidthRatio:
+            data.clubs[i].collections[j].ownedTokens[k]
+              .image_height_width_ratio,
           clubId: data.clubs[i].club_id,
         });
       }
@@ -56,20 +59,22 @@ const clubTokens = (data?: ClubCollectionListData): Array<NftInfo> => {
   return tokens;
 };
 
-const otherTokens = (data?: NFTCollection[]): Array<NftInfo> => {
+const getNonClubTokenList = (data?: NFTCollection[]): Array<NftInfo> => {
   let tokens: Array<NftInfo> = [];
   if (!data) return tokens;
 
   for (let i = 0; i < data.length; i++) {
     for (let j = 0; j < data[i].tokens.length; j++) {
       tokens.push({
-        nftCanisterId: data[i].canisterId,
-        nftTokenIndex: Number(data[i].tokens[j].index),
-        nftTokenIdentifier: data[i].tokens[j].id ?? "",
-        nftCollectionName: data[i].name,
-        nftOriginalImageUrl: "",
-        nftOriginalThumbnailUrl: data[i].tokens[j].url,
-        clubId: "",
+        canisterId: data[i].canisterId,
+        tokenIndex: Number(data[i].tokens[j].index),
+        tokenIdentifier: data[i].tokens[j].id ?? "",
+        collectionName: data[i].name,
+        imageUrl: data[i].tokens[j].url,
+        imageThumbnailUrl: data[i].tokens[j].url,
+        imageType: "img",
+        imageHeightWidthRatio: undefined,
+        clubId: undefined,
       });
     }
   }
@@ -85,13 +90,6 @@ export const NftSelector = ({ onNftSelected }: NftSelectorProps) => {
   const otherNftQuery = useUserCollectionListDab(context.userLoginInfo.userPid);
   const [hovered, setHovered] = useState<HoverStateType>({});
 
-  const getImageUrl = (token: NftInfo): string => {
-    if (token.nftCanisterId === "4ggk4-mqaaa-aaaae-qad6q-cai") {
-      return token.nftOriginalImageUrl;
-    } else {
-      return token.nftOriginalThumbnailUrl;
-    }
-  };
   return (
     <Box marginLeft={5}>
       <Typography variant="h6">Club NFTs</Typography>
@@ -102,33 +100,35 @@ export const NftSelector = ({ onNftSelected }: NftSelectorProps) => {
         gap={30}
         rowHeight={400}
       >
-        {clubTokens(clubNftQuery.data).map((token) => (
+        {getClubTokenList(clubNftQuery.data).map((token) => (
           <Box
-            key={token.nftOriginalThumbnailUrl}
+            key={token.imageUrl}
             position="relative"
             onMouseEnter={() =>
               setHovered((prevState) => ({
                 ...prevState,
-                [token.nftTokenIdentifier]: true, // Toggle the boolean value
+                [token.tokenIdentifier]: true, // Toggle the boolean value
               }))
             }
             onMouseLeave={() =>
               setHovered((prevState) => ({
                 ...prevState,
-                [token.nftTokenIdentifier]: false, // Toggle the boolean value
+                [token.tokenIdentifier]: false, // Toggle the boolean value
               }))
             }
           >
             <ImageListItem
-              key={token.nftOriginalThumbnailUrl}
+              key={token.imageUrl}
               sx={{ position: "relative", zIndex: hovered ? -1 : 0 }}
             >
               <NftImage
-                imageUrl={getImageUrl(token)}
-                canisterId={token.nftCanisterId}
+                imageUrl={token.imageUrl}
+                width={500}
+                imageType={token.imageType}
+                imageHeightWidthRatio={token.imageHeightWidthRatio}
               />
             </ImageListItem>
-            <Fade in={hovered[token.nftTokenIdentifier] ?? false}>
+            <Fade in={hovered[token.tokenIdentifier] ?? false}>
               <IconButton
                 sx={{
                   position: "absolute",
@@ -157,33 +157,35 @@ export const NftSelector = ({ onNftSelected }: NftSelectorProps) => {
         gap={30}
         rowHeight={400}
       >
-        {otherTokens(otherNftQuery.data).map((token) => (
+        {getNonClubTokenList(otherNftQuery.data).map((token) => (
           <Box
-            key={token.nftOriginalThumbnailUrl}
+            key={token.tokenIdentifier}
             position="relative"
             onMouseEnter={() =>
               setHovered((prevState) => ({
                 ...prevState,
-                [token.nftTokenIdentifier]: true, // Toggle the boolean value
+                [token.tokenIdentifier]: true, // Toggle the boolean value
               }))
             }
             onMouseLeave={() =>
               setHovered((prevState) => ({
                 ...prevState,
-                [token.nftTokenIdentifier]: false, // Toggle the boolean value
+                [token.tokenIdentifier]: false, // Toggle the boolean value
               }))
             }
           >
             <ImageListItem
-              key={token.nftOriginalThumbnailUrl}
+              key={token.tokenIdentifier}
               sx={{ position: "relative", zIndex: hovered ? -1 : 0 }}
             >
               <NftImage
-                imageUrl={getImageUrl(token)}
-                canisterId={token.nftCanisterId}
+                imageUrl={token.imageUrl}
+                width={500}
+                imageType={token.imageType}
+                imageHeightWidthRatio={token.imageHeightWidthRatio}
               />
             </ImageListItem>
-            <Fade in={hovered[token.nftTokenIdentifier] ?? false}>
+            <Fade in={hovered[token.tokenIdentifier] ?? false}>
               <IconButton
                 sx={{
                   position: "absolute",

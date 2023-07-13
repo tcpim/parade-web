@@ -45,17 +45,19 @@ export const PostCard = ({ post }: PostCardProps) => {
         {post.nfts[0] && (
           <Typography variant="body2" component="p">
             {"NFT:  " +
-              post.nfts[0].nftCanisterId +
+              post.nfts[0].canisterId +
               ": " +
-              post.nfts[0].nftTokenIndex}
+              post.nfts[0].tokenIndex}
           </Typography>
         )}
       </CardContent>
       {post.nfts[0] && (
         <Box marginLeft="200px" maxWidth="350px">
           <NftImage
-            imageUrl={post.nfts[0].nftOriginalThumbnailUrl}
-            canisterId={post.nfts[0].nftCanisterId}
+            imageUrl={post.nfts[0].imageUrl}
+            width={500}
+            imageType={post.nfts[0].imageType}
+            imageHeightWidthRatio={post.nfts[0].imageHeightWidthRatio}
           />
         </Box>
       )}

@@ -3,66 +3,19 @@ import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import CircularProgress from "@mui/material/CircularProgress";
 import Collapse from "@mui/material/Collapse";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-import { styled } from "@mui/material/styles";
 import { NFTCollection, NFTDetails } from "@psychedelic/dab-js";
 import { useEffect, useState } from "react";
 import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
 import { NftInfo } from "../../types/nft";
 import { PostCreationForm } from "../Post/PostCreationForm";
+import { NftCard } from "./NftCard";
 import { NftImage } from "./NftImage";
-
-export interface NftImageProps {
-  index: string;
-  name?: string;
-  imageUrl: string;
-  standard?: string;
-  canisterId: string;
-}
-
-export const NftCard = ({
-  index,
-  name,
-  imageUrl,
-  standard,
-  canisterId,
-}: NftImageProps) => {
-  const CardContentNoPadding = styled(CardContent)(`
-          padding: 0;
-          &:last-child {
-              padding-bottom: 0px;
-          };
-          display: flex;
-          justify-content: space-between;
-          button {
-              justify-content: center;
-              min-width: 25%;
-          }
-          & .MuiTypography-root {
-              display:flex;
-              flex-direction: column;
-              justify-content: center;
-          }
-      `);
-
-  return (
-    <Card sx={{ maxWidth: 350, mr: 1, mt: 1 }}>
-      <NftImage imageUrl={imageUrl} canisterId={canisterId} />
-      <CardContentNoPadding>
-        <Typography variant="subtitle2" component="div">
-          {name ? name : "#".concat(index)}
-        </Typography>
-      </CardContentNoPadding>
-    </Card>
-  );
-};
 
 interface CollectionListProps {
   userPid: string;
@@ -74,13 +27,15 @@ export const UserCollectionListDab = ({ userPid }: CollectionListProps) => {
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [postFormNftInfo, setPostFormNftInfo] = useState<NftInfo>({
-    nftCanisterId: "",
-    nftCollectionName: "",
-    nftTokenIndex: 0,
-    nftTokenIdentifier: "",
-    nftOriginalImageUrl: "",
-    nftOriginalThumbnailUrl: "",
+    canisterId: "",
+    collectionName: "",
+    tokenIndex: 0,
+    tokenIdentifier: "",
+    imageUrl: "",
+    imageThumbnailUrl: "",
     clubId: "",
+    imageType: "img",
+    imageHeightWidthRatio: undefined,
   });
 
   const handleOpenForm = (
@@ -89,13 +44,15 @@ export const UserCollectionListDab = ({ userPid }: CollectionListProps) => {
   ) => {
     setOpenForm(true);
     setPostFormNftInfo({
-      nftCanisterId: collection.canisterId,
-      nftCollectionName: collection.name,
-      nftTokenIndex: parseInt(token.index.toString()),
-      nftTokenIdentifier: token.id ?? "",
-      nftOriginalImageUrl: token.url,
-      nftOriginalThumbnailUrl: token.url,
+      canisterId: collection.canisterId,
+      collectionName: collection.name,
+      tokenIndex: parseInt(token.index.toString()),
+      tokenIdentifier: token.id ?? "",
+      imageUrl: token.url,
+      imageThumbnailUrl: token.url,
       clubId: "",
+      imageType: "img",
+      imageHeightWidthRatio: undefined,
     });
   };
 
@@ -172,10 +129,15 @@ export const UserCollectionListDab = ({ userPid }: CollectionListProps) => {
                   <Box key={token.id}>
                     <NftCard
                       key={token.index.toString()}
-                      imageUrl={token.url.replace("type=thumbnail&", "")}
                       index={token.index.toString()}
-                      canisterId={collection.canisterId}
-                    />
+                    >
+                      <NftImage
+                        imageUrl={token.url}
+                        width={500}
+                        imageType="img"
+                        imageHeightWidthRatio={undefined}
+                      />{" "}
+                    </NftCard>
                     <Button
                       size="small"
                       color="primary"

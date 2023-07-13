@@ -99,8 +99,10 @@ export const PostCreationPage = () => {
         >
           {selectedNft ? (
             <NftImage
-              imageUrl={selectedNft.nftOriginalThumbnailUrl}
-              canisterId={selectedNft.nftCanisterId}
+              imageUrl={selectedNft.imageUrl}
+              width={500}
+              imageType={selectedNft.imageType}
+              imageHeightWidthRatio={selectedNft.imageHeightWidthRatio}
             />
           ) : (
             <Typography variant="h5">Select your NFT</Typography>

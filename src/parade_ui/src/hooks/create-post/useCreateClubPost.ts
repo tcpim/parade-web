@@ -15,25 +15,29 @@ export interface CreateClubPostProps {
 }
 
 const getCreatePostRequest = (
-  createClubPostProps: CreateClubPostProps
+  props: CreateClubPostProps
 ): CreatePostRequest => {
   let request: CreatePostRequest = {
     post_id: uuidv4(),
-    created_by: createClubPostProps.userPid,
+    created_by: props.userPid,
     created_ts: BigInt(Date.now()),
-    words: createClubPostProps.words,
+    words: props.words,
     nfts: [],
-    in_public: createClubPostProps.inPublic,
+    in_public: props.inPublic,
   };
-  if (createClubPostProps.nftInfo) {
+  if (props.nftInfo) {
     request.nfts.push({
-      canister_id: createClubPostProps.nftInfo.nftCanisterId,
-      token_index: createClubPostProps.nftInfo.nftTokenIndex,
-      token_id: createClubPostProps.nftInfo.nftTokenIdentifier,
-      original_image_url: createClubPostProps.nftInfo.nftOriginalImageUrl,
-      original_thumbnail_url:
-        createClubPostProps.nftInfo.nftOriginalThumbnailUrl,
-      collection_name: createClubPostProps.nftInfo.nftCollectionName,
+      canister_id: props.nftInfo.canisterId,
+      token_index: props.nftInfo.tokenIndex,
+      token_id: props.nftInfo.tokenIdentifier,
+      image_url: props.nftInfo.imageUrl,
+      image_thumbnail_url: props.nftInfo.imageThumbnailUrl,
+      collection_name: props.nftInfo.collectionName,
+      image_type: props.nftInfo.imageType ?? "",
+      image_height_width_ratio:
+        props.nftInfo.imageHeightWidthRatio?.toString() ?? "",
+      image_onchain_url: props.nftInfo.imageUrl,
+      club_id: props.clubId,
     });
   }
 

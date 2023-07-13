@@ -61,11 +61,11 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
         <CircularProgress />
       </Box>
     );
-  } else if (query.data === undefined || query.data?.post.length === 0) {
+  } else if (query.data === undefined) {
     return <h1>No post found</h1>;
   }
 
-  const post = query.data.post[0];
+  const post = query.data;
   return (
     <Box sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
       <Typography variant="h6" gutterBottom>
@@ -77,8 +77,10 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
       {post.nfts.length > 0 && (
         <Box marginLeft="150px" maxWidth="350px">
           <NftImage
-            imageUrl={post.nfts[0].original_thumbnail_url}
-            canisterId={post.nfts[0].canister_id}
+            imageUrl={post.nfts[0].imageUrl}
+            width={500}
+            imageType={post.nfts[0].imageType}
+            imageHeightWidthRatio={post.nfts[0].imageHeightWidthRatio}
           />
         </Box>
       )}

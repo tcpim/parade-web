@@ -1,38 +1,44 @@
-import CardMedia from "@mui/material/CardMedia";
-
-const svgCanisters = new Set<string>([
-  "skjpp-haaaa-aaaae-qac7q-cai", // Pineapple punks
-  "pk6rk-6aaaa-aaaae-qaazq-cai", // BTC Flower
-  "4ggk4-mqaaa-aaaae-qad6q-cai", // ICP Flower
-  "dhiaa-ryaaa-aaaae-qabva-cai", // ETH Flower
-]);
-
-interface NftImageProps {
+export interface NftImageProps {
   imageUrl: string;
-  canisterId: string;
+  width: number;
+  imageType: string;
+  imageHeightWidthRatio: number | undefined;
 }
-export const NftImage = ({ imageUrl, canisterId }: NftImageProps) => {
-  if (imageUrl.endsWith(".mp4")) {
-    return (
-      <CardMedia component="video" src={imageUrl} autoPlay controls loop />
-    );
-  } else if (svgCanisters.has(canisterId)) {
-    return (
-      <CardMedia
-        component="iframe"
-        height="400"
-        src={imageUrl}
-        sx={{ objectFit: "contain" }}
-      />
-    );
-  } else {
-    return (
-      <CardMedia
-        component="img"
-        image={imageUrl}
-        height="400"
-        sx={{ objectFit: "contain" }}
-      />
-    );
+
+export const NftImage = ({
+  imageUrl,
+  width,
+  imageType,
+  imageHeightWidthRatio,
+}: NftImageProps) => {
+  if (imageHeightWidthRatio !== undefined) {
+    if (imageType === "svg") {
+      return (
+        <iframe
+          width={"500px"}
+          height={`${width * imageHeightWidthRatio}px`}
+          src={imageUrl}
+        ></iframe>
+      );
+    } else if (imageType === "img") {
+      return (
+        <img
+          src={imageUrl}
+          width={`${width}px`}
+          height={`${width * imageHeightWidthRatio}px`}
+          style={{ objectFit: "fill" }}
+          // loading="lazy"
+        />
+      );
+    }
   }
+
+  return (
+    <img
+      src={imageUrl}
+      width={`${width}px`}
+      style={{ objectFit: "fill" }}
+      loading="lazy"
+    />
+  );
 };

@@ -2,23 +2,13 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
-import { NftImage } from "./NftImage";
 
-export interface NftImageProps {
+export interface NftCardProps {
   index: string;
-  name?: string;
-  imageUrl: string;
-  standard?: string;
-  canisterId: string;
+  children: React.ReactNode;
 }
 
-export const NftCard = ({
-  index,
-  name,
-  imageUrl,
-  standard,
-  canisterId,
-}: NftImageProps) => {
+export const NftCard = ({ index, children }: NftCardProps) => {
   const CardContentNoPadding = styled(CardContent)(`
           padding: 0;
           &:last-child {
@@ -39,10 +29,10 @@ export const NftCard = ({
 
   return (
     <Card sx={{ maxWidth: 350, mr: 1, mt: 1 }}>
-      <NftImage imageUrl={imageUrl} canisterId={canisterId} />
+      {children}
       <CardContentNoPadding>
         <Typography variant="subtitle2" component="div">
-          {name ? name : "#".concat(index)}
+          {"#".concat(index)}
         </Typography>
       </CardContentNoPadding>
     </Card>

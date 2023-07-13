@@ -31,7 +31,10 @@ export function useGetPostFromPostTypes(): (
           clubPostIdMap.set(clubId, postIds);
         } else if (post.post.length > 0) {
           // If street post, add it to the post array
-          postArray[index] = convertToPost(post.post[0]);
+          postArray[index] =
+            post.post[0] === undefined
+              ? undefined
+              : convertToPost(post.post[0]);
         }
       });
 
@@ -49,7 +52,8 @@ export function useGetPostFromPostTypes(): (
             });
 
           postIds.forEach((i: [number, string], idx) => {
-            postArray[i[0]] = convertToPost(clubPostsRes.posts[idx][0]);
+            const p = clubPostsRes.posts[idx][0];
+            postArray[i[0]] = p === undefined ? undefined : convertToPost(p);
           });
         }
       );

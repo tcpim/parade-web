@@ -13,14 +13,20 @@ import {
 import { memo, useEffect, useState } from "react";
 import {
   Club,
+  Token as ClubToken,
   useUserClubCollectionList,
 } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
-import { NftInfo } from "../../types/nft";
 import { PostCreationForm } from "../Post/PostCreationForm";
 import { NftCard } from "./NftCard";
-
+import { NftImage } from "./NftImage";
 interface UserClubCollectionListProps {
   userAccount: string;
+}
+
+interface PostFormNftInfo extends ClubToken {
+  canisterId: string;
+  collectionName: string;
+  clubId: string;
 }
 
 const UserClubCollectionList = ({
@@ -29,13 +35,16 @@ const UserClubCollectionList = ({
   const useUserClubCollectionListQuery = useUserClubCollectionList(userAccount);
   const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
   const [openForm, setOpenForm] = useState<boolean>(false);
-  const [postFormNftInfo, setPostFormNftInfo] = useState<NftInfo>({
-    nftCanisterId: "",
-    nftCollectionName: "",
-    nftTokenIndex: 0,
-    nftTokenIdentifier: "",
-    nftOriginalImageUrl: "",
-    nftOriginalThumbnailUrl: "",
+  const [postFormNftInfo, setPostFormNftInfo] = useState<PostFormNftInfo>({
+    canisterId: "",
+    collectionName: "",
+    index: 0,
+    identifier: "",
+    image_url: "",
+    thum_image_url: "",
+    image_type: "",
+    image_height_width_ratio: 0,
+    image_url_onchain: "",
     clubId: "",
   });
 
@@ -46,16 +55,19 @@ const UserClubCollectionList = ({
     setIsExpanded(clubExpandedState);
   }, [userAccount, useUserClubCollectionListQuery.data]);
 
-  const handleOpenForm = (club: Club, token: any) => {
+  const handleOpenForm = (club: Club, token: PostFormNftInfo) => {
     setOpenForm(true);
     setPostFormNftInfo({
-      nftCanisterId: token.canisterId,
-      nftCollectionName: token.collectionName,
-      nftTokenIndex: token.index,
-      nftTokenIdentifier: token.identifier,
-      nftOriginalImageUrl: token.originalImage,
-      nftOriginalThumbnailUrl: token.smallImage,
+      canisterId: token.canisterId,
+      collectionName: token.collectionName,
+      index: token.index,
+      identifier: token.identifier,
+      image_url: token.image_url,
+      thum_image_url: token.thum_image_url,
+      image_type: token.image_type,
+      image_height_width_ratio: token.image_height_width_ratio,
       clubId: club.club_id,
+      image_url_onchain: token.image_url_onchain,
     });
   };
 
@@ -96,17 +108,20 @@ const UserClubCollectionList = ({
     setIsExpanded(newExpandedState);
   };
 
-  const clubTokens = (clubId: string) => {
+  const getClubTokenList = (clubId: string): Array<PostFormNftInfo> => {
     const club = useUserClubCollectionListQuery.data.clubs.filter(
       (club) => club.club_id === clubId
     )[0];
     return club.collections.flatMap((collection) => {
       return collection.ownedTokens.map((token) => {
-        return {
+        let res: PostFormNftInfo = {
           ...token,
           canisterId: collection.canisterId,
           collectionName: collection.collection_name,
+          clubId: clubId,
         };
+
+        return res;
       });
     });
   };
@@ -129,14 +144,19 @@ const UserClubCollectionList = ({
               </Box>
               <Collapse in={isExpanded[index]} timeout="auto">
                 <Stack direction="row" sx={{ ml: 1, flexWrap: "wrap" }}>
-                  {clubTokens(club.club_id).map((token) => (
+                  {getClubTokenList(club.club_id).map((token) => (
                     <Box key={token.index}>
                       <NftCard
                         key={token.index.toString()}
-                        imageUrl={token.smallImage}
                         index={token.index.toString()}
-                        canisterId={token.canisterId}
-                      />
+                      >
+                        <NftImage
+                          imageUrl={token.image_url}
+                          width={500}
+                          imageType={token.image_type}
+                          imageHeightWidthRatio={token.image_height_width_ratio}
+                        />{" "}
+                      </NftCard>
                       <Button
                         size="small"
                         color="primary"
@@ -156,7 +176,17 @@ const UserClubCollectionList = ({
         <PostCreationForm
           open={openForm}
           handleCloseForm={handleCloseForm}
-          nftInfo={postFormNftInfo}
+          nftInfo={{
+            canisterId: postFormNftInfo.canisterId,
+            collectionName: postFormNftInfo.collectionName,
+            tokenIndex: postFormNftInfo.index,
+            tokenIdentifier: postFormNftInfo.identifier,
+            imageUrl: postFormNftInfo.image_url,
+            imageThumbnailUrl: postFormNftInfo.thum_image_url,
+            imageType: postFormNftInfo.image_type,
+            imageHeightWidthRatio: postFormNftInfo.image_height_width_ratio,
+            clubId: postFormNftInfo.clubId,
+          }}
           isPublicPost={true}
         />
       )}

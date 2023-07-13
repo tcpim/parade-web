@@ -8,7 +8,6 @@ export interface ClubCollectionListData {
 export interface Club {
   club_id: string;
   club_name: string;
-  owner_principal: string;
   royalty_account: string;
   description: string;
   icon_url: string;
@@ -37,8 +36,11 @@ export interface Collection {
 export interface Token {
   index: number;
   identifier: string;
-  originalImage: string;
-  smallImage: string;
+  image_url: string;
+  image_url_onchain: string;
+  thum_image_url: string;
+  image_type: string;
+  image_height_width_ratio: number;
 }
 
 const paradeApiHost =

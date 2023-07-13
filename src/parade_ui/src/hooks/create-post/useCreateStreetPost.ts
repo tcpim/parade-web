@@ -13,23 +13,23 @@ export interface CreateStreetPostProps {
 }
 
 const getCreatePostRequest = (
-  createPostProps: CreateStreetPostProps
+  props: CreateStreetPostProps
 ): CreateStreetPostRequest => {
   let request: CreateStreetPostRequest = {
     post_id: uuidv4(),
-    created_by: createPostProps.userPid,
+    created_by: props.userPid,
     created_ts: BigInt(Date.now()),
-    words: createPostProps.words,
+    words: props.words,
     nfts: [],
   };
-  if (createPostProps.nftInfo) {
+  if (props.nftInfo) {
     request.nfts.push({
-      canister_id: createPostProps.nftInfo.nftCanisterId,
-      token_index: createPostProps.nftInfo.nftTokenIndex,
-      token_id: createPostProps.nftInfo.nftTokenIdentifier,
-      original_image_url: createPostProps.nftInfo.nftOriginalImageUrl,
-      original_thumbnail_url: createPostProps.nftInfo.nftOriginalThumbnailUrl,
-      collection_name: createPostProps.nftInfo.nftCollectionName,
+      canister_id: props.nftInfo.canisterId,
+      token_index: props.nftInfo.tokenIndex,
+      token_id: props.nftInfo.tokenIdentifier,
+      image_url: props.nftInfo.imageUrl,
+      image_thumbnail_url: props.nftInfo.imageThumbnailUrl,
+      collection_name: props.nftInfo.collectionName,
     });
   }
 
