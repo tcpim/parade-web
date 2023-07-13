@@ -15,8 +15,8 @@ export const Icon = styled.svg<IconProps>`
 
 const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: 250px 1fr;
-  grid-template-rows: 80px 1fr;
+  grid-template-columns: 15rem 1fr;
+  grid-template-rows: 5rem 1fr;
   grid-template-areas:
     "topbar topbar"
     "navbar main-content";
@@ -30,12 +30,15 @@ const StyledTopBar = styled(TopBar)`
   width: 100%;
   z-index: 2;
   background-color: white;
+  border-bottom: 1px solid #c4c1c1;
+  padding-bottom: 1rem;
 `;
 
 const StyledNavBar = styled(NavBar)`
   grid-area: navbar;
   position: fixed;
   top: 5em;
+  height: 100%;
 `;
 
 const StyledChildren = styled.div`

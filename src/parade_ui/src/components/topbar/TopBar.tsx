@@ -20,7 +20,6 @@ const Wrapper = styled.div`
   grid-template-columns: 8rem 1fr 12rem;
   align-items: center;
   justify-items: center;
-  margin: 0 1rem;
 `;
 
 const Login = styled.div``;
