@@ -20,20 +20,24 @@ const StyledEditor = styled.div`
   gap: 1rem;
 `;
 
-const StyledInput = styled.input`
+interface InputProps {
+  isActive: boolean;
+}
+
+const StyledInput = styled.input<InputProps>`
   all: unset;
   display: inline-flex;
   padding: 0.5rem 0.5rem;
   border-radius: 0.5rem;
-  border: 1px solid #8f8d8d;
+  border: 1px solid ${(props) => (props.isActive ? "#638ef4" : "#8f8d8d")};
 `;
 
-const StyledTextArea = styled.textarea`
+const StyledTextArea = styled.textarea<InputProps>`
   all: unset;
   display: inline-flex;
   padding: 0.5rem 0.5rem;
   border-radius: 0.5rem;
-  border: 1px solid #8f8d8d;
+  border: 1px solid ${(props) => (props.isActive ? "#638ef4" : "#8f8d8d")};
 `;
 
 const StyledEditButton = styled.button`
@@ -46,7 +50,7 @@ const StyledEditButton = styled.button`
 `;
 
 const StyledLabel = styled.p`
-  width: 8rem;
+  width: 6rem;
 `;
 
 export const UserInfo = () => {
@@ -188,6 +192,7 @@ export const UserInfo = () => {
           readOnly={!editingUsername}
           value={editingUsername ? newUsername : username}
           onChange={(e: any) => setNewUsername(e.target.value)}
+          isActive={editingUsername}
         />
         {newUsername.length > 20 ? (
           <p style={{ color: "red" }}>Max username length is 20</p>
@@ -206,6 +211,7 @@ export const UserInfo = () => {
           rows={5}
           cols={40}
           maxLength={200}
+          isActive={editingUserbio}
         >
           Tell about yourself
         </StyledTextArea>
