@@ -1,106 +1,220 @@
-import SaveIcon from "@mui/icons-material/Save";
-import {
-  Box,
-  CircularProgress,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 import { useContext, useState } from "react";
+import { AiOutlineCheck, AiOutlineClose, AiOutlineEdit } from "react-icons/ai";
+import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useGetUser } from "../../hooks/user/useGetUser";
 import { useSetUserBio, useSetUserName } from "../../hooks/user/useSetUserInfo";
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: 10rem;
+  gap: 1rem;
+`;
+
+const StyledEditor = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const StyledInput = styled.input`
+  all: unset;
+  display: inline-flex;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #8f8d8d;
+`;
+
+const StyledTextArea = styled.textarea`
+  all: unset;
+  display: inline-flex;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #8f8d8d;
+`;
+
+const StyledEditButton = styled.button`
+  background-color: transparent;
+  border: none;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 2px 2px 2px rgba(255, 56, 92, 1);
+  }
+`;
+
+const StyledLabel = styled.p`
+  width: 8rem;
+`;
 
 export const UserInfo = () => {
   const appContext = useContext(AppContext);
   const userId = appContext.userLoginInfo.userPid;
 
   const userInfoQuery = useGetUser(userId);
-  const [editingUsername, setEditingUsername] = useState(false);
-  const [editingUserbio, setEditingUserbio] = useState(false);
-  const [newUsername, setNewUsername] = useState("");
+
   const [newUserbio, setNewUserbio] = useState("");
-  const setUserNameMutation = useSetUserName(userId, newUsername);
-  const setUserBioMutation = useSetUserBio(userId, newUserbio);
 
   const username = userInfoQuery.data?.username;
   const userBio = userInfoQuery.data?.bio;
 
-  const handleSaveUsername = () => {
-    setUserNameMutation.mutate();
-  };
+  const [editingUserbio, setEditingUserbio] = useState(false);
+  const [editingUsername, setEditingUsername] = useState(false);
 
-  const handleSaveBio = () => {
-    setUserBioMutation.mutate();
-  };
+  const [newUsername, setNewUsername] = useState("");
 
-  const userNameButton = () => {
+  const setUserNameMutation = useSetUserName(userId, newUsername, () =>
+    setEditingUsername(false)
+  );
+  const setUserBioMutation = useSetUserBio(userId, newUserbio, () =>
+    setEditingUserbio(false)
+  );
+
+  const userNameEditorButton = () => {
     if (setUserNameMutation.data?.error[0]) {
       return (
         <Typography color="red">
-          user name exists. please choose another one
+          username exists. please choose another one
         </Typography>
       );
     } else if (setUserNameMutation.isLoading) {
       return <CircularProgress />;
     }
-    if (newUsername !== "") {
+
+    if (editingUsername) {
       return (
-        <IconButton onClick={handleSaveUsername}>
-          <SaveIcon fontSize="small" />
-        </IconButton>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "0.5rem",
+          }}
+        >
+          <StyledEditButton
+            onClick={() => setUserNameMutation.mutate()}
+            disabled={newUsername === "" || newUsername === username}
+          >
+            <AiOutlineCheck />
+          </StyledEditButton>
+          <StyledEditButton
+            type="reset"
+            onClick={() => {
+              setEditingUsername(false);
+              setNewUsername("");
+            }}
+          >
+            <AiOutlineClose />
+          </StyledEditButton>
+        </div>
+      );
+    } else {
+      return (
+        <StyledEditButton
+          onClick={() => {
+            setEditingUsername(true);
+            setNewUsername(username ?? "");
+          }}
+        >
+          <AiOutlineEdit />
+        </StyledEditButton>
+      );
+    }
+  };
+
+  const userNameBioButton = () => {
+    if (setUserBioMutation.data?.error[0]) {
+      return (
+        <Typography color="red">
+          Failed to update bio. Please try again
+        </Typography>
+      );
+    } else if (setUserBioMutation.isLoading) {
+      return <CircularProgress />;
+    }
+
+    if (editingUserbio) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "0.5rem",
+          }}
+        >
+          <StyledEditButton
+            onClick={() => setUserBioMutation.mutate()}
+            disabled={newUserbio === "" || newUserbio === userBio}
+          >
+            <AiOutlineCheck />
+          </StyledEditButton>
+          <StyledEditButton
+            type="reset"
+            onClick={() => {
+              setEditingUserbio(false);
+              setNewUserbio("");
+            }}
+          >
+            <AiOutlineClose />
+          </StyledEditButton>
+        </div>
+      );
+    } else {
+      return (
+        <StyledEditButton
+          onClick={() => {
+            setEditingUserbio(true);
+            setNewUserbio(userBio ?? "");
+          }}
+        >
+          <AiOutlineEdit />
+        </StyledEditButton>
       );
     }
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="space-between"
-      marginLeft="20%"
-    >
-      <Typography>Principal ID: {appContext.userLoginInfo.userPid}</Typography>
-      <Box display="flex">
-        <Typography alignContent="center" marginRight="5px" marginTop="3px">
-          User name:{" "}
-        </Typography>
-        <TextField
-          id="user-name"
+    <Wrapper>
+      <StyledEditor>
+        <StyledLabel>Principal ID:</StyledLabel>
+        {appContext.userLoginInfo.userPid}
+      </StyledEditor>
+      <StyledEditor>
+        <StyledLabel> User name: </StyledLabel>
+        <StyledInput
+          id="username"
           placeholder="Choose your username"
-          variant="standard"
-          value={newUsername === "" ? username : newUsername}
-          InputProps={{
-            disableUnderline: !editingUsername,
-          }}
-          onClick={() => setEditingUsername(true)}
-          onBlur={() => setEditingUsername(false)}
-          onChange={(e) => setNewUsername(e.target.value)}
+          readOnly={!editingUsername}
+          value={editingUsername ? newUsername : username}
+          onChange={(e: any) => setNewUsername(e.target.value)}
         />
-        {userNameButton()}
-      </Box>
-      <Box display="flex">
-        <Typography alignContent="center" marginRight="5px" marginTop="3px">
-          User bio:{" "}
-        </Typography>
-        <TextField
-          id="user-bio"
-          placeholder="Tell about yourself"
-          variant="standard"
-          value={newUserbio === "" ? userBio : newUserbio}
-          onClick={() => setEditingUserbio(true)}
-          onBlur={() => setEditingUserbio(false)}
-          InputProps={{
-            disableUnderline: !editingUserbio,
-          }}
-          onChange={(e) => setNewUserbio(e.target.value)}
-        />
-        {newUserbio !== "" && (
-          <IconButton onClick={handleSaveBio}>
-            <SaveIcon fontSize="small" />
-          </IconButton>
+        {newUsername.length > 20 ? (
+          <p style={{ color: "red" }}>Max username length is 20</p>
+        ) : (
+          userNameEditorButton()
         )}
-      </Box>
-    </Box>
+      </StyledEditor>
+      <StyledEditor>
+        <StyledLabel>User bio: </StyledLabel>
+        <StyledTextArea
+          id="userbio"
+          placeholder="Tell about yourself"
+          readOnly={!editingUserbio}
+          value={editingUserbio ? newUserbio : userBio}
+          onChange={(e: any) => setNewUserbio(e.target.value)}
+          rows={5}
+          cols={40}
+          maxLength={200}
+        >
+          Tell about yourself
+        </StyledTextArea>
+        {newUserbio.length > 200 ? (
+          <p style={{ color: "red" }}>Max bio length is 200</p>
+        ) : (
+          userNameBioButton()
+        )}
+      </StyledEditor>
+    </Wrapper>
   );
 };

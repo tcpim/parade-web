@@ -7,8 +7,13 @@ import {
 } from "../../../backend_declarations/main_server/main_server.did";
 import { useMainServer } from "../useMainServer";
 
-export function useSetUserName(userId: string, newUsername: string) {
+export function useSetUserName(
+  userId: string,
+  newUsername: string,
+  onSuccessCallback?: any
+) {
   const mainServer = useMainServer();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (): Promise<SetUserInfoResponse> => {
@@ -16,13 +21,20 @@ export function useSetUserName(userId: string, newUsername: string) {
         user_id: userId,
         new_name: newUsername,
       };
-      console.log("!!1request", request.new_name);
       return mainServer.set_user_name(request);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getUser", userId]);
+      onSuccessCallback();
     },
   });
 }
 
-export function useSetUserBio(userId: string, newBio: string) {
+export function useSetUserBio(
+  userId: string,
+  newBio: string,
+  onSuccessCallback?: any
+) {
   const mainServer = useMainServer();
   const queryClient = useQueryClient();
 
@@ -32,11 +44,11 @@ export function useSetUserBio(userId: string, newBio: string) {
         user_id: userId,
         bio: newBio,
       };
-      console.log("!!1request", request.bio);
       return mainServer.set_user_bio(request);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["getUser", userId]);
+      onSuccessCallback();
     },
   });
 }
