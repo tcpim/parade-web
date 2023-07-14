@@ -7,12 +7,14 @@ export interface UserPortfolioProps {
   userAccount?: string;
   userPid?: string;
   loggedIn: boolean;
+  nftType: "club" | "other";
 }
 
-const UserPortfolio = ({
+export const UserPortfolio = ({
   userAccount,
   userPid,
   loggedIn,
+  nftType,
 }: UserPortfolioProps) => {
   console.log(`userAccount: ${userAccount}, userPid: ${userPid}`);
 
@@ -26,8 +28,10 @@ const UserPortfolio = ({
 
   return (
     <Fragment>
-      <UserClubCollectionListMemo userAccount={userAccount} />
-      <UserCollectionListDab userPid={userPid} />
+      {nftType === "club" && (
+        <UserClubCollectionListMemo userAccount={userAccount} />
+      )}
+      {nftType === "other" && <UserCollectionListDab userPid={userPid} />}
     </Fragment>
   );
 };

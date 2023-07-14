@@ -1,13 +1,12 @@
-import { Box, Button, Divider } from "@mui/material";
 import { useContext, useState } from "react";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
-import { UserPortfolioMemo } from "../Nft/UserPortfolio";
+import { UserPortfolio } from "../Nft/UserPortfolio";
 import { UserPostsMemo } from "../Post/UserPosts";
 import { UserAvatar } from "./Avatar";
 import { UserInfo } from "./UserInfo";
 
-type SubPage = "portfolio" | "posts";
+type SubPage = "club-nfts" | "other-nfts" | "posts";
 
 const Wrapper = styled.div`
   display: flex;
@@ -24,20 +23,63 @@ const UserInfoDiv = styled.div`
   margin-left: 4rem;
 `;
 
-/**
- * 
- * @returns         display="flex"
-        justifyContent="center"
-        marginLeft="10%"
-        width="80%"
-        marginBottom="20px"
- */
+const SubTabDiv = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin: 2rem 5rem;
+`;
+
+interface SubTabButtonProps {
+  selected: boolean;
+}
+const SubTabButton = styled.button<SubTabButtonProps>`
+  border: none;
+  width: 10rem;
+  height: 3rem;
+  font-size: large;
+  background-color: transparent;
+  border-bottom: 2px solid
+    ${(props) => (props.selected ? "rgba(255, 56, 92, 1)" : "none")};
+  &:hover {
+    background-color: #c4c2c2;
+  }
+`;
+
 const UserPortfolioActivity = () => {
-  const [subPage, setSubPage] = useState<SubPage>("portfolio");
+  const [subPage, setSubPage] = useState<SubPage>("club-nfts");
   const appContext = useContext(AppContext);
 
-  return (
-    <Wrapper>
+  const subTabs = () => {
+    return (
+      <SubTabDiv>
+        <SubTabButton
+          disabled={subPage === "club-nfts"}
+          selected={subPage === "club-nfts"}
+          onClick={() => setSubPage("club-nfts")}
+        >
+          Club NFTs
+        </SubTabButton>
+
+        <SubTabButton
+          disabled={subPage === "other-nfts"}
+          selected={subPage === "other-nfts"}
+          onClick={() => setSubPage("other-nfts")}
+        >
+          Other NFTs
+        </SubTabButton>
+        <SubTabButton
+          disabled={subPage === "posts"}
+          selected={subPage === "posts"}
+          onClick={() => setSubPage("posts")}
+        >
+          Posts
+        </SubTabButton>
+      </SubTabDiv>
+    );
+  };
+
+  const userInfoDiv = () => {
+    return (
       <UserInfoDiv>
         <UserAvatar
           canChange={true}
@@ -45,26 +87,26 @@ const UserPortfolioActivity = () => {
         />
         <UserInfo />
       </UserInfoDiv>
-      <Box display="flex" justifyContent="space-evenly">
-        <Button
-          disabled={subPage === "portfolio"}
-          onClick={() => setSubPage("portfolio")}
-        >
-          Portfolio
-        </Button>
-        <Divider orientation="vertical" flexItem />
-        <Button
-          disabled={subPage === "posts"}
-          onClick={() => setSubPage("posts")}
-        >
-          Posts
-        </Button>
-      </Box>
-      {subPage === "portfolio" && (
-        <UserPortfolioMemo
+    );
+  };
+  return (
+    <Wrapper>
+      {userInfoDiv()}
+      {subTabs()}
+      {subPage === "club-nfts" && (
+        <UserPortfolio
           loggedIn={appContext.userLoginInfo.walletConnected}
           userAccount={appContext.userLoginInfo.userAccount}
           userPid={appContext.userLoginInfo.userPid}
+          nftType="club"
+        />
+      )}
+      {subPage === "other-nfts" && (
+        <UserPortfolio
+          loggedIn={appContext.userLoginInfo.walletConnected}
+          userAccount={appContext.userLoginInfo.userAccount}
+          userPid={appContext.userLoginInfo.userPid}
+          nftType="other"
         />
       )}
       {subPage === "posts" && (

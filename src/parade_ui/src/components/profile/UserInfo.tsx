@@ -1,4 +1,4 @@
-import { CircularProgress, Typography } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { useContext, useState } from "react";
 import { AiOutlineCheck, AiOutlineClose, AiOutlineEdit } from "react-icons/ai";
 import { styled } from "styled-components";
@@ -78,11 +78,7 @@ export const UserInfo = () => {
 
   const userNameEditorButton = () => {
     if (setUserNameMutation.data?.error[0]) {
-      return (
-        <Typography color="red">
-          username exists. please choose another one
-        </Typography>
-      );
+      return <p color="red">username exists. please choose another one</p>;
     } else if (setUserNameMutation.isLoading) {
       return <CircularProgress />;
     }
@@ -121,7 +117,7 @@ export const UserInfo = () => {
             setNewUsername(username ?? "");
           }}
         >
-          <AiOutlineEdit />
+          <AiOutlineEdit size="1.5rem" />
         </StyledEditButton>
       );
     }
@@ -129,11 +125,7 @@ export const UserInfo = () => {
 
   const userNameBioButton = () => {
     if (setUserBioMutation.data?.error[0]) {
-      return (
-        <Typography color="red">
-          Failed to update bio. Please try again
-        </Typography>
-      );
+      return <p color="red">Failed to update bio. Please try again</p>;
     } else if (setUserBioMutation.isLoading) {
       return <CircularProgress />;
     }
@@ -172,7 +164,7 @@ export const UserInfo = () => {
             setNewUserbio(userBio ?? "");
           }}
         >
-          <AiOutlineEdit />
+          <AiOutlineEdit size="1.5rem" />
         </StyledEditButton>
       );
     }
