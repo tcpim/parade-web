@@ -44,6 +44,8 @@ const getClubTokenList = (data?: ClubCollectionListData): Array<NftInfo> => {
             data.clubs[i].collections[j].ownedTokens[k].identifier,
           collectionName: data.clubs[i].collections[j].collection_name,
           imageUrl: data.clubs[i].collections[j].ownedTokens[k].image_url,
+          imageUrlOnChain:
+            data.clubs[i].collections[j].ownedTokens[k].image_url_onchain,
           imageThumbnailUrl:
             data.clubs[i].collections[j].ownedTokens[k].thum_image_url,
           imageType: data.clubs[i].collections[j].ownedTokens[k].image_type,
@@ -71,6 +73,7 @@ const getNonClubTokenList = (data?: NFTCollection[]): Array<NftInfo> => {
         tokenIdentifier: data[i].tokens[j].id ?? "",
         collectionName: data[i].name,
         imageUrl: data[i].tokens[j].url,
+        imageUrlOnChain: data[i].tokens[j].url,
         imageThumbnailUrl: data[i].tokens[j].url,
         imageType: "img",
         imageHeightWidthRatio: undefined,

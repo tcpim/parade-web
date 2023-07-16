@@ -22,7 +22,6 @@ import { NftInfo } from "../../types/nft";
 export interface PostCreationFormProps {
   open: boolean;
   nftInfo: NftInfo;
-  isPublicPost?: boolean;
   handleCloseForm: () => void;
 }
 

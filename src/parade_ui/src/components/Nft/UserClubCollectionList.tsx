@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import {
   Club,
   ClubCollectionListData,
-  Token,
   useUserClubCollectionList,
 } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
 import { NftImage } from "./NftImage";
@@ -14,28 +13,46 @@ import {
   ImageCardFooterButton,
   ImageList,
   ItemButton,
+  ItemName,
   StyledItemList,
   Wrapper,
 } from "./UserPortfolio";
 
 import { AiOutlinePlus } from "react-icons/ai";
+import { NftInfo, defaultNftInfo } from "../../types/nft";
+import { PostCreationForm } from "../Post/PostCreationForm";
 
 interface UserClubCollectionListProps {
   userAccount: string;
 }
 
-const getClubTokenList = (
+const getClubNftInfoList = (
   clubId: string,
   clubs: ClubCollectionListData
-): Token[] => {
+): NftInfo[] => {
   const club = clubs.clubs.find((club) => club.club_id === clubId);
   if (!club) {
     return [];
   }
 
-  const tokens: Token[] = [];
+  const tokens: NftInfo[] = [];
   club.collections.forEach((collection) => {
-    tokens.push(...collection.ownedTokens);
+    const nfts = collection.ownedTokens.map((token) => {
+      const nftInfo: NftInfo = {
+        canisterId: collection.canisterId,
+        tokenIndex: token.index,
+        tokenIdentifier: token.identifier,
+        collectionName: collection.collection_name,
+        imageUrl: token.image_url,
+        imageUrlOnChain: token.image_url_onchain,
+        imageThumbnailUrl: token.thum_image_url,
+        imageType: token.image_type,
+        imageHeightWidthRatio: token.image_height_width_ratio,
+        clubId: club.club_id,
+      };
+      return nftInfo;
+    });
+    tokens.push(...nfts);
   });
 
   return tokens;
@@ -47,6 +64,14 @@ const UserClubCollectionList = ({
   const query = useUserClubCollectionList(userAccount);
   const [currentClubId, setCurrentClubId] = useState("");
   const navigate = useNavigate();
+  const [openForm, setOpenForm] = useState<boolean>(false);
+  const [postFormNftInfo, setPostFormNftInfo] =
+    useState<NftInfo>(defaultNftInfo);
+
+  const handleOpenForm = (nftInfo: NftInfo) => {
+    setOpenForm(true);
+    setPostFormNftInfo(nftInfo);
+  };
 
   // check error cases
   if (query.isLoading) {
@@ -71,7 +96,10 @@ const UserClubCollectionList = ({
   const displayedClub: string = currentClubId
     ? currentClubId
     : clubs[0].club_id;
-  const clubTokenList: Token[] = getClubTokenList(displayedClub, query.data);
+  const clubTokenList: NftInfo[] = getClubNftInfoList(
+    displayedClub,
+    query.data
+  );
 
   return (
     <Wrapper>
@@ -80,11 +108,9 @@ const UserClubCollectionList = ({
           return (
             <li>
               <ItemButton onClick={() => setCurrentClubId(club.club_id)}>
-                <h6 style={{ textAlign: "left", fontSize: "large" }}>
-                  {club.club_name}
-                </h6>
+                <ItemName>{club.club_name}</ItemName>
                 <p style={{ textAlign: "left" }}>
-                  Owned: {getClubTokenList(club.club_id, query.data).length}
+                  Owned: {clubTokenList.length}
                 </p>
               </ItemButton>
             </li>
@@ -97,19 +123,19 @@ const UserClubCollectionList = ({
           return (
             <ImageCard>
               <NftImage
-                imageUrl={token.image_url}
+                imageUrl={token.imageUrl}
                 width={300}
-                imageType={token.image_type}
-                imageHeightWidthRatio={token.image_height_width_ratio}
+                imageType={token.imageType}
+                imageHeightWidthRatio={token.imageHeightWidthRatio}
               />
               <ImageCardFooter>
-                {"#" + token.index}
+                {"#" + token.tokenIndex}
                 <ImageCardFooterButton
-                  onClick={() => window.open(token.image_url_onchain)}
+                  onClick={() => window.open(token.imageUrlOnChain)}
                 >
                   view onchain
                 </ImageCardFooterButton>
-                <ImageCardFooterButton>
+                <ImageCardFooterButton onClick={() => handleOpenForm(token)}>
                   <AiOutlinePlus size={"1rem"} />
                 </ImageCardFooterButton>
               </ImageCardFooter>
@@ -117,6 +143,13 @@ const UserClubCollectionList = ({
           );
         })}
       </ImageList>
+      {openForm && (
+        <PostCreationForm
+          open={openForm}
+          handleCloseForm={() => setOpenForm(false)}
+          nftInfo={postFormNftInfo}
+        />
+      )}
     </Wrapper>
   );
 };

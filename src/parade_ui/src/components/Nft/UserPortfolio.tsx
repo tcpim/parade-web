@@ -63,6 +63,15 @@ export const ImageCardFooterButton = styled.button`
   border: 1px solid transparent; /* Transparent border */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   background: none;
+  &:hover {
+    background-color: #d1d0d0;
+  }
+`;
+
+export const ItemName = styled.h6`
+  text-align: left;
+  font-size: large;
+  white-space: nowrap;
 `;
 
 export const UserPortfolio = ({

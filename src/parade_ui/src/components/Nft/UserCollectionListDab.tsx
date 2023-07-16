@@ -3,6 +3,8 @@ import { NFTCollection } from "@psychedelic/dab-js";
 import { memo, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
+import { NftInfo, defaultNftInfo } from "../../types/nft";
+import { PostCreationForm } from "../Post/PostCreationForm";
 import { NftImage } from "./NftImage";
 import {
   ImageCard,
@@ -10,6 +12,7 @@ import {
   ImageCardFooterButton,
   ImageList,
   ItemButton,
+  ItemName,
   StyledItemList,
   Wrapper,
 } from "./UserPortfolio";
@@ -18,16 +21,11 @@ interface UserCollectionListDabProps {
   userPid: string;
 }
 
-interface DabToken {
-  image_url: string;
-  index: number;
-}
-
-const getCollectionTokenList = (
+const getCollectionNftInfoList = (
   collection: string,
   collections: NFTCollection[]
-): DabToken[] => {
-  const tokens: DabToken[] = [];
+): NftInfo[] => {
+  const tokens: NftInfo[] = [];
   const targetCollection = collections.find(
     (col) => col.canisterId === collection
   );
@@ -35,13 +33,22 @@ const getCollectionTokenList = (
     return [];
   }
 
-  targetCollection.tokens.forEach((token, index) => {
-    const dabToken: DabToken = {
-      image_url: token.url,
-      index: Number(token.index),
+  const nfts = targetCollection.tokens.map((token) => {
+    const nftInfo: NftInfo = {
+      canisterId: targetCollection.canisterId,
+      tokenIndex: Number(token.index),
+      tokenIdentifier: token.id ?? "",
+      collectionName: targetCollection.name,
+      imageUrl: token.url,
+      imageUrlOnChain: token.url,
+      imageThumbnailUrl: token.url,
+      imageType: "img",
+      imageHeightWidthRatio: undefined,
+      clubId: undefined,
     };
-    tokens.push(dabToken);
+    return nftInfo;
   });
+  tokens.push(...nfts);
 
   return tokens;
 };
@@ -49,6 +56,13 @@ const getCollectionTokenList = (
 const UserCollectionListDab = ({ userPid }: UserCollectionListDabProps) => {
   const query = useUserCollectionListDab(userPid);
   const [currentCollection, setCurrentCollection] = useState("");
+  const [openForm, setOpenForm] = useState<boolean>(false);
+  const [postFormNftInfo, setPostFormNftInfo] =
+    useState<NftInfo>(defaultNftInfo);
+  const handleOpenForm = (nftInfo: NftInfo) => {
+    setOpenForm(true);
+    setPostFormNftInfo(nftInfo);
+  };
 
   // check error cases
   if (query.isLoading) {
@@ -73,7 +87,7 @@ const UserCollectionListDab = ({ userPid }: UserCollectionListDabProps) => {
   const displayedCollection: string = currentCollection
     ? currentCollection
     : collections[0].canisterId;
-  const collectionTokenList: DabToken[] = getCollectionTokenList(
+  const collectionNftInfoList: NftInfo[] = getCollectionNftInfoList(
     displayedCollection,
     collections
   );
@@ -89,15 +103,9 @@ const UserCollectionListDab = ({ userPid }: UserCollectionListDabProps) => {
                   setCurrentCollection(collection.canisterId);
                 }}
               >
-                <h6 style={{ textAlign: "left", fontSize: "large" }}>
-                  {collection.name}
-                </h6>
+                <ItemName>{collection.name}</ItemName>
                 <p style={{ textAlign: "left" }}>
-                  Owned:{" "}
-                  {
-                    getCollectionTokenList(collection.canisterId, query.data)
-                      .length
-                  }
+                  Owned: {collectionNftInfoList.length}
                 </p>
               </ItemButton>
             </li>
@@ -106,23 +114,23 @@ const UserCollectionListDab = ({ userPid }: UserCollectionListDabProps) => {
       </StyledItemList>
       <Divider orientation="vertical" flexItem />
       <ImageList>
-        {collectionTokenList.map((token) => {
+        {collectionNftInfoList.map((token) => {
           return (
             <ImageCard>
               <NftImage
-                imageUrl={token.image_url}
+                imageUrl={token.imageUrl}
                 width={300}
                 imageType="img"
                 imageHeightWidthRatio={undefined}
               />
               <ImageCardFooter>
-                {"#" + token.index}
+                {"#" + token.tokenIndex}
                 <ImageCardFooterButton
-                  onClick={() => window.open(token.image_url)}
+                  onClick={() => window.open(token.imageUrlOnChain)}
                 >
                   view onchain
                 </ImageCardFooterButton>
-                <ImageCardFooterButton>
+                <ImageCardFooterButton onClick={() => handleOpenForm(token)}>
                   <AiOutlinePlus size={"1rem"} />
                 </ImageCardFooterButton>
               </ImageCardFooter>
@@ -130,6 +138,13 @@ const UserCollectionListDab = ({ userPid }: UserCollectionListDabProps) => {
           );
         })}
       </ImageList>
+      {openForm && (
+        <PostCreationForm
+          open={openForm}
+          handleCloseForm={() => setOpenForm(false)}
+          nftInfo={postFormNftInfo}
+        />
+      )}
     </Wrapper>
   );
 };
