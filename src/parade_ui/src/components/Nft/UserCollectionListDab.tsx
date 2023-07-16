@@ -1,9 +1,13 @@
 import { CircularProgress, Divider } from "@mui/material";
 import { NFTCollection } from "@psychedelic/dab-js";
 import { memo, useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
 import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
 import { NftImage } from "./NftImage";
 import {
+  ImageCard,
+  ImageCardFooter,
+  ImageCardFooterButton,
   ImageList,
   ItemButton,
   StyledItemList,
@@ -104,17 +108,29 @@ const UserCollectionListDab = ({ userPid }: UserCollectionListDabProps) => {
       <ImageList>
         {collectionTokenList.map((token) => {
           return (
-            <NftImage
-              imageUrl={token.image_url}
-              width={300}
-              imageType="img"
-              imageHeightWidthRatio={undefined}
-            />
+            <ImageCard>
+              <NftImage
+                imageUrl={token.image_url}
+                width={300}
+                imageType="img"
+                imageHeightWidthRatio={undefined}
+              />
+              <ImageCardFooter>
+                {"#" + token.index}
+                <ImageCardFooterButton
+                  onClick={() => window.open(token.image_url)}
+                >
+                  view onchain
+                </ImageCardFooterButton>
+                <ImageCardFooterButton>
+                  <AiOutlinePlus size={"1rem"} />
+                </ImageCardFooterButton>
+              </ImageCardFooter>
+            </ImageCard>
           );
         })}
       </ImageList>
     </Wrapper>
   );
 };
-
 export const UserCollectionListDabMemo = memo(UserCollectionListDab);

@@ -9,11 +9,16 @@ import {
 } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
 import { NftImage } from "./NftImage";
 import {
+  ImageCard,
+  ImageCardFooter,
+  ImageCardFooterButton,
   ImageList,
   ItemButton,
   StyledItemList,
   Wrapper,
 } from "./UserPortfolio";
+
+import { AiOutlinePlus } from "react-icons/ai";
 
 interface UserClubCollectionListProps {
   userAccount: string;
@@ -90,12 +95,25 @@ const UserClubCollectionList = ({
       <ImageList>
         {clubTokenList.map((token) => {
           return (
-            <NftImage
-              imageUrl={token.image_url}
-              width={300}
-              imageType={token.image_type}
-              imageHeightWidthRatio={token.image_height_width_ratio}
-            />
+            <ImageCard>
+              <NftImage
+                imageUrl={token.image_url}
+                width={300}
+                imageType={token.image_type}
+                imageHeightWidthRatio={token.image_height_width_ratio}
+              />
+              <ImageCardFooter>
+                {"#" + token.index}
+                <ImageCardFooterButton
+                  onClick={() => window.open(token.image_url_onchain)}
+                >
+                  view onchain
+                </ImageCardFooterButton>
+                <ImageCardFooterButton>
+                  <AiOutlinePlus size={"1rem"} />
+                </ImageCardFooterButton>
+              </ImageCardFooter>
+            </ImageCard>
           );
         })}
       </ImageList>
