@@ -1,6 +1,6 @@
 import { CircularProgress, Divider } from "@mui/material";
 import { memo, useState } from "react";
-import { styled } from "styled-components";
+import { useNavigate } from "react-router-dom";
 import {
   Club,
   ClubCollectionListData,
@@ -8,25 +8,16 @@ import {
   useUserClubCollectionList,
 } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
 import { NftImage } from "./NftImage";
+import {
+  ImageList,
+  ItemButton,
+  StyledItemList,
+  Wrapper,
+} from "./UserPortfolio";
 
 interface UserClubCollectionListProps {
   userAccount: string;
 }
-
-const StyledClubList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-const ImageList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem, 0.5rem;
-  justify-content: space-between;
-  justify-items: center;
-  align-items: center;
-`;
 
 const getClubTokenList = (
   clubId: string,
@@ -50,6 +41,7 @@ const UserClubCollectionList = ({
 }: UserClubCollectionListProps) => {
   const query = useUserClubCollectionList(userAccount);
   const [currentClubId, setCurrentClubId] = useState("");
+  const navigate = useNavigate();
 
   // check error cases
   if (query.isLoading) {
@@ -77,25 +69,23 @@ const UserClubCollectionList = ({
   const clubTokenList: Token[] = getClubTokenList(displayedClub, query.data);
 
   return (
-    <div style={{ display: "flex", gap: "2rem" }}>
-      <StyledClubList>
-        <li>Total tokens: {query.data.tokenCount}</li>
+    <Wrapper>
+      <StyledItemList>
         {clubs.map((club) => {
           return (
             <li>
-              <div>
-                <button
-                  onClick={() => {
-                    setCurrentClubId(club.club_id);
-                  }}
-                >
+              <ItemButton onClick={() => setCurrentClubId(club.club_id)}>
+                <h6 style={{ textAlign: "left", fontSize: "large" }}>
                   {club.club_name}
-                </button>
-              </div>
+                </h6>
+                <p style={{ textAlign: "left" }}>
+                  Owned: {getClubTokenList(club.club_id, query.data).length}
+                </p>
+              </ItemButton>
             </li>
           );
         })}
-      </StyledClubList>
+      </StyledItemList>
       <Divider orientation="vertical" flexItem />
       <ImageList>
         {clubTokenList.map((token) => {
@@ -109,7 +99,7 @@ const UserClubCollectionList = ({
           );
         })}
       </ImageList>
-    </div>
+    </Wrapper>
   );
 };
 

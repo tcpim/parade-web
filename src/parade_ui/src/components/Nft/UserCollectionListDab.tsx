@@ -1,9 +1,14 @@
 import { CircularProgress, Divider } from "@mui/material";
 import { NFTCollection } from "@psychedelic/dab-js";
 import { memo, useState } from "react";
-import { styled } from "styled-components";
 import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
 import { NftImage } from "./NftImage";
+import {
+  ImageList,
+  ItemButton,
+  StyledItemList,
+  Wrapper,
+} from "./UserPortfolio";
 
 interface UserCollectionListDabProps {
   userPid: string;
@@ -13,21 +18,6 @@ interface DabToken {
   image_url: string;
   index: number;
 }
-
-const StyledClubList = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-const ImageList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem, 0.5rem;
-  justify-content: space-between;
-  justify-items: center;
-  align-items: center;
-`;
 
 const getCollectionTokenList = (
   collection: string,
@@ -52,15 +42,7 @@ const getCollectionTokenList = (
   return tokens;
 };
 
-const getTotalTokens = (collections: NFTCollection[]): number => {
-  let totalTokens = 0;
-  collections.forEach((collection) => {
-    totalTokens += collection.tokens.length;
-  });
-  return totalTokens;
-};
-
-const UserCollectionListDab1 = ({ userPid }: UserCollectionListDabProps) => {
+const UserCollectionListDab = ({ userPid }: UserCollectionListDabProps) => {
   const query = useUserCollectionListDab(userPid);
   const [currentCollection, setCurrentCollection] = useState("");
 
@@ -93,25 +75,31 @@ const UserCollectionListDab1 = ({ userPid }: UserCollectionListDabProps) => {
   );
 
   return (
-    <div style={{ display: "flex", gap: "2rem" }}>
-      <StyledClubList>
-        <li>Total tokens: {getTotalTokens(query.data)}</li>
+    <Wrapper>
+      <StyledItemList>
         {collections.map((collection) => {
           return (
             <li>
-              <div>
-                <button
-                  onClick={() => {
-                    setCurrentCollection(collection.canisterId);
-                  }}
-                >
+              <ItemButton
+                onClick={() => {
+                  setCurrentCollection(collection.canisterId);
+                }}
+              >
+                <h6 style={{ textAlign: "left", fontSize: "large" }}>
                   {collection.name}
-                </button>
-              </div>
+                </h6>
+                <p style={{ textAlign: "left" }}>
+                  Owned:{" "}
+                  {
+                    getCollectionTokenList(collection.canisterId, query.data)
+                      .length
+                  }
+                </p>
+              </ItemButton>
             </li>
           );
         })}
-      </StyledClubList>
+      </StyledItemList>
       <Divider orientation="vertical" flexItem />
       <ImageList>
         {collectionTokenList.map((token) => {
@@ -125,8 +113,8 @@ const UserCollectionListDab1 = ({ userPid }: UserCollectionListDabProps) => {
           );
         })}
       </ImageList>
-    </div>
+    </Wrapper>
   );
 };
 
-export const UserCollectionListDab1Memo = memo(UserCollectionListDab1);
+export const UserCollectionListDabMemo = memo(UserCollectionListDab);
