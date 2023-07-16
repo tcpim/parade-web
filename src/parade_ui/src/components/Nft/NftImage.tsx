@@ -15,7 +15,7 @@ export const NftImage = ({
     if (imageType === "svg") {
       return (
         <iframe
-          width={"500px"}
+          width={`${width}px`}
           height={`${width * imageHeightWidthRatio}px`}
           src={imageUrl}
         ></iframe>

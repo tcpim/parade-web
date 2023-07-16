@@ -1,196 +1,115 @@
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import AddIcon from "@mui/icons-material/Add";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Collapse,
-  List,
-  ListItemButton,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { memo, useEffect, useState } from "react";
+import { CircularProgress, Divider } from "@mui/material";
+import { memo, useState } from "react";
+import { styled } from "styled-components";
 import {
   Club,
-  Token as ClubToken,
+  ClubCollectionListData,
+  Token,
   useUserClubCollectionList,
 } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
-import { PostCreationForm } from "../Post/PostCreationForm";
-import { NftCard } from "./NftCard";
 import { NftImage } from "./NftImage";
+
 interface UserClubCollectionListProps {
   userAccount: string;
 }
 
-interface PostFormNftInfo extends ClubToken {
-  canisterId: string;
-  collectionName: string;
-  clubId: string;
-}
+const StyledClubList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const ImageList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem, 0.5rem;
+  justify-content: space-between;
+  justify-items: center;
+  align-items: center;
+`;
+
+const getClubTokenList = (
+  clubId: string,
+  clubs: ClubCollectionListData
+): Token[] => {
+  const club = clubs.clubs.find((club) => club.club_id === clubId);
+  if (!club) {
+    return [];
+  }
+
+  const tokens: Token[] = [];
+  club.collections.forEach((collection) => {
+    tokens.push(...collection.ownedTokens);
+  });
+
+  return tokens;
+};
 
 const UserClubCollectionList = ({
   userAccount,
 }: UserClubCollectionListProps) => {
-  const useUserClubCollectionListQuery = useUserClubCollectionList(userAccount);
-  const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
-  const [openForm, setOpenForm] = useState<boolean>(false);
-  const [postFormNftInfo, setPostFormNftInfo] = useState<PostFormNftInfo>({
-    canisterId: "",
-    collectionName: "",
-    index: 0,
-    identifier: "",
-    image_url: "",
-    thum_image_url: "",
-    image_type: "",
-    image_height_width_ratio: 0,
-    image_url_onchain: "",
-    clubId: "",
-  });
+  const query = useUserClubCollectionList(userAccount);
+  const [currentClubId, setCurrentClubId] = useState("");
 
-  useEffect(() => {
-    const clubExpandedState: boolean[] = new Array(
-      useUserClubCollectionListQuery.data?.clubs.length
-    ).fill(true);
-    setIsExpanded(clubExpandedState);
-  }, [userAccount, useUserClubCollectionListQuery.data]);
-
-  const handleOpenForm = (club: Club, token: PostFormNftInfo) => {
-    setOpenForm(true);
-    setPostFormNftInfo({
-      canisterId: token.canisterId,
-      collectionName: token.collectionName,
-      index: token.index,
-      identifier: token.identifier,
-      image_url: token.image_url,
-      thum_image_url: token.thum_image_url,
-      image_type: token.image_type,
-      image_height_width_ratio: token.image_height_width_ratio,
-      clubId: club.club_id,
-      image_url_onchain: token.image_url_onchain,
-    });
-  };
-
-  const handleCloseForm = () => {
-    setOpenForm(false);
-  };
-
-  if (useUserClubCollectionListQuery.isLoading) {
+  // check error cases
+  if (query.isLoading) {
     return (
-      <Box
-        sx={{
+      <div
+        style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
         }}
       >
         <CircularProgress />
-      </Box>
+      </div>
     );
-  } else if (useUserClubCollectionListQuery.isError) {
-    throw new Error(
-      "Failed to fetch userCollectionList from api: " +
-        useUserClubCollectionListQuery.error.message
-    );
-  } else if (!useUserClubCollectionListQuery.data) {
+  } else if (query.isError) {
+    throw new Error("Failed to get club NFTs: " + query.error.message);
+  } else if (!query.data || query.data.tokenCount === 0) {
     return <div>You don't have any club NFTs</div>;
   }
 
-  const handleClubExpansionClick = (index: number) => {
-    const newExpandedState = isExpanded.map((v, i) => {
-      if (i == index) {
-        return !v;
-      } else {
-        return v;
-      }
-    });
-    setIsExpanded(newExpandedState);
-  };
-
-  const getClubTokenList = (clubId: string): Array<PostFormNftInfo> => {
-    const club = useUserClubCollectionListQuery.data.clubs.filter(
-      (club) => club.club_id === clubId
-    )[0];
-    return club.collections.flatMap((collection) => {
-      return collection.ownedTokens.map((token) => {
-        let res: PostFormNftInfo = {
-          ...token,
-          canisterId: collection.canisterId,
-          collectionName: collection.collection_name,
-          clubId: clubId,
-        };
-
-        return res;
-      });
-    });
-  };
+  const clubs: Club[] = query.data.clubs;
+  const displayedClub: string = currentClubId
+    ? currentClubId
+    : clubs[0].club_id;
+  const clubTokenList: Token[] = getClubTokenList(displayedClub, query.data);
 
   return (
-    <Box>
-      <Typography variant="h3">Club NFTs</Typography>
-      <List>
-        {useUserClubCollectionListQuery.data.clubs.map((club: Club, index) => {
+    <div style={{ display: "flex", gap: "2rem" }}>
+      <StyledClubList>
+        <li>Total tokens: {query.data.tokenCount}</li>
+        {clubs.map((club) => {
           return (
-            <Box key={club.club_id}>
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="h5">{club.club_name}</Typography>
-                <ListItemButton
-                  sx={{ maxWidth: "10%" }}
-                  onClick={() => handleClubExpansionClick(index)}
+            <li>
+              <div>
+                <button
+                  onClick={() => {
+                    setCurrentClubId(club.club_id);
+                  }}
                 >
-                  {isExpanded[index] ? <ExpandLess /> : <ExpandMore />}
-                </ListItemButton>
-              </Box>
-              <Collapse in={isExpanded[index]} timeout="auto">
-                <Stack direction="row" sx={{ ml: 1, flexWrap: "wrap" }}>
-                  {getClubTokenList(club.club_id).map((token) => (
-                    <Box key={token.index}>
-                      <NftCard
-                        key={token.index.toString()}
-                        index={token.index.toString()}
-                      >
-                        <NftImage
-                          imageUrl={token.image_url}
-                          width={500}
-                          imageType={token.image_type}
-                          imageHeightWidthRatio={token.image_height_width_ratio}
-                        />{" "}
-                      </NftCard>
-                      <Button
-                        size="small"
-                        color="primary"
-                        onClick={() => handleOpenForm(club, token)}
-                      >
-                        <AddIcon />
-                      </Button>
-                    </Box>
-                  ))}
-                </Stack>
-              </Collapse>
-            </Box>
+                  {club.club_name}
+                </button>
+              </div>
+            </li>
           );
         })}
-      </List>
-      {openForm && (
-        <PostCreationForm
-          open={openForm}
-          handleCloseForm={handleCloseForm}
-          nftInfo={{
-            canisterId: postFormNftInfo.canisterId,
-            collectionName: postFormNftInfo.collectionName,
-            tokenIndex: postFormNftInfo.index,
-            tokenIdentifier: postFormNftInfo.identifier,
-            imageUrl: postFormNftInfo.image_url,
-            imageThumbnailUrl: postFormNftInfo.thum_image_url,
-            imageType: postFormNftInfo.image_type,
-            imageHeightWidthRatio: postFormNftInfo.image_height_width_ratio,
-            clubId: postFormNftInfo.clubId,
-          }}
-          isPublicPost={true}
-        />
-      )}
-    </Box>
+      </StyledClubList>
+      <Divider orientation="vertical" flexItem />
+      <ImageList>
+        {clubTokenList.map((token) => {
+          return (
+            <NftImage
+              imageUrl={token.image_url}
+              width={300}
+              imageType={token.image_type}
+              imageHeightWidthRatio={token.image_height_width_ratio}
+            />
+          );
+        })}
+      </ImageList>
+    </div>
   );
 };
 

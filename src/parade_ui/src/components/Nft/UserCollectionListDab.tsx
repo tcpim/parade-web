@@ -1,165 +1,132 @@
-import AddIcon from "@mui/icons-material/Add";
-import ExpandLess from "@mui/icons-material/ExpandLess";
-import ExpandMore from "@mui/icons-material/ExpandMore";
-import { Box } from "@mui/material";
-import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
-import Collapse from "@mui/material/Collapse";
-import List from "@mui/material/List";
-import ListItemButton from "@mui/material/ListItemButton";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { NFTCollection, NFTDetails } from "@psychedelic/dab-js";
-import { useEffect, useState } from "react";
+import { CircularProgress, Divider } from "@mui/material";
+import { NFTCollection } from "@psychedelic/dab-js";
+import { memo, useState } from "react";
+import { styled } from "styled-components";
 import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
-import { NftInfo } from "../../types/nft";
-import { PostCreationForm } from "../Post/PostCreationForm";
-import { NftCard } from "./NftCard";
 import { NftImage } from "./NftImage";
 
-interface CollectionListProps {
+interface UserCollectionListDabProps {
   userPid: string;
 }
 
-export const UserCollectionListDab = ({ userPid }: CollectionListProps) => {
-  const userCollectionDabQuery = useUserCollectionListDab(userPid);
+interface DabToken {
+  image_url: string;
+  index: number;
+}
 
-  const [isExpanded, setIsExpanded] = useState<boolean[]>([]);
-  const [openForm, setOpenForm] = useState<boolean>(false);
-  const [postFormNftInfo, setPostFormNftInfo] = useState<NftInfo>({
-    canisterId: "",
-    collectionName: "",
-    tokenIndex: 0,
-    tokenIdentifier: "",
-    imageUrl: "",
-    imageThumbnailUrl: "",
-    clubId: "",
-    imageType: "img",
-    imageHeightWidthRatio: undefined,
+const StyledClubList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const ImageList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem, 0.5rem;
+  justify-content: space-between;
+  justify-items: center;
+  align-items: center;
+`;
+
+const getCollectionTokenList = (
+  collection: string,
+  collections: NFTCollection[]
+): DabToken[] => {
+  const tokens: DabToken[] = [];
+  const targetCollection = collections.find(
+    (col) => col.canisterId === collection
+  );
+  if (!targetCollection) {
+    return [];
+  }
+
+  targetCollection.tokens.forEach((token, index) => {
+    const dabToken: DabToken = {
+      image_url: token.url,
+      index: Number(token.index),
+    };
+    tokens.push(dabToken);
   });
 
-  const handleOpenForm = (
-    collection: NFTCollection,
-    token: NFTDetails<bigint | string>
-  ) => {
-    setOpenForm(true);
-    setPostFormNftInfo({
-      canisterId: collection.canisterId,
-      collectionName: collection.name,
-      tokenIndex: parseInt(token.index.toString()),
-      tokenIdentifier: token.id ?? "",
-      imageUrl: token.url,
-      imageThumbnailUrl: token.url,
-      clubId: "",
-      imageType: "img",
-      imageHeightWidthRatio: undefined,
-    });
-  };
+  return tokens;
+};
 
-  const handleCloseForm = () => {
-    setOpenForm(false);
-  };
+const getTotalTokens = (collections: NFTCollection[]): number => {
+  let totalTokens = 0;
+  collections.forEach((collection) => {
+    totalTokens += collection.tokens.length;
+  });
+  return totalTokens;
+};
 
-  useEffect(() => {
-    const collectionExpandedState: boolean[] = new Array(
-      userCollectionDabQuery.data?.length
-    ).fill(true);
-    setIsExpanded(collectionExpandedState);
-  }, [userCollectionDabQuery.data]);
+const UserCollectionListDab1 = ({ userPid }: UserCollectionListDabProps) => {
+  const query = useUserCollectionListDab(userPid);
+  const [currentCollection, setCurrentCollection] = useState("");
 
-  if (userCollectionDabQuery.isLoading) {
+  // check error cases
+  if (query.isLoading) {
     return (
-      <Box
-        sx={{
+      <div
+        style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
         }}
       >
         <CircularProgress />
-      </Box>
-    );
-  } else if (userCollectionDabQuery.isError) {
-    return (
-      <div>
-        {"Failed to fetch userCollectionList from dab api: " +
-          userCollectionDabQuery.error.message}
       </div>
     );
-  } else if (!userCollectionDabQuery.data) {
-    return <div>No data is available</div>;
+  } else if (query.isError) {
+    throw new Error("Failed to get club NFTs: " + query.error.message);
+  } else if (!query.data || query.data.length === 0) {
+    return <div>You don't have any club NFTs</div>;
   }
 
-  const handleCollectionExpansionClick = (index: number) => {
-    const newExpandedState = isExpanded.map((v, i) => {
-      if (i == index) {
-        return !v;
-      } else {
-        return v;
-      }
-    });
-    setIsExpanded(newExpandedState);
-    console.dir(isExpanded);
-  };
+  const collections: NFTCollection[] = query.data;
+  const displayedCollection: string = currentCollection
+    ? currentCollection
+    : collections[0].canisterId;
+  const collectionTokenList: DabToken[] = getCollectionTokenList(
+    displayedCollection,
+    collections
+  );
 
-  if (userCollectionDabQuery.data.length == 0) {
-    return <Box>You don't have any NFTs</Box>;
-  }
   return (
-    <Box>
-      <Typography variant="h3">Other NFTs</Typography>
-      <List>
-        {userCollectionDabQuery.data.map((collection, index) => (
-          <Box key={collection.canisterId}>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="h5">
-                {collection.name + ": " + collection.canisterId}
-              </Typography>
-              <ListItemButton
-                sx={{ maxWidth: "10%" }}
-                onClick={() => handleCollectionExpansionClick(index)}
-              >
-                {isExpanded[index] ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-            </Box>
-            <Collapse in={isExpanded[index]} timeout="auto">
-              <Stack direction="row" sx={{ ml: 1, flexWrap: "wrap" }}>
-                {collection.tokens.map((token) => (
-                  <Box key={token.id}>
-                    <NftCard
-                      key={token.index.toString()}
-                      index={token.index.toString()}
-                    >
-                      <NftImage
-                        imageUrl={token.url}
-                        width={500}
-                        imageType="img"
-                        imageHeightWidthRatio={undefined}
-                      />{" "}
-                    </NftCard>
-                    <Button
-                      size="small"
-                      color="primary"
-                      onClick={() => handleOpenForm(collection, token)}
-                    >
-                      <AddIcon />
-                    </Button>
-                  </Box>
-                ))}
-              </Stack>
-            </Collapse>
-          </Box>
-        ))}
-      </List>
-      {openForm && (
-        <PostCreationForm
-          open={openForm}
-          handleCloseForm={handleCloseForm}
-          nftInfo={postFormNftInfo}
-          isPublicPost={true}
-        />
-      )}
-    </Box>
+    <div style={{ display: "flex", gap: "2rem" }}>
+      <StyledClubList>
+        <li>Total tokens: {getTotalTokens(query.data)}</li>
+        {collections.map((collection) => {
+          return (
+            <li>
+              <div>
+                <button
+                  onClick={() => {
+                    setCurrentCollection(collection.canisterId);
+                  }}
+                >
+                  {collection.name}
+                </button>
+              </div>
+            </li>
+          );
+        })}
+      </StyledClubList>
+      <Divider orientation="vertical" flexItem />
+      <ImageList>
+        {collectionTokenList.map((token) => {
+          return (
+            <NftImage
+              imageUrl={token.image_url}
+              width={300}
+              imageType="img"
+              imageHeightWidthRatio={undefined}
+            />
+          );
+        })}
+      </ImageList>
+    </div>
   );
 };
+
+export const UserCollectionListDab1Memo = memo(UserCollectionListDab1);

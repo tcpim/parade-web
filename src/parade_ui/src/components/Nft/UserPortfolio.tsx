@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { Fragment, memo } from "react";
 import { UserClubCollectionListMemo } from "./UserClubCollectionList";
-import { UserCollectionListDab } from "./UserCollectionListDab";
+import { UserCollectionListDabMemo } from "./UserCollectionListDab";
 
 export interface UserPortfolioProps {
   userAccount?: string;
@@ -31,7 +31,7 @@ export const UserPortfolio = ({
       {nftType === "club" && (
         <UserClubCollectionListMemo userAccount={userAccount} />
       )}
-      {nftType === "other" && <UserCollectionListDab userPid={userPid} />}
+      {nftType === "other" && <UserCollectionListDabMemo userPid={userPid} />}
     </Fragment>
   );
 };
