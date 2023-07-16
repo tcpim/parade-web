@@ -20,7 +20,7 @@ import {
 
 import { AiOutlinePlus } from "react-icons/ai";
 import { NftInfo, defaultNftInfo } from "../../types/nft";
-import { PostCreationForm } from "../Post/PostCreationForm";
+import { PostCreationFormMemo } from "../Post/PostCreationForm";
 
 interface UserClubCollectionListProps {
   userAccount: string;
@@ -110,7 +110,7 @@ const UserClubCollectionList = ({
               <ItemButton onClick={() => setCurrentClubId(club.club_id)}>
                 <ItemName>{club.club_name}</ItemName>
                 <p style={{ textAlign: "left" }}>
-                  Owned: {clubTokenList.length}
+                  Owned: {getClubNftInfoList(club.club_id, query.data).length}
                 </p>
               </ItemButton>
             </li>
@@ -144,7 +144,7 @@ const UserClubCollectionList = ({
         })}
       </ImageList>
       {openForm && (
-        <PostCreationForm
+        <PostCreationFormMemo
           open={openForm}
           handleCloseForm={() => setOpenForm(false)}
           nftInfo={postFormNftInfo}

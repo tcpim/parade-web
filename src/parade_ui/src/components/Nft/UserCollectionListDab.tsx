@@ -4,7 +4,7 @@ import { memo, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
 import { NftInfo, defaultNftInfo } from "../../types/nft";
-import { PostCreationForm } from "../Post/PostCreationForm";
+import { PostCreationFormMemo } from "../Post/PostCreationForm";
 import { NftImage } from "./NftImage";
 import {
   ImageCard,
@@ -105,7 +105,11 @@ const UserCollectionListDab = ({ userPid }: UserCollectionListDabProps) => {
               >
                 <ItemName>{collection.name}</ItemName>
                 <p style={{ textAlign: "left" }}>
-                  Owned: {collectionNftInfoList.length}
+                  Owned:
+                  {
+                    getCollectionNftInfoList(collection.canisterId, query.data)
+                      .length
+                  }
                 </p>
               </ItemButton>
             </li>
@@ -139,7 +143,7 @@ const UserCollectionListDab = ({ userPid }: UserCollectionListDabProps) => {
         })}
       </ImageList>
       {openForm && (
-        <PostCreationForm
+        <PostCreationFormMemo
           open={openForm}
           handleCloseForm={() => setOpenForm(false)}
           nftInfo={postFormNftInfo}
