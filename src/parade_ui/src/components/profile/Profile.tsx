@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
-import { UserPortfolio } from "../Nft/UserPortfolio";
+import { UserPortfolioMemo } from "../Nft/UserPortfolio";
 import { UserPostsMemo } from "../Post/UserPosts";
 import { UserAvatar } from "./Avatar";
 import { UserInfo } from "./UserInfo";
@@ -94,20 +94,10 @@ const UserPortfolioActivity = () => {
       {userInfoDiv()}
       {subTabs()}
       {subPage === "club-nfts" && (
-        <UserPortfolio
-          loggedIn={appContext.userLoginInfo.walletConnected}
-          userAccount={appContext.userLoginInfo.userAccount}
-          userPid={appContext.userLoginInfo.userPid}
-          nftType="club"
-        />
+        <UserPortfolioMemo nftType="club" withImageFooter={true} />
       )}
       {subPage === "other-nfts" && (
-        <UserPortfolio
-          loggedIn={appContext.userLoginInfo.walletConnected}
-          userAccount={appContext.userLoginInfo.userAccount}
-          userPid={appContext.userLoginInfo.userPid}
-          nftType="other"
-        />
+        <UserPortfolioMemo nftType="other" withImageFooter={true} />
       )}
       {subPage === "posts" && (
         <UserPostsMemo userPid={appContext.userLoginInfo.userPid} />

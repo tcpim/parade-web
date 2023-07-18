@@ -1,25 +1,20 @@
 import { CircularProgress, Divider } from "@mui/material";
 import { NFTCollection } from "@psychedelic/dab-js";
 import { memo, useState } from "react";
-import { AiOutlinePlus } from "react-icons/ai";
 import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
 import { NftInfo, defaultNftInfo } from "../../types/nft";
 import { PostCreationFormMemo } from "../Post/PostCreationForm";
 import { NftImage } from "./NftImage";
 import {
   ImageCard,
-  ImageCardFooter,
-  ImageCardFooterButton,
   ImageList,
   ItemButton,
   ItemName,
   StyledItemList,
   Wrapper,
+  imageFooter,
+  imageOverlay,
 } from "./UserPortfolio";
-
-interface UserCollectionListDabProps {
-  userPid: string;
-}
 
 const getCollectionNftInfoList = (
   collection: string,
@@ -53,7 +48,19 @@ const getCollectionNftInfoList = (
   return tokens;
 };
 
-const UserCollectionListDab = ({ userPid }: UserCollectionListDabProps) => {
+interface UserCollectionListDabProps {
+  userPid: string;
+  withImageFooter?: boolean;
+  withImageOverlay?: boolean;
+  handleImageOverlayClick?: (nftInfo: NftInfo) => void;
+}
+
+const UserCollectionListDab = ({
+  userPid,
+  withImageFooter = false,
+  withImageOverlay = false,
+  handleImageOverlayClick,
+}: UserCollectionListDabProps) => {
   const query = useUserCollectionListDab(userPid);
   const [currentCollection, setCurrentCollection] = useState("");
   const [openForm, setOpenForm] = useState<boolean>(false);
@@ -127,17 +134,9 @@ const UserCollectionListDab = ({ userPid }: UserCollectionListDabProps) => {
                 imageType="img"
                 imageHeightWidthRatio={undefined}
               />
-              <ImageCardFooter>
-                {"#" + token.tokenIndex}
-                <ImageCardFooterButton
-                  onClick={() => window.open(token.imageUrlOnChain)}
-                >
-                  view onchain
-                </ImageCardFooterButton>
-                <ImageCardFooterButton onClick={() => handleOpenForm(token)}>
-                  <AiOutlinePlus size={"1rem"} />
-                </ImageCardFooterButton>
-              </ImageCardFooter>
+              {withImageFooter &&
+                imageFooter(token, () => handleOpenForm(token))}
+              {withImageOverlay && imageOverlay(token, handleImageOverlayClick)}
             </ImageCard>
           );
         })}

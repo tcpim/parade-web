@@ -1,14 +1,10 @@
-import { Fragment, memo } from "react";
+import { Fragment, memo, useContext } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
 import { styled } from "styled-components";
+import { AppContext } from "../../App";
+import { NftInfo } from "../../types/nft";
 import { UserClubCollectionListMemo } from "./UserClubCollectionList";
 import { UserCollectionListDabMemo } from "./UserCollectionListDab";
-
-export interface UserPortfolioProps {
-  userAccount?: string;
-  userPid?: string;
-  loggedIn: boolean;
-  nftType: "club" | "other";
-}
 
 export const Wrapper = styled.div`
   display: flex;
@@ -50,6 +46,11 @@ export const ImageCard = styled.div`
   padding-top: 0.5rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
+  position: relative;
+  display: inline-block;
+  &:hover .overlay {
+    height: 40px; /* Adjust the height as per your needs */
+  }
 `;
 
 export const ImageCardFooter = styled.div`
@@ -74,13 +75,65 @@ export const ItemName = styled.h6`
   white-space: nowrap;
 `;
 
+export const ImageOverlay = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: height 0.3s;
+  overflow: hidden;
+`;
+
+export const imageFooter = (token: NftInfo, handleButton: any) => {
+  return (
+    <ImageCardFooter>
+      {"#" + token.tokenIndex}
+      <ImageCardFooterButton onClick={() => window.open(token.imageUrlOnChain)}>
+        view onchain
+      </ImageCardFooterButton>
+      <ImageCardFooterButton onClick={handleButton}>
+        <AiOutlinePlus size={"1rem"} />
+      </ImageCardFooterButton>
+    </ImageCardFooter>
+  );
+};
+
+export const imageOverlay = (token: NftInfo, handleButton: any) => {
+  return (
+    <ImageOverlay className="overlay">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%",
+        }}
+      >
+        <button onClick={handleButton}>Click Me</button>
+      </div>
+    </ImageOverlay>
+  );
+};
+
+export interface UserPortfolioProps {
+  nftType: "club" | "other";
+  withImageFooter?: boolean;
+  withImageOverlay?: boolean;
+  handleImageOverlayClick?: (nftInfo: NftInfo) => any;
+}
+
 export const UserPortfolio = ({
-  userAccount,
-  userPid,
-  loggedIn,
   nftType,
+  withImageFooter = false,
+  withImageOverlay = false,
+  handleImageOverlayClick,
 }: UserPortfolioProps) => {
-  console.log(`userAccount: ${userAccount}, userPid: ${userPid}`);
+  const appContext = useContext(AppContext);
+  const loggedIn = appContext.userLoginInfo.walletConnected;
+  const userAccount = appContext.userLoginInfo.userAccount;
+  const userPid = appContext.userLoginInfo.userPid;
 
   if (!loggedIn || !userAccount || !userPid) {
     return (
@@ -93,9 +146,21 @@ export const UserPortfolio = ({
   return (
     <Fragment>
       {nftType === "club" && (
-        <UserClubCollectionListMemo userAccount={userAccount} />
+        <UserClubCollectionListMemo
+          userAccount={userAccount}
+          withImageFooter={withImageFooter}
+          withImageOverlay={withImageOverlay}
+          handleImageOverlayClick={handleImageOverlayClick}
+        />
       )}
-      {nftType === "other" && <UserCollectionListDabMemo userPid={userPid} />}
+      {nftType === "other" && (
+        <UserCollectionListDabMemo
+          userPid={userPid}
+          withImageFooter={withImageFooter}
+          withImageOverlay={withImageOverlay}
+          handleImageOverlayClick={handleImageOverlayClick}
+        />
+      )}
     </Fragment>
   );
 };
