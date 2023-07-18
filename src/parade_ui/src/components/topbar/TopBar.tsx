@@ -34,23 +34,21 @@ const TopBarIcons = styled.div`
 
 interface IconButtonProps {
   children: React.ReactNode;
-  className?: string;
   tooltipText: string;
   onClick?: () => void;
 }
 
 const TooltipWrapper = ({
   children,
-  className,
   tooltipText,
   onClick,
 }: IconButtonProps) => {
   return (
-    <div className={className} onClick={onClick}>
+    <div onClick={onClick}>
       <Tooltip.Provider delayDuration={200}>
         <Tooltip.Root>
           <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
-          <Tooltip.Content side="bottom" sideOffset={16}>
+          <Tooltip.Content side="bottom" sideOffset={1}>
             {tooltipText}
           </Tooltip.Content>
         </Tooltip.Root>
