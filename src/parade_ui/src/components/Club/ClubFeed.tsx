@@ -1,4 +1,4 @@
-import { CircularProgress, Typography } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { Fragment, useState } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
@@ -53,11 +53,7 @@ export const ClubFeed = () => {
     normalizedQuery.status === "error" ||
     normalizedQuery.data === undefined
   ) {
-    return (
-      <Typography color="error" align="center" variant="h6" gutterBottom>
-        {normalizedQuery.error?.message}
-      </Typography>
-    );
+    return <h5>{normalizedQuery.error?.message}</h5>;
   }
 
   const subTabs = () => {

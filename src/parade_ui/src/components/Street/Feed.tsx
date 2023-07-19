@@ -1,6 +1,5 @@
-import { Autocomplete, Box, TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import Typography from "@mui/material/Typography";
 import { DABCollection } from "@psychedelic/dab-js";
 import { Fragment, useState } from "react";
 import { styled } from "styled-components";
@@ -66,19 +65,15 @@ export const Feed = () => {
 
   if (normallizedQuery.isLoading) {
     return (
-      <Box>
+      <div>
         <CircularProgress />
-      </Box>
+      </div>
     );
   } else if (
     normallizedQuery.status === "error" ||
     normallizedQuery.data === undefined
   ) {
-    return (
-      <Typography color="error" align="center" variant="h6" gutterBottom>
-        {normallizedQuery.error?.message}
-      </Typography>
-    );
+    return <h6>{normallizedQuery.error?.message}</h6>;
   }
 
   const collections = allCollectionQuery.data ?? [];

@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { Fragment, memo } from "react";
 import { styled } from "styled-components";
 import { useUserPosts } from "../../hooks/fetch-posts/useUserPosts";
@@ -29,19 +29,15 @@ const UserPosts = ({ userPid }: UserPostsProps) => {
 
   if (userPostQuery.isLoading) {
     return (
-      <Box>
+      <div>
         <CircularProgress />
-      </Box>
+      </div>
     );
   } else if (
     userPostQuery.status === "error" ||
     userPostQuery.data === undefined
   ) {
-    return (
-      <Typography color="error" align="center" variant="h6" gutterBottom>
-        {userPostQuery.error?.message}
-      </Typography>
-    );
+    return <h6>{userPostQuery.error?.message}</h6>;
   }
 
   return (
@@ -56,9 +52,9 @@ const UserPosts = ({ userPid }: UserPostsProps) => {
         </Fragment>
       ))}
       {userPostQuery.isFetchingNextPage && (
-        <Box>
+        <div>
           <CircularProgress />
-        </Box>
+        </div>
       )}
     </Wrapper>
   );
