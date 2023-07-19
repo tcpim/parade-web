@@ -27,18 +27,12 @@ export const NftImage = ({
           width={`${width}px`}
           height={`${width * imageHeightWidthRatio}px`}
           style={{ objectFit: "fill" }}
-          // loading="lazy"
         />
       );
     }
   }
 
   return (
-    <img
-      src={imageUrl}
-      width={`${width}px`}
-      style={{ objectFit: "fill" }}
-      loading="lazy"
-    />
+    <img src={imageUrl} width={`${width}px`} style={{ objectFit: "fill" }} />
   );
 };

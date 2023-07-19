@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +47,7 @@ const ImageWindow = styled.div<ImageWindowProps>`
 const TextWidow = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
   width: 50%;
 `;
 
@@ -66,6 +67,7 @@ const SubTabDiv = styled.div`
 const StyledTextarea = styled.textarea`
   resize: none;
 `;
+
 interface SubTabButtonProps {
   selected: boolean;
 }
@@ -79,6 +81,22 @@ const SubTabButton = styled.button<SubTabButtonProps>`
     ${(props) => (props.selected ? "rgba(255, 56, 92, 1)" : "none")};
   &:hover {
     background-color: #c4c2c2;
+    cursor: pointer;
+  }
+`;
+
+const StyledButton = styled.button`
+  width: min-content;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background-color: white;
+
+  &:hover {
+    background-color: #b8b8b8;
+    cursor: pointer;
   }
 `;
 
@@ -180,6 +198,25 @@ export const PostCreationPage = () => {
           )}
         </ImageWindow>
         <TextWidow>
+          {selectedNft !== undefined && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem",
+              }}
+            >
+              <h3>
+                {selectedNft.collectionName} # {selectedNft.tokenIndex}
+              </h3>
+              <button
+                onClick={() => window.open(selectedNft.imageUrlOnChain)}
+                style={{ borderRadius: "0.5rem", background: "none" }}
+              >
+                View on-chain
+              </button>
+            </div>
+          )}
           <StyledTextarea
             placeholder="What's on your mind?"
             value={words}
@@ -189,34 +226,36 @@ export const PostCreationPage = () => {
             maxLength={500}
           />
           {selectedNft !== undefined && selectedNft?.clubId !== "" && (
-            <Box display="flex" alignItems="center">
-              <Typography>Also post to street</Typography>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <p>Also post to street</p>
               <Checkbox
                 checked={postToStreetChecked}
                 onChange={(e) => setPostToStreetChecked(e.target.checked)}
               />
-            </Box>
+            </div>
           )}
           <ButtonWrapper>
             {normalizedMutation.isLoading ? (
               <CircularProgress />
             ) : createPostFinished ? (
-              <Button
-                sx={{ marginTop: 1 }}
-                variant="contained"
+              <StyledButton
                 onClick={() => handleCheckPostClicked(normalizedMutation.data)}
               >
                 Check your post
-              </Button>
+              </StyledButton>
             ) : (
-              <Button
-                sx={{ marginTop: 1 }}
-                variant="contained"
+              <StyledButton
                 onClick={handlePostSubmit}
                 disabled={selectedNft === undefined}
               >
-                Post
-              </Button>
+                <p
+                  style={{
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Post
+                </p>
+              </StyledButton>
             )}
           </ButtonWrapper>
         </TextWidow>

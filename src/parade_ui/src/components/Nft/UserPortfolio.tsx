@@ -86,6 +86,14 @@ export const ImageOverlay = styled.div`
   overflow: hidden;
 `;
 
+const ImageOverlayButton = styled.button`
+  background: none;
+  border: none;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 export const imageFooter = (token: NftInfo, handleButton: any) => {
   return (
     <ImageCardFooter>
@@ -111,12 +119,9 @@ export const imageOverlay = (token: NftInfo, handleButton: any) => {
           height: "100%",
         }}
       >
-        <button
-          onClick={() => handleButton(token)}
-          style={{ background: "none", border: "none" }}
-        >
+        <ImageOverlayButton onClick={() => handleButton(token)}>
           <h6 style={{ color: "white" }}>Select this NFT</h6>
-        </button>
+        </ImageOverlayButton>
       </div>
     </ImageOverlay>
   );
