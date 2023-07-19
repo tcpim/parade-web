@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import { useClubPosts } from "../../hooks/fetch-posts/useClubPosts";
 import { useTrendingClubPosts } from "../../hooks/fetch-trending-posts/useTrendingClubPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
-import { PostCard } from "../Post/PostCard";
+import { PostCardMemo } from "../Post/PostCard";
 
 export type SubPage = "recent" | "trending";
 
@@ -76,7 +76,7 @@ export const ClubFeed = () => {
           <Fragment key={index}>
             {page.posts.map((post) => (
               <Fragment key={post.postId}>
-                <PostCard post={post} />
+                <PostCardMemo post={post} />
               </Fragment>
             ))}
           </Fragment>

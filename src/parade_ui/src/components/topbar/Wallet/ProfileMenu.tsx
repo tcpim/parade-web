@@ -37,7 +37,7 @@ export const ProfileMenu = () => {
       <Menubar.Menu>
         <ProfileTrigger>
           <UserAvatar userId={userId} size={36} />
-          {truncateStr(username ?? userId)}
+          {truncateStr(username ?? userId, 8)}
         </ProfileTrigger>
         <Menubar.Portal>
           <CommonContent sideOffset={10} align="center">

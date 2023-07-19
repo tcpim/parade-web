@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
+import { SubTabButton, SubTabDiv } from "../CommonUI/SubTab";
 import { UserPortfolioMemo } from "../Nft/UserPortfolio";
 import { UserPostsMemo } from "../Post/UserPosts";
 import { UserAvatar } from "./Avatar";
@@ -21,28 +22,6 @@ const UserInfoDiv = styled.div`
   align-items: center;
   margin-right: 4rem;
   margin-left: 4rem;
-`;
-
-const SubTabDiv = styled.div`
-  display: flex;
-  justify-content: space-around;
-  margin: 2rem 5rem;
-`;
-
-interface SubTabButtonProps {
-  selected: boolean;
-}
-const SubTabButton = styled.button<SubTabButtonProps>`
-  border: none;
-  width: 10rem;
-  height: 3rem;
-  font-size: large;
-  background-color: transparent;
-  border-bottom: 2px solid
-    ${(props) => (props.selected ? "rgba(255, 56, 92, 1)" : "none")};
-  &:hover {
-    background-color: #c4c2c2;
-  }
 `;
 
 const UserPortfolioActivity = () => {
@@ -72,7 +51,7 @@ const UserPortfolioActivity = () => {
           selected={subPage === "posts"}
           onClick={() => setSubPage("posts")}
         >
-          Posts
+          User Posts
         </SubTabButton>
       </SubTabDiv>
     );

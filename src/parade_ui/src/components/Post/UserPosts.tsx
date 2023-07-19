@@ -2,7 +2,7 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { Fragment, memo } from "react";
 import { useUserPosts } from "../../hooks/fetch-posts/useUserPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
-import { PostCard } from "./PostCard";
+import { PostCardMemo } from "./PostCard";
 
 interface UserPostsProps {
   userPid: string;
@@ -43,7 +43,7 @@ const UserPosts = ({ userPid }: UserPostsProps) => {
         <Fragment key={index}>
           {page.posts.map((post) => (
             <Fragment key={post.postId}>
-              <PostCard post={post} />
+              <PostCardMemo post={post} />
             </Fragment>
           ))}
         </Fragment>

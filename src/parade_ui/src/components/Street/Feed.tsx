@@ -1,8 +1,9 @@
-import { Autocomplete, Box, Button, Divider, TextField } from "@mui/material";
+import { Autocomplete, Box, TextField } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import { DABCollection } from "@psychedelic/dab-js";
 import { Fragment, useState } from "react";
+import { styled } from "styled-components";
 import { useAllCollectionsDab } from "../../hooks/fetch-nft-data/useAllCollectionsDab";
 import { useStreetCollectionPosts } from "../../hooks/fetch-posts/useStreetCollectionPosts";
 import { useStreetPosts } from "../../hooks/fetch-posts/useStreetPosts";
@@ -10,9 +11,20 @@ import { useTrendingCollectionPosts } from "../../hooks/fetch-trending-posts/use
 import { useTrendingStreetPosts } from "../../hooks/fetch-trending-posts/useTrendingStreetPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
 import { Post } from "../../types/post";
-import { PostCard } from "../Post/PostCard";
+import { SubTabButton, SubTabDiv } from "../CommonUI/SubTab";
+import { PostCardMemo } from "../Post/PostCard";
 
 export type SubPage = "recent" | "trending";
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-left: 10%;
+  margin-top: 5rem;
+  margin-right: 20%;
+`;
 
 export const Feed = () => {
   const [subPage, setSubPage] = useState<SubPage>("recent");
@@ -76,62 +88,64 @@ export const Feed = () => {
     setSubPage("recent");
   };
 
-  return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      sx={{ marginLeft: "15%", marginTop: "5%", marginRight: "15%" }}
-    >
-      <Box>
-        <Autocomplete
-          color="primary"
-          onChange={(event: any, newValue: DABCollection | null) => {
-            handleCollectionSelect(newValue?.principal_id.toString());
-          }}
-          options={collections}
-          getOptionLabel={(option) => option.name}
-          renderInput={(params) => (
-            <TextField {...params} label="Collection names" />
-          )}
-        />
-      </Box>
-      <Box display="flex" justifyContent="space-evenly" marginY={2}>
-        <Button
+  const subTabs = () => {
+    return (
+      <SubTabDiv>
+        <SubTabButton
           disabled={subPage === "recent"}
+          selected={subPage === "recent"}
           onClick={() => setSubPage("recent")}
         >
           Recent
-        </Button>
-        <Divider orientation="vertical" flexItem />
-        <Button
+        </SubTabButton>
+
+        <SubTabButton
           disabled={subPage === "trending"}
+          selected={subPage === "trending"}
           onClick={() => setSubPage("trending")}
         >
           Trending
-        </Button>
-      </Box>
-      {normallizedQuery.data.pages[0].posts.length === 0 && (
-        <Typography align="center" variant="h6" gutterBottom marginTop={5}>
-          There is no post in this collection yet
-        </Typography>
-      )}
-      <Box alignItems="center">
-        {normallizedQuery.data.pages.map((page: any, index: any) => (
-          <Fragment key={index}>
-            {page.posts.map((post: Post) => (
-              <Fragment key={post.postId}>
-                <PostCard post={post} />
-              </Fragment>
-            ))}
-          </Fragment>
-        ))}
+        </SubTabButton>
+      </SubTabDiv>
+    );
+  };
 
-        {normallizedQuery.isFetchingNextPage && (
-          <Box>
-            <CircularProgress />
-          </Box>
+  return (
+    <Wrapper>
+      <Autocomplete
+        sx={{ width: "80%" }}
+        color="primary"
+        onChange={(event: any, newValue: DABCollection | null) => {
+          handleCollectionSelect(newValue?.principal_id.toString());
+        }}
+        options={collections}
+        getOptionLabel={(option) => option.name}
+        renderInput={(params) => (
+          <TextField {...params} label="Search collection names" />
         )}
-      </Box>
-    </Box>
+      />
+      {subTabs()}
+      {normallizedQuery.data.pages[0].posts.length === 0 && (
+        <h5 style={{ textAlign: "center", fontSize: "1rem" }}>
+          There is no post in this collection yet
+        </h5>
+      )}
+
+      {normallizedQuery.data.pages.map((page: any, index: any) => (
+        <Fragment key={index}>
+          {page.posts.map((post: Post) => (
+            <Fragment key={post.postId}>
+              <PostCardMemo post={post} />
+            </Fragment>
+          ))}
+        </Fragment>
+      ))}
+
+      {normallizedQuery.isFetchingNextPage && (
+        <div>
+          <CircularProgress />
+        </div>
+      )}
+    </Wrapper>
   );
 };

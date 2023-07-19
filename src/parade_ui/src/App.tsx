@@ -5,10 +5,10 @@ import { Route, Routes } from "react-router-dom";
 import { ClubChatRoom } from "./components/Chat/ClubChatRoom";
 import { ClubPage } from "./components/Club/ClubPage";
 import { ClubsGrid } from "./components/Club/ClubsGrid";
-import { Feed } from "./components/Homepage/Feed";
 import { PostCreationPage } from "./components/Post/PostCreationPage";
 import { PostPage } from "./components/Post/PostPage";
 import { Profile } from "./components/Profile/Profile";
+import { Feed } from "./components/Street/Feed";
 import { TopSideBarLayout } from "./components/Topbar/TopSideBarLayout";
 import { User } from "./types/user";
 

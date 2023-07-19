@@ -1,24 +1,43 @@
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { Box, IconButton, Menu, Typography } from "@mui/material";
+import * as Popover from "@radix-ui/react-popover";
 import { useContext, useState } from "react";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useReactEmojiClub } from "../../hooks/react-to-post/useReactEmojiClub";
 import { useReactEmojiStreet } from "../../hooks/react-to-post/useReactEmojiStreet";
 
-interface EmojiPickerProps {
-  handleEmojiClick: (emoji: any) => void;
-}
+const Wrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+`;
 
-const EmojiPicker = ({ handleEmojiClick }: EmojiPickerProps) => {
-  return (
-    <Picker
-      data={data}
-      onEmojiSelect={handleEmojiClick}
-      categories={["frequent", "people", "nature", "foods", "flags"]}
-    />
-  );
+const EmojiButton = styled.button`
+  border: none;
+  border-radius: 1rem;
+  width: 3rem;
+  height: 1.5rem;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const EmojiAddButton = styled.button`
+  border: none;
+  border-radius: 0.5rem;
+  width: 2.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const getEmojiFromUnicode = (emoji: string) => {
+  return String.fromCodePoint(parseInt(emoji, 16));
 };
 
 export interface EmojisProps {
@@ -29,7 +48,6 @@ export interface EmojisProps {
 }
 
 export const Emojis = ({ postId, replyId, emojis, clubId }: EmojisProps) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [emojisCount, setEmojisCount] =
     useState<Array<[string, number]>>(emojis);
   const appContext = useContext(AppContext);
@@ -44,22 +62,14 @@ export const Emojis = ({ postId, replyId, emojis, clubId }: EmojisProps) => {
     userPid: appContext.userLoginInfo.userPid,
     clubId: clubId ?? "",
   });
+
   const mutation = clubId ? clubMutation : streetMutation;
-
-  // for emoji picker anchor
-  const open = Boolean(anchorEl);
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   // handle click events
   const handleEmojiClick = (emoji: any) => {
     mutation.mutate(emoji.unified);
     increaseEmojiCount(emoji.unified);
   };
-  const handleAddButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+
   const handlePlusOneClick = (emoji: string) => {
     mutation.mutate(emoji);
     increaseEmojiCount(emoji);
@@ -77,37 +87,39 @@ export const Emojis = ({ postId, replyId, emojis, clubId }: EmojisProps) => {
     setEmojisCount(updatedEmojisCount);
   };
 
-  const getEmojiFromUnicode = (emoji: string) => {
-    return String.fromCodePoint(parseInt(emoji, 16));
+  const EmojiPopover = () => {
+    return (
+      <Popover.Root>
+        <Popover.Trigger asChild>
+          <EmojiAddButton>
+            <AiOutlinePlusCircle />
+          </EmojiAddButton>
+        </Popover.Trigger>
+        <Popover.Portal>
+          <Popover.Content side="top" sideOffset={5} align="start">
+            <Picker
+              data={data}
+              onEmojiSelect={handleEmojiClick}
+              categories={["frequent", "people", "nature", "foods", "flags"]}
+            />
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
+    );
   };
 
   return (
-    <Box display="flex" flexWrap="wrap">
+    <Wrapper>
       {emojisCount.map((emoji) => (
-        <IconButton
+        <EmojiButton
           onClick={() => handlePlusOneClick(emoji[0])}
-          color="primary"
           key={emoji[0]}
         >
-          <Typography display="inline">
-            {getEmojiFromUnicode(emoji[0])}
-          </Typography>
-          <Typography display="inline">{emoji[1]}</Typography>
-        </IconButton>
+          {getEmojiFromUnicode(emoji[0])}
+          {emoji[1]}
+        </EmojiButton>
       ))}
-      <Box>
-        <IconButton color="primary" onClick={handleAddButtonClick}>
-          <AddCircleOutlineIcon />
-        </IconButton>
-        <Menu
-          id="emoji-picker"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-        >
-          <EmojiPicker handleEmojiClick={handleEmojiClick} />
-        </Menu>
-      </Box>
-    </Box>
+      {EmojiPopover()}
+    </Wrapper>
   );
 };
