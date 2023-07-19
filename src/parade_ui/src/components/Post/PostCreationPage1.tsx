@@ -16,23 +16,29 @@ type SubPage = "club-nfts" | "other-nfts";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 2rem;
-  margin: 2rem 5rem;
+  padding: 2rem 5rem;
+  background-color: #e9e9e9;
 `;
 
 const StyledForm = styled.div`
   display: flex;
-  justify-content: "space-around";
   border: 1px solid black;
   padding: 2rem;
   gap: 2rem;
+  width: 80%;
+  align-self: center;
+  background-color: white;
+  border-radius: 1rem;
 `;
 
-const ImageWindow = styled.div`
+interface ImageWindowProps {
+  imgHeight: number;
+}
+const ImageWindow = styled.div<ImageWindowProps>`
   border: 1px solid gray;
   width: 400px;
-  height: 400px;
+  height: ${(props) => props.imgHeight}px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -41,6 +47,7 @@ const ImageWindow = styled.div`
 const TextWidow = styled.div`
   display: flex;
   flex-direction: column;
+  width: 50%;
 `;
 
 const ButtonWrapper = styled.div`
@@ -52,8 +59,13 @@ const SubTabDiv = styled.div`
   display: flex;
   justify-content: space-around;
   margin: 2rem 5rem;
+  gap: 2rem;
+  align-self: center;
 `;
 
+const StyledTextarea = styled.textarea`
+  resize: none;
+`;
 interface SubTabButtonProps {
   selected: boolean;
 }
@@ -144,26 +156,31 @@ export const PostCreationPage1 = () => {
     setPostToStreetChecked(false);
     setCreatePostFinished(false);
     setWords("");
-    window.alert("NFT selected");
   };
 
   return (
     <Wrapper>
       <StyledForm>
-        <ImageWindow>
+        <ImageWindow
+          imgHeight={
+            selectedNft?.imageHeightWidthRatio
+              ? 400 * selectedNft.imageHeightWidthRatio
+              : 400
+          }
+        >
           {selectedNft ? (
             <NftImage
               imageUrl={selectedNft.imageUrl}
-              width={500}
+              width={400}
               imageType={selectedNft.imageType}
               imageHeightWidthRatio={selectedNft.imageHeightWidthRatio}
             />
           ) : (
-            <h4>Select your NFT</h4>
+            <h4>Select your NFT from below</h4>
           )}
         </ImageWindow>
         <TextWidow>
-          <textarea
+          <StyledTextarea
             placeholder="What's on your mind?"
             value={words}
             onChange={(e: any) => setWords(e.target.value)}

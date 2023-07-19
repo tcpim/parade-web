@@ -43,9 +43,9 @@ export const ItemButton = styled.button`
 `;
 
 export const ImageCard = styled.div`
-  padding-top: 0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   position: relative;
   display: inline-block;
   &:hover .overlay {
@@ -81,7 +81,7 @@ export const ImageOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 56, 92, 1);
   transition: height 0.3s;
   overflow: hidden;
 `;
@@ -111,7 +111,12 @@ export const imageOverlay = (token: NftInfo, handleButton: any) => {
           height: "100%",
         }}
       >
-        <button onClick={handleButton}>Click Me</button>
+        <button
+          onClick={() => handleButton(token)}
+          style={{ background: "none", border: "none" }}
+        >
+          <h6 style={{ color: "white" }}>Select this NFT</h6>
+        </button>
       </div>
     </ImageOverlay>
   );
@@ -121,7 +126,7 @@ export interface UserPortfolioProps {
   nftType: "club" | "other";
   withImageFooter?: boolean;
   withImageOverlay?: boolean;
-  handleImageOverlayClick?: (nftInfo: NftInfo) => any;
+  handleImageOverlayClick?: (nftInfo: NftInfo) => void;
 }
 
 export const UserPortfolio = ({
