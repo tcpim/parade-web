@@ -1,8 +1,15 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { Fragment, memo } from "react";
+import { styled } from "styled-components";
 import { useUserPosts } from "../../hooks/fetch-posts/useUserPosts";
 import { useScrollToBottomAction } from "../../hooks/useScrollToBottomAction";
 import { PostCardMemo } from "./PostCard";
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 interface UserPostsProps {
   userPid: string;
@@ -38,7 +45,7 @@ const UserPosts = ({ userPid }: UserPostsProps) => {
   }
 
   return (
-    <Box sx={{ width: "80%", marginLeft: "10%" }}>
+    <Wrapper>
       {userPostQuery.data.pages.map((page, index) => (
         <Fragment key={index}>
           {page.posts.map((post) => (
@@ -53,7 +60,7 @@ const UserPosts = ({ userPid }: UserPostsProps) => {
           <CircularProgress />
         </Box>
       )}
-    </Box>
+    </Wrapper>
   );
 };
 

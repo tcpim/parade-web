@@ -34,6 +34,10 @@ const EmojiAddButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  &:hover {
+    background-color: gray;
+    cursor: pointer;
+  }
 `;
 
 const getEmojiFromUnicode = (emoji: string) => {

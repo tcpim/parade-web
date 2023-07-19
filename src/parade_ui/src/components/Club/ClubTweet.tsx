@@ -1,7 +1,33 @@
-import { Box, Button, CircularProgress, TextField } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { useContext, useState } from "react";
+import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useCreateClubPost } from "../../hooks/create-post/useCreateClubPost";
+
+const Wrapper = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const StyledButtonRow = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const StyledTextarea = styled.textarea`
+  resize: none;
+  width: 40rem;
+`;
+
+const StyledButton = styled.button`
+  width: 5rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  background-color: white;
+  border-color: ${(props) =>
+    props.disabled ? "none" : "rgba(255, 56, 92, 1)"};
+`;
 
 interface ClubTweetProps {
   clubId: string;
@@ -18,32 +44,30 @@ export const ClubTweet = ({ clubId }: ClubTweetProps) => {
     onSuccessCallback: () => setWords(""),
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setWords(e.target.value);
-  };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createPostMutation.mutate();
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
-      <TextField
-        multiline
-        maxRows={5}
-        fullWidth
+    <Wrapper onSubmit={handleSubmit}>
+      <StyledTextarea
         value={words}
+        rows={4}
+        cols={50}
         placeholder="What's on your mind about this club?"
-        onChange={handleInputChange}
+        onChange={(e: any) => setWords(e.target.value)}
+        maxLength={500}
       />
-      {createPostMutation.isLoading ? (
-        <CircularProgress />
-      ) : (
-        <Button variant="contained" type="submit" disabled={words.length === 0}>
-          Post
-        </Button>
-      )}
-    </Box>
+      <StyledButtonRow>
+        {createPostMutation.isLoading ? (
+          <CircularProgress />
+        ) : (
+          <StyledButton type="submit" disabled={words.length === 0}>
+            Post
+          </StyledButton>
+        )}
+      </StyledButtonRow>
+    </Wrapper>
   );
 };

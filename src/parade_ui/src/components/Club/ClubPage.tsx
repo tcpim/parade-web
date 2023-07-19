@@ -1,37 +1,49 @@
-import { Box, Button, Divider } from "@mui/material";
-import { useState } from "react";
+import { AiOutlineArrowRight } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
+import { styled } from "styled-components";
 import { ClubFeed } from "./ClubFeed";
 import { ClubTweet } from "./ClubTweet";
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 10%;
+  margin-top: 3rem;
+  margin-right: 20%;
+`;
+
+const ButtonRow = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+`;
+
+const StyledButton = styled.button`
+  height: 3rem;
+  border-radius: 0.5rem;
+  border: none;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  background-color: rgba(255, 56, 92, 1);
+  color: white;
+  padding: 0.5rem;
+`;
 
 export const ClubPage = () => {
   const { clubId } = useParams();
-  const [subPage, setSubPage] = useState("feed");
   const navigate = useNavigate();
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      sx={{ marginLeft: "15%", marginTop: "5%", marginRight: "15%" }}
-    >
-      <Box display="flex" justifyContent="space-evenly">
-        <Button
-          disabled={subPage === "feed"}
-          onClick={() => navigate("/clubs/" + clubId)}
-        >
-          Feed
-        </Button>
-        <Divider orientation="vertical" flexItem />
-        <Button
-          disabled={subPage === "chat"}
-          onClick={() => navigate("/clubs/" + clubId + "/chat")}
-        >
-          Chat
-        </Button>
-      </Box>
+    <Wrapper>
+      <ButtonRow>
+        <StyledButton onClick={() => navigate("/clubs/" + clubId + "/chat")}>
+          Go to chat room <AiOutlineArrowRight />
+        </StyledButton>
+      </ButtonRow>
       <ClubTweet clubId={clubId ?? ""} />
       <ClubFeed />
-    </Box>
+    </Wrapper>
   );
 };
