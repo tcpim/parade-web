@@ -6,7 +6,7 @@ import { ClubChatRoom } from "./components/Chat/ClubChatRoom";
 import { ClubPage } from "./components/Club/ClubPage";
 import { ClubsGrid } from "./components/Club/ClubsGrid";
 import { Feed } from "./components/Homepage/Feed";
-import { PostCreationPage1 } from "./components/Post/PostCreationPage1";
+import { PostCreationPage } from "./components/Post/PostCreationPage";
 import { PostPage } from "./components/Post/PostPage";
 import { Profile } from "./components/Profile/Profile";
 import { TopSideBarLayout } from "./components/Topbar/TopSideBarLayout";
@@ -97,7 +97,7 @@ export const App = () => {
             path="/post-creator"
             element={
               <TopSideBarLayout>
-                <PostCreationPage1 />
+                <PostCreationPage />
               </TopSideBarLayout>
             }
           />
