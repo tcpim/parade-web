@@ -2,14 +2,21 @@ import { AiOutlineArrowRight } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { ClubFeed } from "./ClubFeed";
+import { ClubLayout } from "./ClubLayout";
 import { ClubTweet } from "./ClubTweet";
 const Wrapper = styled.div`
+  display: grid;
+  position: relative;
+  grid-template-columns: 1fr 1px 20rem;
+  margin-left: 10%;
+  margin-top: 3rem;
+  gap: 2rem;
+`;
+
+const ClubMain = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: 10%;
-  margin-top: 3rem;
-  margin-right: 20%;
 `;
 
 const ButtonRow = styled.div`
@@ -36,14 +43,16 @@ export const ClubPage = () => {
   const navigate = useNavigate();
 
   return (
-    <Wrapper>
-      <ButtonRow>
-        <StyledButton onClick={() => navigate("/clubs/" + clubId + "/chat")}>
-          Go to chat room <AiOutlineArrowRight />
-        </StyledButton>
-      </ButtonRow>
-      <ClubTweet clubId={clubId ?? ""} />
-      <ClubFeed />
-    </Wrapper>
+    <ClubLayout>
+      <ClubMain>
+        <ButtonRow>
+          <StyledButton onClick={() => navigate("/clubs/" + clubId + "/chat")}>
+            Go to chat room <AiOutlineArrowRight />
+          </StyledButton>
+        </ButtonRow>
+        <ClubTweet clubId={clubId ?? ""} />
+        <ClubFeed />
+      </ClubMain>
+    </ClubLayout>
   );
 };

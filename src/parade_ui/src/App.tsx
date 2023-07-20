@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Dispatch, SetStateAction, createContext, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { ClubChatRoom } from "./components/Chat/ClubChatRoom";
+import { ClubChatRoom1 } from "./components/Chat/ClubChatRoom1";
 import { ClubPage } from "./components/Club/ClubPage";
 import { ClubsGrid } from "./components/Club/ClubsGrid";
 import { PostCreationPage } from "./components/Post/PostCreationPage";
@@ -121,7 +121,7 @@ export const App = () => {
             path="/clubs/:clubId/chat"
             element={
               <TopSideBarLayout>
-                <ClubChatRoom />
+                <ClubChatRoom1 />
               </TopSideBarLayout>
             }
           />
