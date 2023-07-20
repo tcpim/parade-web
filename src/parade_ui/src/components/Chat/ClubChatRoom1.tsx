@@ -1,18 +1,19 @@
 import { CircularProgress, Divider } from "@mui/material";
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import { useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { useGetMessages } from "../../hooks/chat/useGetMessages";
 import { ClubLayout } from "../Club/ClubLayout";
 import { ChatMessage } from "./ChatMessage";
 import { ChatMessageEditor } from "./ChatMessageEditor";
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid red;
+  gap: 0.5rem;
   padding: 1rem;
   height: 80vh;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 `;
 
 const MessageBox = styled.div`
@@ -22,9 +23,23 @@ const MessageBox = styled.div`
   flex-direction: column;
 `;
 
+const StyledButton = styled.button`
+  height: 3rem;
+  border-radius: 0.5rem;
+  border: none;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  background-color: rgba(255, 56, 92, 1);
+  color: white;
+  padding: 0.5rem;
+  width: 12rem;
+`;
+
 export const ClubChatRoom1 = () => {
   const { clubId } = useParams();
   const messagesQuery = useGetMessages(clubId ?? "");
+  const navigate = useNavigate();
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const prevScrollPositionRef = useRef<number | null>(null);
@@ -92,7 +107,9 @@ export const ClubChatRoom1 = () => {
   const Chat = () => {
     return (
       <Wrapper>
-        <h5>{clubId}'s chat room</h5>
+        <StyledButton onClick={() => navigate("/clubs/" + clubId)}>
+          <AiOutlineArrowLeft /> Go back to club feed
+        </StyledButton>
         <Divider orientation="horizontal" />
         <MessageBox ref={messagesContainerRef}>
           {messagesQuery.isFetchingNextPage && <CircularProgress />}

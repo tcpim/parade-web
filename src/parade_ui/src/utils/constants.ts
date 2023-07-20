@@ -3,3 +3,5 @@ export const DEFAULT_PAGE_SIZE_FOR_REPLIES = 10;
 export const DEFAULT_PAGE_SIZE_FOR_MESSAGES = 10;
 
 const mainColor = "rgba(255, 56, 92, 1)";
+
+export const MAX_CLUB_MESSAGE_LENGTH = 500;
