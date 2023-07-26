@@ -11,8 +11,12 @@ import { NftImage } from "../Nft/NftImage";
 import { UserAvatar } from "../Profile/Avatar";
 import { Emojis } from "./Emojis";
 
-const Wrapper = styled.div`
+interface WrapperProps {
+  width: number;
+}
+const Wrapper = styled.div<WrapperProps>`
   margin-bottom: 1rem;
+  width: ${(props) => props.width}px;
 `;
 
 const Header = styled.div`
@@ -47,9 +51,10 @@ const ReplyButton = styled.button`
 
 interface PostCardProps {
   post: Post;
+  width?: number;
 }
 
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = ({ post, width = 500 }: PostCardProps) => {
   const navigate = useNavigate();
   const userInfoQuery = useGetUser(post.created_by);
 
@@ -62,7 +67,7 @@ const PostCard = ({ post }: PostCardProps) => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper width={width}>
       <Header>
         <UserAvatar size={50} userId={post.created_by} />
         <h6>{userInfoQuery.data?.username ?? userInfoQuery.data?.userId}</h6>
@@ -74,7 +79,7 @@ const PostCard = ({ post }: PostCardProps) => {
       {post.nfts[0] && (
         <NftImage
           imageUrl={post.nfts[0].imageUrl}
-          width={500}
+          width={width}
           imageType={post.nfts[0].imageType}
           imageHeightWidthRatio={post.nfts[0].imageHeightWidthRatio}
         />

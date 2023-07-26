@@ -1,9 +1,36 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
 import { useContext } from "react";
+import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useGetUser } from "../../hooks/user/useGetUser";
 import { Message } from "../../types/message";
+import { truncateStr } from "../../utils/strings";
 import { UserAvatar } from "../Profile/Avatar";
+
+interface WrapperProps {
+  selfMessage: boolean;
+}
+
+const Wrapper = styled.div<WrapperProps>`
+  display: flex;
+  flex-direction: column;
+  align-self: ${(props) => (props.selfMessage ? "flex-end" : "flex-start")};
+  margin: 0 1rem;
+`;
+
+const MessageHeader = styled.div<WrapperProps>`
+  display: flex;
+  margin-left: ${(props) => (props.selfMessage ? "auto" : "0")};
+  margin-right: ${(props) => (props.selfMessage ? "0" : "auto")};
+`;
+
+const Message = styled.div<WrapperProps>`
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  max-width: 20rem;
+  margin-bottom: 1rem;
+  background-color: ${(props) => (props.selfMessage ? "#dbf5ff" : "#e8ebec")};
+  padding: 0.5rem;
+`;
 
 export interface ChatMessageProps {
   message: Message;
@@ -14,39 +41,20 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
   const userInfoQuery = useGetUser(message.sender);
   const selfMessage = userId === message.sender;
 
-  const messageStyle = selfMessage
-    ? {
-        marginLeft: "auto",
-        marginRight: "10px",
-        backgroundColor: "#dbf5ff",
-      }
-    : {
-        backgroundColor: "hsla(100,100%,50%,.5)",
-        marginRight: "auto",
-        marginLeft: "10px",
-      };
-
   return (
-    <Box display="flex" flexDirection="column" width="100%">
-      <Box display="flex" sx={{ ...messageStyle, backgroundColor: "none" }}>
+    <Wrapper selfMessage={selfMessage}>
+      <MessageHeader selfMessage={selfMessage}>
         <UserAvatar size={20} userId={message.sender} canChange={false} />
-        <Typography variant="subtitle1" component="span" marginLeft="10px">
-          {userInfoQuery.data?.username ?? userInfoQuery.data?.userId}
-        </Typography>
-      </Box>
-      <Card
-        sx={{
-          borderRadius: "16px",
-          marginTop: "10px",
-          maxWidth: "80%",
-          marginBottom: "10px",
-          ...messageStyle,
-        }}
-      >
-        <CardContent>
-          <Typography variant="body1">{message.words}</Typography>
-        </CardContent>
-      </Card>
-    </Box>
+        <p>
+          {truncateStr(
+            userInfoQuery.data?.username ??
+              userInfoQuery.data?.userId ??
+              "unknown user",
+            10
+          )}
+        </p>
+      </MessageHeader>
+      <Message selfMessage={selfMessage}>{message.words}</Message>
+    </Wrapper>
   );
 };

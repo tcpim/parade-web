@@ -1,24 +1,49 @@
-import { Box, CircularProgress, Divider, Typography } from "@mui/material";
+import { CircularProgress, Divider } from "@mui/material";
 import { Fragment, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import { useNavigate, useParams } from "react-router-dom";
+import { styled } from "styled-components";
 import { useGetMessages } from "../../hooks/chat/useGetMessages";
+import { ClubLayout } from "../Club/ClubLayout";
 import { ChatMessage } from "./ChatMessage";
 import { ChatMessageEditor } from "./ChatMessageEditor";
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  height: 80vh;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+`;
+
+const MessageBox = styled.div`
+  flex: 1;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledButton = styled.button`
+  height: 3rem;
+  border-radius: 0.5rem;
+  border: none;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  background-color: rgba(255, 56, 92, 1);
+  color: white;
+  padding: 0.5rem;
+  width: 12rem;
+`;
 
 export const ClubChatRoom = () => {
   const { clubId } = useParams();
   const messagesQuery = useGetMessages(clubId ?? "");
+  const navigate = useNavigate();
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const prevScrollPositionRef = useRef<number | null>(null);
   const [shouldRemainPosition, setShouldRemainPosition] = useState(true);
-
-  const container = messagesContainerRef.current;
-  if (container) {
-    console.log(
-      "top: " + container.scrollTop + ", height: " + container.scrollHeight
-    );
-  }
 
   useEffect(() => {
     const container = messagesContainerRef.current;
@@ -71,45 +96,23 @@ export const ClubChatRoom = () => {
   }
 
   if (messagesQuery.isLoading) {
-    return (
-      <Box>
-        <CircularProgress />
-      </Box>
-    );
+    return <CircularProgress />;
   } else if (
     messagesQuery.status === "error" ||
     messagesQuery.data === undefined
   ) {
-    return (
-      <Typography color="error" align="center" variant="h6" gutterBottom>
-        {messagesQuery.error?.message}
-      </Typography>
-    );
+    return <h6>{messagesQuery.error?.message}</h6>;
   }
 
-  return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      sx={{
-        marginLeft: "15%",
-        marginTop: "5%",
-        marginRight: "15%",
-        height: "90vh",
-        boxShadow: "0 0 5px rgba(0, 0, 0, 0.5)",
-      }}
-    >
-      <Box>
-        <Typography variant="h6">{clubId}'s chat room</Typography>
-      </Box>
-      <Divider orientation="horizontal" />
-      <Box ref={messagesContainerRef} sx={{ flex: "1", overflow: "auto" }}>
-        {messagesQuery.isFetchingNextPage && (
-          <Box>
-            <CircularProgress />
-          </Box>
-        )}
-        <Box alignItems="center">
+  const Chat = () => {
+    return (
+      <Wrapper>
+        <StyledButton onClick={() => navigate("/clubs/" + clubId)}>
+          <AiOutlineArrowLeft /> Go back to club feed
+        </StyledButton>
+        <Divider orientation="horizontal" />
+        <MessageBox ref={messagesContainerRef}>
+          {messagesQuery.isFetchingNextPage && <CircularProgress />}
           {messagesQuery.data.pages.map((page, index) => (
             <Fragment key={index}>
               {page.messages
@@ -122,17 +125,11 @@ export const ClubChatRoom = () => {
                 ))}
             </Fragment>
           ))}
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          marginTop: "auto",
-          marginBottom: "10px",
-          marginLeft: "10px",
-        }}
-      >
+        </MessageBox>
         <ChatMessageEditor clubId={clubId} scrollToBottom={scrollToBottom} />
-      </Box>
-    </Box>
-  );
+      </Wrapper>
+    );
+  };
+
+  return <ClubLayout>{Chat()}</ClubLayout>;
 };

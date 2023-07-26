@@ -1,23 +1,20 @@
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useCreateClubPost } from "../../hooks/create-post/useCreateClubPost";
+import { MAX_CLUB_POST_WORDS_LENGTH } from "../../utils/constants";
 
 const Wrapper = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 60%;
 `;
 
 const StyledButtonRow = styled.div`
   display: flex;
   justify-content: flex-end;
-`;
-
-const StyledTextarea = styled.textarea`
-  resize: none;
-  width: 40rem;
 `;
 
 const StyledButton = styled.button`
@@ -51,13 +48,16 @@ export const ClubTweet = ({ clubId }: ClubTweetProps) => {
 
   return (
     <Wrapper onSubmit={handleSubmit}>
-      <StyledTextarea
+      <TextField
         value={words}
-        rows={4}
-        cols={50}
         placeholder="What's on your mind about this club?"
-        onChange={(e: any) => setWords(e.target.value)}
-        maxLength={500}
+        onChange={(e) => setWords(e.target.value)}
+        fullWidth
+        multiline
+        error={words.length > MAX_CLUB_POST_WORDS_LENGTH}
+        helperText={
+          words.length > MAX_CLUB_POST_WORDS_LENGTH ? "Max 500 characters" : ""
+        }
       />
       <StyledButtonRow>
         {createPostMutation.isLoading ? (
