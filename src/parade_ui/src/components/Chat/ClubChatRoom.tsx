@@ -131,5 +131,5 @@ export const ClubChatRoom = () => {
     );
   };
 
-  return <ClubLayout>{Chat()}</ClubLayout>;
+  return <ClubLayout clubId={clubId}>{Chat()}</ClubLayout>;
 };

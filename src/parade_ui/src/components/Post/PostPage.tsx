@@ -164,7 +164,7 @@ export const PostPage = () => {
   let { clubId } = useParams();
 
   return (
-    <div style={{ marginTop: "5%", marginLeft: "25%" }}>
+    <div style={{ marginTop: "5%", marginLeft: "25%", marginBottom: "5rem" }}>
       <PostDetail postId={postId ?? "0"} clubId={clubId} />
     </div>
   );

@@ -13,14 +13,15 @@ const Wrapper = styled.div`
 
 interface ClubLayoutProps {
   children: React.ReactNode;
+  clubId: string;
 }
 
-export const ClubLayout = ({ children }: ClubLayoutProps) => {
+export const ClubLayout = ({ children, clubId }: ClubLayoutProps) => {
   return (
     <Wrapper>
       {children}
       <Divider orientation="vertical" flexItem />
-      <ClubSidebar />
+      <ClubSidebar clubId={clubId} />
     </Wrapper>
   );
 };

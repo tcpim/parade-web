@@ -62,7 +62,6 @@ const StyledTextarea = styled.textarea`
 `;
 
 const StyledButton = styled.button`
-  width: min-content;
   padding: 0.5rem;
   display: flex;
   align-items: center;

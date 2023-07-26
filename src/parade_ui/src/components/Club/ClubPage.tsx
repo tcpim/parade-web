@@ -42,15 +42,19 @@ export const ClubPage = () => {
   const { clubId } = useParams();
   const navigate = useNavigate();
 
+  if (clubId === undefined) {
+    throw new Error("clubId is undefined");
+  }
+
   return (
-    <ClubLayout>
+    <ClubLayout clubId={clubId ?? ""}>
       <ClubMain>
         <ButtonRow>
           <StyledButton onClick={() => navigate("/clubs/" + clubId + "/chat")}>
             Go to chat room <AiOutlineArrowRight />
           </StyledButton>
         </ButtonRow>
-        <ClubTweet clubId={clubId ?? ""} />
+        <ClubTweet clubId={clubId} />
         <ClubFeed />
       </ClubMain>
     </ClubLayout>
