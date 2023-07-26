@@ -42,6 +42,13 @@ const ReplyButton = styled.button`
   background-color: #f1efef;
 `;
 
+const ImageFooter = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+  gap: 0.5rem;
+`;
+
 interface PostDetailProps {
   postId: string;
   clubId: string | undefined;
@@ -119,7 +126,12 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
         />
       )}
       {post.nfts[0] && (
-        <p>{post.nfts[0].collectionName + ": #" + post.nfts[0].tokenIndex}</p>
+        <ImageFooter>
+          <p>{post.nfts[0].collectionName + ": #" + post.nfts[0].tokenIndex}</p>
+          <button onClick={() => window.open(post.nfts[0].imageUrlOnChain)}>
+            View on-chain
+          </button>
+        </ImageFooter>
       )}
       <p>{post.words}</p>
       <Emojis postId={postId} emojis={post.emoji_reactions} clubId={clubId} />
