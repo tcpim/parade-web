@@ -6,3 +6,4 @@ const mainColor = "rgba(255, 56, 92, 1)";
 
 export const MAX_CLUB_MESSAGE_LENGTH = 500;
 export const MAX_CLUB_POST_WORDS_LENGTH = 500;
+export const MAX_REPLY_MESSAGE_LENGTH = 500;

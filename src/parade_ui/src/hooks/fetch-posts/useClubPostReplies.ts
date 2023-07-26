@@ -23,7 +23,7 @@ export const useClubPostRepiles = (
   enabled: boolean
 ) => {
   const postRepliesQuery = useInfiniteQuery<GetPostRepliesResponse, Error>({
-    queryKey: ["clubPostReplies", postId],
+    queryKey: ["clubPostReplies", postId, clubId],
     queryFn: async ({ pageParam = 0 }) => {
       const request = getPostRepliesRequest(postId, pageParam);
       const response = await getClubServer(clubId).get_post_replies(request);

@@ -1,21 +1,50 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
-import Divider from "@mui/material/Divider";
 import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
+import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useClubPostDetail } from "../../hooks/fetch-posts/useClubPostDetail";
 import { useStreetPostDetail } from "../../hooks/fetch-posts/useStreetPostDetail";
 import { useReplyClubPost } from "../../hooks/react-to-post/useReplyClubPost";
 import { useReplyStreetPost } from "../../hooks/react-to-post/useReplyStreetPost";
+import { useGetUser } from "../../hooks/user/useGetUser";
+import { MAX_REPLY_MESSAGE_LENGTH } from "../../utils/constants";
 import { getTimeperiod } from "../../utils/getTimePeriod";
+import { truncateStr } from "../../utils/strings";
 import { NftImage } from "../Nft/NftImage";
+import { UserAvatar } from "../Profile/Avatar";
 import { Emojis } from "./Emojis";
-import { PostRepliesMemo } from "./PostReplies";
+import { PostReplies } from "./PostReplies";
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+`;
+
+const Header = styled.div`
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const TextEditor = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ReplyButton = styled.button`
+  margin-left: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #f1efef;
+`;
 
 interface PostDetailProps {
   postId: string;
-  clubId?: string;
+  clubId: string | undefined;
 }
 
 const PostDetail = ({ postId, clubId }: PostDetailProps) => {
@@ -26,9 +55,8 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
     clubId ?? "",
     clubId !== undefined
   );
-
   const query = clubId ? clubQuery : streetQuery;
-
+  const userInfoQuery = useGetUser(query.data?.created_by ?? "");
   const [reply, setReply] = useState("");
 
   const streetMutation = useReplyStreetPost({
@@ -66,46 +94,56 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
   }
 
   const post = query.data;
+
   return (
-    <Box sx={{ marginLeft: "30%", marginRight: "auto", width: "100" }}>
-      <Typography variant="h6" gutterBottom>
-        Created by: {post?.created_by}
-      </Typography>
-      <Typography color="text.secondary">
-        {getTimeperiod(post?.created_ts)}
-      </Typography>
-      {post.nfts.length > 0 && (
-        <Box marginLeft="150px" maxWidth="350px">
-          <NftImage
-            imageUrl={post.nfts[0].imageUrl}
-            width={500}
-            imageType={post.nfts[0].imageType}
-            imageHeightWidthRatio={post.nfts[0].imageHeightWidthRatio}
-          />
-        </Box>
+    <Wrapper>
+      <Header>
+        <UserAvatar size={50} userId={post.created_by} />
+        <h6>
+          {truncateStr(
+            userInfoQuery.data?.username ??
+              userInfoQuery.data?.userId ??
+              "unknow user",
+            20
+          )}
+        </h6>
+        <p>{getTimeperiod(post.created_ts)}</p>
+      </Header>
+
+      {post.nfts[0] && (
+        <NftImage
+          imageUrl={post.nfts[0].imageUrl}
+          width={500}
+          imageType={post.nfts[0].imageType}
+          imageHeightWidthRatio={post.nfts[0].imageHeightWidthRatio}
+        />
       )}
-      <Typography variant="h5" component="p">
-        {post.words}
-      </Typography>
+      {post.nfts[0] && (
+        <p>{post.nfts[0].collectionName + ": #" + post.nfts[0].tokenIndex}</p>
+      )}
+      <p>{post.words}</p>
       <Emojis postId={postId} emojis={post.emoji_reactions} clubId={clubId} />
-      <Box display="flex" justifyContent="start" width="600px">
+      <TextEditor>
         <TextField
           id="reply"
           placeholder="Show your reaction!"
           fullWidth
           multiline
+          value={reply}
           onChange={handleInputChange}
+          error={reply.length > MAX_REPLY_MESSAGE_LENGTH}
+          helperText={
+            reply.length > MAX_REPLY_MESSAGE_LENGTH ? "Max 500 characters" : ""
+          }
         />
         {isMutationLoading() ? (
           <CircularProgress />
         ) : (
-          <Button variant="contained" onClick={handleReplySubmit}>
-            Reply
-          </Button>
+          <ReplyButton onClick={handleReplySubmit}>Reply</ReplyButton>
         )}
-      </Box>
-      <PostRepliesMemo postId={postId} />
-    </Box>
+      </TextEditor>
+      <PostReplies postId={postId} clubId={clubId} />
+    </Wrapper>
   );
 };
 
@@ -114,16 +152,8 @@ export const PostPage = () => {
   let { clubId } = useParams();
 
   return (
-    <Box sx={{ marginTop: "5%" }}>
-      <Stack
-        direction="row"
-        divider={<Divider orientation="vertical" flexItem />}
-        justifyContent="space-between"
-        height="100vh"
-        sx={{ marginTop: "5%" }}
-      >
-        <PostDetail postId={postId ?? "0"} clubId={clubId} />
-      </Stack>
-    </Box>
+    <div style={{ marginTop: "5%", marginLeft: "25%" }}>
+      <PostDetail postId={postId ?? "0"} clubId={clubId} />
+    </div>
   );
 };

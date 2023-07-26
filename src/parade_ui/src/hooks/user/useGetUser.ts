@@ -9,6 +9,7 @@ export function useGetUser(userId: string) {
     queryFn: async () => {
       const response = await mainServer.get_user_info(userId);
       if (response.user.length === 0) {
+        // if user not found
         const user: User = {
           userId: userId,
         };

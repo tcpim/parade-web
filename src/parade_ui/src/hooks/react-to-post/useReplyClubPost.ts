@@ -52,7 +52,7 @@ export const useReplyClubPost = (props: CreatePostReplyProps) => {
       };
 
       queryClient.setQueryData<InfiniteData<GetPostRepliesResponse>>(
-        ["postReplies", props.postId],
+        ["clubPostReplies", props.postId, props.clubId],
         (oldData) => {
           if (oldData === undefined) {
             return undefined;
