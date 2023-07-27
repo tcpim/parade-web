@@ -1,7 +1,10 @@
+import { useContext } from "react";
 import { AiOutlineTwitter } from "react-icons/ai";
 import { BiLogoDiscord } from "react-icons/bi";
 import { MdOutlineExplore } from "react-icons/md";
 import { styled } from "styled-components";
+import { AppContext } from "../../App";
+import { useUserBelongToClub } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
 import { ClubInfo, clubs } from "../../utils/clubInfos";
 import { truncateStr } from "../../utils/strings";
 
@@ -40,6 +43,11 @@ interface ClubSidebarProps {
 
 export const ClubSidebar = ({ clubId }: ClubSidebarProps) => {
   const clubInfo: ClubInfo = clubs[clubId];
+  const appContext = useContext(AppContext);
+  const belong = useUserBelongToClub(
+    appContext.userLoginInfo.userAccount,
+    clubId ?? ""
+  );
 
   if (clubInfo === undefined) {
     return <p>unknown club</p>;
@@ -69,6 +77,7 @@ export const ClubSidebar = ({ clubId }: ClubSidebarProps) => {
   return (
     <Wrapper>
       <Content>
+        {!belong && <i>You are in readonly mode </i>}
         <h3 style={{ fontSize: "2rem" }}>{clubInfo.name} Club</h3>
         <Icons>
           {clubInfo.twitter !== "" &&

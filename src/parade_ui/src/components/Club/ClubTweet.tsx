@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useCreateClubPost } from "../../hooks/create-post/useCreateClubPost";
+import { useUserBelongToClub } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
 import { MAX_CLUB_POST_WORDS_LENGTH } from "../../utils/constants";
 
 const Wrapper = styled.form`
@@ -14,6 +15,7 @@ const Wrapper = styled.form`
 
 const StyledButtonRow = styled.div`
   display: flex;
+  align-items: center;
   justify-content: flex-end;
 `;
 
@@ -31,6 +33,11 @@ interface ClubTweetProps {
 }
 export const ClubTweet = ({ clubId }: ClubTweetProps) => {
   const appContext = useContext(AppContext);
+  const belong = useUserBelongToClub(
+    appContext.userLoginInfo.userAccount,
+    clubId ?? ""
+  );
+
   const [words, setWords] = useState("");
 
   const createPostMutation = useCreateClubPost({
@@ -50,10 +57,15 @@ export const ClubTweet = ({ clubId }: ClubTweetProps) => {
     <Wrapper onSubmit={handleSubmit}>
       <TextField
         value={words}
-        placeholder="What's on your mind about this club?"
+        placeholder={
+          belong.data
+            ? "What's on your mind about this club?"
+            : "You can't post because you are not a member of this club"
+        }
         onChange={(e) => setWords(e.target.value)}
         fullWidth
         multiline
+        disabled={!belong.data}
         error={words.length > MAX_CLUB_POST_WORDS_LENGTH}
         helperText={
           words.length > MAX_CLUB_POST_WORDS_LENGTH ? "Max 500 characters" : ""
@@ -63,7 +75,10 @@ export const ClubTweet = ({ clubId }: ClubTweetProps) => {
         {createPostMutation.isLoading ? (
           <CircularProgress />
         ) : (
-          <StyledButton type="submit" disabled={words.length === 0}>
+          <StyledButton
+            type="submit"
+            disabled={words.length === 0 || !belong.data}
+          >
             Post
           </StyledButton>
         )}
