@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useCreateClubPost } from "../../hooks/create-post/useCreateClubPost";
-import { useUserBelongToClub } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
+import { useUserCollectionListForClub } from "../../hooks/fetch-nft-data/useUserCollectionListForClub";
 import { MAX_CLUB_POST_WORDS_LENGTH } from "../../utils/constants";
 
 const Wrapper = styled.form`
@@ -33,10 +33,11 @@ interface ClubTweetProps {
 }
 export const ClubTweet = ({ clubId }: ClubTweetProps) => {
   const appContext = useContext(AppContext);
-  const belong = useUserBelongToClub(
+  const query = useUserCollectionListForClub(
     appContext.userLoginInfo.userAccount,
     clubId ?? ""
   );
+  const belong = query.data?.tokenCount !== 0;
 
   const [words, setWords] = useState("");
 
@@ -58,14 +59,14 @@ export const ClubTweet = ({ clubId }: ClubTweetProps) => {
       <TextField
         value={words}
         placeholder={
-          belong.data
+          belong
             ? "What's on your mind about this club?"
             : "You can't post because you are not a member of this club"
         }
         onChange={(e) => setWords(e.target.value)}
         fullWidth
         multiline
-        disabled={!belong.data}
+        disabled={!belong}
         error={words.length > MAX_CLUB_POST_WORDS_LENGTH}
         helperText={
           words.length > MAX_CLUB_POST_WORDS_LENGTH ? "Max 500 characters" : ""
@@ -75,10 +76,7 @@ export const ClubTweet = ({ clubId }: ClubTweetProps) => {
         {createPostMutation.isLoading ? (
           <CircularProgress />
         ) : (
-          <StyledButton
-            type="submit"
-            disabled={words.length === 0 || !belong.data}
-          >
+          <StyledButton type="submit" disabled={words.length === 0 || !belong}>
             Post
           </StyledButton>
         )}

@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useSendMessage } from "../../hooks/chat/useSendMessage";
-import { useUserBelongToClub } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
+import { useUserCollectionListForClub } from "../../hooks/fetch-nft-data/useUserCollectionListForClub";
 import { MAX_CLUB_MESSAGE_LENGTH } from "../../utils/constants";
 
 const StyledTextarea = styled.textarea`
@@ -20,10 +20,13 @@ export const ChatMessageEditor = ({
   scrollToBottom,
 }: ChatMessageEditorProps) => {
   const appContext = useContext(AppContext);
-  const belong = useUserBelongToClub(
+  const query = useUserCollectionListForClub(
     appContext.userLoginInfo.userAccount,
     clubId ?? ""
   );
+
+  const belong = query.data?.tokenCount !== 0;
+  console.log("belong", belong);
 
   const [message, setMessage] = useState("");
 
@@ -48,11 +51,11 @@ export const ChatMessageEditor = ({
       <TextField
         value={message}
         placeholder={
-          belong.data
+          belong
             ? "Say something..."
             : "You can't chat because you are not a member of this club"
         }
-        disabled={!belong.data}
+        disabled={!belong}
         onChange={(e) => setMessage(e.target.value)}
         fullWidth
         multiline
@@ -61,11 +64,11 @@ export const ChatMessageEditor = ({
           message.length > MAX_CLUB_MESSAGE_LENGTH ? "Max 500 characters" : ""
         }
       />
-      {sendMessageMutation.isLoading || belong.isFetching ? (
+      {sendMessageMutation.isLoading ? (
         <CircularProgress />
       ) : (
         <IconButton
-          disabled={message === "" || belong.isError || !belong.data}
+          disabled={message === "" || query.isError || !belong}
           onClick={handleSendMessage}
         >
           <SendIcon />

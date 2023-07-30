@@ -4,7 +4,7 @@ import { BiLogoDiscord } from "react-icons/bi";
 import { MdOutlineExplore } from "react-icons/md";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
-import { useUserBelongToClub } from "../../hooks/fetch-nft-data/useUserClubCollectionList";
+import { useUserCollectionListForClub } from "../../hooks/fetch-nft-data/useUserCollectionListForClub";
 import { ClubInfo, clubs } from "../../utils/clubInfos";
 import { truncateStr } from "../../utils/strings";
 
@@ -44,10 +44,11 @@ interface ClubSidebarProps {
 export const ClubSidebar = ({ clubId }: ClubSidebarProps) => {
   const clubInfo: ClubInfo = clubs[clubId];
   const appContext = useContext(AppContext);
-  const belong = useUserBelongToClub(
+  const query = useUserCollectionListForClub(
     appContext.userLoginInfo.userAccount,
     clubId ?? ""
   );
+  const belong = query.data?.tokenCount !== 0;
 
   if (clubInfo === undefined) {
     return <p>unknown club</p>;

@@ -63,25 +63,3 @@ export const useUserClubCollectionList = (userAccount: string) => {
     () => fetchUserClubCollectionList(userAccount)
   );
 };
-
-const checkUserBelongToClub = async (
-  userAccount: string,
-  clubId: string
-): Promise<boolean> => {
-  if (clubId === "" || userAccount === "") return false;
-  const response = await fetch(paradeApiHost + userAccount);
-  if (!response.ok) {
-    throw new Error("Error fetching user collection list data");
-  }
-  const data: ClubCollectionListData = await response.json();
-  return data.clubs.some((club) => club.club_id === clubId);
-};
-
-export const useUserBelongToClub = (userAccount: string, clubId: string) => {
-  return useQuery<boolean, Error>({
-    queryKey: ["userBelongToClub", userAccount, clubId],
-    queryFn: async () => {
-      return checkUserBelongToClub(userAccount, clubId);
-    },
-  });
-};
