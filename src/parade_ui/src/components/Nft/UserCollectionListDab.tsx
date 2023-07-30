@@ -53,6 +53,7 @@ interface UserCollectionListDabProps {
   withImageFooter?: boolean;
   withImageOverlay?: boolean;
   handleImageOverlayClick?: (nftInfo: NftInfo) => void;
+  isSelf: boolean;
 }
 
 const UserCollectionListDab = ({
@@ -60,6 +61,7 @@ const UserCollectionListDab = ({
   withImageFooter = false,
   withImageOverlay = false,
   handleImageOverlayClick,
+  isSelf,
 }: UserCollectionListDabProps) => {
   const query = useUserCollectionListDab(userPid);
   const [currentCollection, setCurrentCollection] = useState("");
@@ -135,7 +137,7 @@ const UserCollectionListDab = ({
                 imageHeightWidthRatio={undefined}
               />
               {withImageFooter &&
-                imageFooter(token, () => handleOpenForm(token))}
+                imageFooter(token, () => handleOpenForm(token), isSelf)}
               {withImageOverlay && imageOverlay(token, handleImageOverlayClick)}
             </ImageCard>
           );

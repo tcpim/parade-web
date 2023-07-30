@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { SubTabButton, SubTabDiv } from "../CommonUI/SubTab";
@@ -24,9 +25,15 @@ const UserInfoDiv = styled.div`
   margin-left: 4rem;
 `;
 
-const UserPortfolioActivity = () => {
+interface ProfileProps {
+  userId: string;
+}
+
+const UserPortfolioActivity = ({ userId }: ProfileProps) => {
   const [subPage, setSubPage] = useState<SubPage>("club-nfts");
   const appContext = useContext(AppContext);
+
+  const isSelf = appContext.userLoginInfo.userPid === userId;
 
   const subTabs = () => {
     return (
@@ -57,34 +64,65 @@ const UserPortfolioActivity = () => {
     );
   };
 
-  const userInfoDiv = () => {
+  const userInfoDiv = (userId: string) => {
     return (
       <UserInfoDiv>
         <UserAvatar
-          canChange={true}
+          canChange={isSelf}
           userId={appContext.userLoginInfo.userPid}
         />
-        <UserInfo />
+        <UserInfo userId={userId} />
       </UserInfoDiv>
     );
   };
+
   return (
     <Wrapper>
-      {userInfoDiv()}
+      {userInfoDiv(userId)}
       {subTabs()}
       {subPage === "club-nfts" && (
-        <UserPortfolioMemo nftType="club" withImageFooter={true} />
+        <UserPortfolioMemo
+          nftType="club"
+          withImageFooter={true}
+          userId={userId}
+        />
       )}
       {subPage === "other-nfts" && (
-        <UserPortfolioMemo nftType="other" withImageFooter={true} />
+        <UserPortfolioMemo
+          nftType="other"
+          withImageFooter={true}
+          userId={userId}
+        />
       )}
-      {subPage === "posts" && (
-        <UserPostsMemo userPid={appContext.userLoginInfo.userPid} />
-      )}
+      {subPage === "posts" && <UserPostsMemo userPid={userId} />}
     </Wrapper>
   );
 };
 
+const CenteredDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 10rem;
+  width: 100%;
+`;
 export const Profile = () => {
-  return <UserPortfolioActivity />;
+  const { userId } = useParams();
+  const appContext = useContext(AppContext);
+
+  let user = userId;
+  if (user === undefined) {
+    // /profile/ url without user id
+    if (!appContext.userLoginInfo.walletConnected) {
+      return (
+        <CenteredDiv>
+          <h1>Please connect your wallet</h1>
+        </CenteredDiv>
+      );
+    } else {
+      user = appContext.userLoginInfo.userPid;
+    }
+  }
+
+  return <UserPortfolioActivity userId={user} />;
 };

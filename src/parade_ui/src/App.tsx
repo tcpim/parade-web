@@ -77,6 +77,14 @@ export const App = () => {
             }
           />
           <Route
+            path="/profile/:userId"
+            element={
+              <TopSideBarLayout>
+                <Profile />
+              </TopSideBarLayout>
+            }
+          />
+          <Route
             path="/post/:postId"
             element={
               <TopSideBarLayout>

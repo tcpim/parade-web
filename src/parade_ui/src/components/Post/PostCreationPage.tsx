@@ -75,6 +75,14 @@ const StyledButton = styled.button`
   }
 `;
 
+const CenteredDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 20rem;
+`;
+
 export const PostCreationPage = () => {
   const navigate = useNavigate();
   const appContext = useContext(AppContext);
@@ -151,6 +159,13 @@ export const PostCreationPage = () => {
     setWords("");
   };
 
+  if (!appContext.userLoginInfo.walletConnected) {
+    return (
+      <CenteredDiv>
+        <h1>Please connect your wallet</h1>
+      </CenteredDiv>
+    );
+  }
   return (
     <Wrapper>
       <StyledForm>
@@ -241,6 +256,7 @@ export const PostCreationPage = () => {
           nftType="club"
           withImageOverlay={true}
           handleImageOverlayClick={handleOnNftSelected}
+          userId={appContext.userLoginInfo.userPid}
         />
       )}
       {subPage === "other-nfts" && (
@@ -248,6 +264,7 @@ export const PostCreationPage = () => {
           nftType="other"
           withImageOverlay={true}
           handleImageOverlayClick={handleOnNftSelected}
+          userId={appContext.userLoginInfo.userPid}
         />
       )}
     </Wrapper>

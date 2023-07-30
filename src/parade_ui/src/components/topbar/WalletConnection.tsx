@@ -1,5 +1,3 @@
-import { AccountIdentifier } from "@dfinity/nns";
-import { Principal } from "@dfinity/principal";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -9,6 +7,7 @@ import Typography from "@mui/material/Typography";
 import { StoicIdentity as stoic } from "ic-stoic-identity";
 import { MouseEvent, useContext, useState } from "react";
 import { AppContext, UserLoginInfo, defaultLoginInfo } from "../../App";
+import { getAccountFromPrincipal } from "../../utils/principals";
 
 const WalletConnection = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -20,12 +19,6 @@ const WalletConnection = () => {
   };
   const handleWalletMenuClose = () => {
     setAnchorEl(null);
-  };
-
-  const getAccountFromPrincipal = (pid: string): string => {
-    const principal = Principal.from(pid);
-    const accountIdentifier = AccountIdentifier.fromPrincipal({ principal });
-    return accountIdentifier.toHex();
   };
 
   const loginPlugWallet = async () => {

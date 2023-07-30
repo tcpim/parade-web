@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   HiOutlineGlobeAlt,
   HiOutlinePlus,
@@ -6,6 +7,7 @@ import {
 } from "react-icons/hi";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { AppContext } from "../../App";
 import { Icon } from "./TopSideBarLayout";
 
 const Wrapper = styled.ol`
@@ -44,6 +46,7 @@ interface NavBarProps {
 export const NavBar = ({ className }: NavBarProps) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const appContext = useContext(AppContext);
   const currentPath = location.pathname;
 
   return (

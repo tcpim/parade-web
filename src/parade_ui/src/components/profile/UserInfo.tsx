@@ -53,9 +53,13 @@ const StyledLabel = styled.p`
   width: 6rem;
 `;
 
-export const UserInfo = () => {
+interface UserInfoProps {
+  userId: string;
+}
+
+export const UserInfo = ({ userId }: UserInfoProps) => {
   const appContext = useContext(AppContext);
-  const userId = appContext.userLoginInfo.userPid;
+  const isSelf = userId === appContext.userLoginInfo.userPid;
 
   const userInfoQuery = useGetUser(userId);
 
@@ -76,7 +80,7 @@ export const UserInfo = () => {
     setEditingUserbio(false)
   );
 
-  const userNameEditorButton = () => {
+  const userNameEditorButton = (isSelf: boolean) => {
     if (setUserNameMutation.data?.error[0]) {
       return <p color="red">username exists. please choose another one</p>;
     } else if (setUserNameMutation.isLoading) {
@@ -112,6 +116,7 @@ export const UserInfo = () => {
     } else {
       return (
         <StyledEditButton
+          disabled={!isSelf}
           onClick={() => {
             setEditingUsername(true);
             setNewUsername(username ?? "");
@@ -123,7 +128,7 @@ export const UserInfo = () => {
     }
   };
 
-  const userNameBioButton = () => {
+  const userNameBioButton = (isSelf: boolean) => {
     if (setUserBioMutation.data?.error[0]) {
       return <p color="red">Failed to update bio. Please try again</p>;
     } else if (setUserBioMutation.isLoading) {
@@ -159,6 +164,7 @@ export const UserInfo = () => {
     } else {
       return (
         <StyledEditButton
+          disabled={!isSelf}
           onClick={() => {
             setEditingUserbio(true);
             setNewUserbio(userBio ?? "");
@@ -174,7 +180,7 @@ export const UserInfo = () => {
     <Wrapper>
       <StyledEditor>
         <StyledLabel>Principal ID:</StyledLabel>
-        {appContext.userLoginInfo.userPid}
+        {userId}
       </StyledEditor>
       <StyledEditor>
         <StyledLabel> User name: </StyledLabel>
@@ -186,11 +192,12 @@ export const UserInfo = () => {
           onChange={(e: any) => setNewUsername(e.target.value)}
           isActive={editingUsername}
         />
-        {newUsername.length > 20 ? (
-          <p style={{ color: "red" }}>Max username length is 20</p>
-        ) : (
-          userNameEditorButton()
-        )}
+        {isSelf &&
+          (newUsername.length > 20 ? (
+            <p style={{ color: "red" }}>Max username length is 20</p>
+          ) : (
+            userNameEditorButton(isSelf)
+          ))}
       </StyledEditor>
       <StyledEditor>
         <StyledLabel>User bio: </StyledLabel>
@@ -207,11 +214,12 @@ export const UserInfo = () => {
         >
           Tell about yourself
         </StyledTextArea>
-        {newUserbio.length > 200 ? (
-          <p style={{ color: "red" }}>Max bio length is 200</p>
-        ) : (
-          userNameBioButton()
-        )}
+        {isSelf &&
+          (newUserbio.length > 200 ? (
+            <p style={{ color: "red" }}>Max bio length is 200</p>
+          ) : (
+            userNameBioButton(isSelf)
+          ))}
       </StyledEditor>
     </Wrapper>
   );

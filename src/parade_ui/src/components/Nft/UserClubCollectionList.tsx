@@ -57,6 +57,7 @@ interface UserClubCollectionListProps {
   withImageFooter?: boolean;
   withImageOverlay?: boolean;
   handleImageOverlayClick?: (nftInfo: NftInfo) => void;
+  isSelf: boolean;
 }
 
 const UserClubCollectionList = ({
@@ -64,6 +65,7 @@ const UserClubCollectionList = ({
   withImageFooter = false,
   withImageOverlay = true,
   handleImageOverlayClick,
+  isSelf,
 }: UserClubCollectionListProps) => {
   const query = useUserClubCollectionList(userAccount);
   const [currentClubId, setCurrentClubId] = useState("");
@@ -132,7 +134,7 @@ const UserClubCollectionList = ({
                 imageHeightWidthRatio={token.imageHeightWidthRatio}
               />
               {withImageFooter &&
-                imageFooter(token, () => handleOpenForm(token))}
+                imageFooter(token, () => handleOpenForm(token), isSelf)}
               {withImageOverlay && imageOverlay(token, handleImageOverlayClick)}
             </ImageCard>
           );

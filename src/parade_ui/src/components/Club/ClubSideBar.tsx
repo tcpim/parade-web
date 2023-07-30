@@ -78,7 +78,7 @@ export const ClubSidebar = ({ clubId }: ClubSidebarProps) => {
   return (
     <Wrapper>
       <Content>
-        {!belong && <i>You are in readonly mode </i>}
+        {!belong && <i>You are in readonly mode in this club</i>}
         <h3 style={{ fontSize: "2rem" }}>{clubInfo.name} Club</h3>
         <Icons>
           {clubInfo.twitter !== "" &&

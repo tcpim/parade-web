@@ -3,6 +3,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { NftInfo } from "../../types/nft";
+import { getAccountFromPrincipal } from "../../utils/principals";
 import { UserClubCollectionListMemo } from "./UserClubCollectionList";
 import { UserCollectionListDabMemo } from "./UserCollectionListDab";
 
@@ -94,16 +95,22 @@ const ImageOverlayButton = styled.button`
   }
 `;
 
-export const imageFooter = (token: NftInfo, handleButton: any) => {
+export const imageFooter = (
+  token: NftInfo,
+  handleButton: any,
+  isSelf: boolean
+) => {
   return (
     <ImageCardFooter>
       {"#" + token.tokenIndex}
       <ImageCardFooterButton onClick={() => window.open(token.imageUrlOnChain)}>
         view onchain
       </ImageCardFooterButton>
-      <ImageCardFooterButton onClick={handleButton}>
-        <AiOutlinePlus size={"1rem"} />
-      </ImageCardFooterButton>
+      {isSelf && (
+        <ImageCardFooterButton onClick={handleButton}>
+          <AiOutlinePlus size={"1rem"} />
+        </ImageCardFooterButton>
+      )}
     </ImageCardFooter>
   );
 };
@@ -132,6 +139,7 @@ export interface UserPortfolioProps {
   withImageFooter?: boolean;
   withImageOverlay?: boolean;
   handleImageOverlayClick?: (nftInfo: NftInfo) => void;
+  userId: string;
 }
 
 export const UserPortfolio = ({
@@ -139,36 +147,29 @@ export const UserPortfolio = ({
   withImageFooter = false,
   withImageOverlay = false,
   handleImageOverlayClick,
+  userId,
 }: UserPortfolioProps) => {
   const appContext = useContext(AppContext);
-  const loggedIn = appContext.userLoginInfo.walletConnected;
-  const userAccount = appContext.userLoginInfo.userAccount;
-  const userPid = appContext.userLoginInfo.userPid;
-
-  if (!loggedIn || !userAccount || !userPid) {
-    return (
-      <div style={{ backgroundColor: "rgba(251, 18, 18, 0.2)" }}>
-        Please connect to wallet to see your portfolio
-      </div>
-    );
-  }
+  let isSelf = userId === appContext.userLoginInfo.userPid;
 
   return (
     <Fragment>
       {nftType === "club" && (
         <UserClubCollectionListMemo
-          userAccount={userAccount}
+          userAccount={getAccountFromPrincipal(userId)}
           withImageFooter={withImageFooter}
           withImageOverlay={withImageOverlay}
           handleImageOverlayClick={handleImageOverlayClick}
+          isSelf={isSelf}
         />
       )}
       {nftType === "other" && (
         <UserCollectionListDabMemo
-          userPid={userPid}
+          userPid={userId}
           withImageFooter={withImageFooter}
           withImageOverlay={withImageOverlay}
           handleImageOverlayClick={handleImageOverlayClick}
+          isSelf={isSelf}
         />
       )}
     </Fragment>
