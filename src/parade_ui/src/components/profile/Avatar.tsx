@@ -62,7 +62,7 @@ export const UserAvatar = ({
       }
 
       const options = {
-        maxSizeMB: 0.2, // (200KB in MB)
+        maxSizeMB: 0.1, // (100KB in MB)
         maxWidthOrHeight: 1920,
         useWebWorker: true,
         fileType: imageFile.type,
