@@ -4,10 +4,7 @@
       "frontend": {
         "entrypoint": "src/parade_ui/src/index.tsx"
       },
-      "source": [
-        "src/parade_ui/assets",
-        "dist/parade_ui/"
-      ],
+      "source": ["src/parade_ui/assets", "dist/parade_ui/"],
       "type": "assets"
     }
   },
@@ -17,7 +14,7 @@
       "packtool": ""
     }
   },
-  "dfx": "0.14.0",
+  "dfx": "0.14.1",
   "networks": {
     "local": {
       "bind": "127.0.0.1:8000",

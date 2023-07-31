@@ -26,7 +26,6 @@ export const ChatMessageEditor = ({
   );
 
   const belong = query.data?.tokenCount !== 0;
-  console.log("belong", belong);
 
   const [message, setMessage] = useState("");
 

@@ -89,7 +89,7 @@ const UserCollectionListDab = ({
   } else if (query.isError) {
     throw new Error("Failed to get club NFTs: " + query.error.message);
   } else if (!query.data || query.data.length === 0) {
-    return <div>You don't have any club NFTs</div>;
+    return <div>You don't have any non-club NFTs</div>;
   }
 
   const collections: NFTCollection[] = query.data;

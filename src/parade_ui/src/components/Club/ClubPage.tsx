@@ -41,6 +41,7 @@ const StyledButton = styled.button`
 export const ClubPage = () => {
   const { clubId } = useParams();
   const navigate = useNavigate();
+
   if (clubId === undefined) {
     throw new Error("clubId is undefined");
   }
