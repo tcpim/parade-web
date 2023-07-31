@@ -24,6 +24,10 @@ const EmojiButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const EmojiAddButton = styled.button`
@@ -35,8 +39,11 @@ const EmojiAddButton = styled.button`
   align-items: center;
   justify-content: center;
   &:hover {
-    background-color: gray;
     cursor: pointer;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 `;
 
@@ -95,7 +102,7 @@ export const Emojis = ({ postId, replyId, emojis, clubId }: EmojisProps) => {
     return (
       <Popover.Root>
         <Popover.Trigger asChild>
-          <EmojiAddButton>
+          <EmojiAddButton disabled={!appContext.userLoginInfo.walletConnected}>
             <AiOutlinePlusCircle />
           </EmojiAddButton>
         </Popover.Trigger>
@@ -118,6 +125,7 @@ export const Emojis = ({ postId, replyId, emojis, clubId }: EmojisProps) => {
         <EmojiButton
           onClick={() => handlePlusOneClick(emoji[0])}
           key={emoji[0]}
+          disabled={!appContext.userLoginInfo.walletConnected}
         >
           {getEmojiFromUnicode(emoji[0])}
           {emoji[1]}

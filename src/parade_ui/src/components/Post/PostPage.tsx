@@ -138,7 +138,12 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
       <TextEditor>
         <TextField
           id="reply"
-          placeholder="Show your reaction!"
+          placeholder={
+            appContext.userLoginInfo.walletConnected
+              ? "Show your reaction!"
+              : "Login to reply"
+          }
+          disabled={!appContext.userLoginInfo.walletConnected}
           fullWidth
           multiline
           value={reply}
@@ -151,7 +156,12 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
         {isMutationLoading() ? (
           <CircularProgress />
         ) : (
-          <ReplyButton onClick={handleReplySubmit}>Reply</ReplyButton>
+          <ReplyButton
+            onClick={handleReplySubmit}
+            disabled={!appContext.userLoginInfo.walletConnected}
+          >
+            Reply
+          </ReplyButton>
         )}
       </TextEditor>
       <PostReplies postId={postId} clubId={clubId} />
