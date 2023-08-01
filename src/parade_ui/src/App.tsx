@@ -46,7 +46,7 @@ const defaultTestingLoginInfo: UserLoginInfo = {
 };
 
 export const AppContext = createContext<AppContext>({
-  userLoginInfo: defaultLoginInfo,
+  userLoginInfo: defaultTestingLoginInfo,
   setUserLoginInfo: () => {},
 });
 
