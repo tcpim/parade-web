@@ -4,14 +4,6 @@ import { styled } from "styled-components";
 import { ClubFeed } from "./ClubFeed";
 import { ClubLayout } from "./ClubLayout";
 import { ClubTweet } from "./ClubTweet";
-const Wrapper = styled.div`
-  display: grid;
-  position: relative;
-  grid-template-columns: 1fr 1px 20rem;
-  margin-left: 10%;
-  margin-top: 3rem;
-  gap: 2rem;
-`;
 
 const ClubMain = styled.div`
   display: flex;

@@ -31,7 +31,10 @@ export const ImageList = styled.div`
   align-items: start;
 `;
 
-export const ItemButton = styled.button`
+interface ItemButtonProps {
+  selected: boolean;
+}
+export const ItemButton = styled.button<ItemButtonProps>`
   border: none;
   background: none;
   align-self: flex-start;
@@ -41,6 +44,7 @@ export const ItemButton = styled.button`
   &:hover {
     background-color: rgba(255, 56, 92, 0.1);
   }
+  ${(props) => props.selected && "background-color: rgba(255, 56, 92, 0.1);"}
 `;
 
 export const ImageCard = styled.div`
@@ -102,7 +106,7 @@ export const imageFooter = (
 ) => {
   return (
     <ImageCardFooter>
-      {"#" + token.tokenIndex}
+      {token.collectionName + "#" + token.tokenIndex}
       <ImageCardFooterButton onClick={() => window.open(token.imageUrlOnChain)}>
         view onchain
       </ImageCardFooterButton>

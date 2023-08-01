@@ -111,8 +111,11 @@ const UserClubCollectionList = ({
       <StyledItemList>
         {clubs.map((club) => {
           return (
-            <li>
-              <ItemButton onClick={() => setCurrentClubId(club.club_id)}>
+            <li key={club.club_id}>
+              <ItemButton
+                onClick={() => setCurrentClubId(club.club_id)}
+                selected={club.club_id === currentClubId}
+              >
                 <ItemName>{club.club_name}</ItemName>
                 <p style={{ textAlign: "left" }}>
                   Owned: {getClubNftInfoList(club.club_id, query.data).length}
@@ -126,7 +129,7 @@ const UserClubCollectionList = ({
       <ImageList>
         {clubTokenList.map((token) => {
           return (
-            <ImageCard>
+            <ImageCard key={token.tokenIdentifier}>
               <NftImage
                 imageUrl={token.imageUrl}
                 width={300}

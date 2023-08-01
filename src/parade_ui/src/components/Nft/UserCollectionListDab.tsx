@@ -111,6 +111,7 @@ const UserCollectionListDab = ({
                 onClick={() => {
                   setCurrentCollection(collection.canisterId);
                 }}
+                selected={collection.canisterId === displayedCollection}
               >
                 <ItemName>{collection.name}</ItemName>
                 <p style={{ textAlign: "left" }}>

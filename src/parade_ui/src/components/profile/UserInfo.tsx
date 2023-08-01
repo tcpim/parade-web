@@ -211,9 +211,7 @@ export const UserInfo = ({ userId }: UserInfoProps) => {
           cols={40}
           maxLength={200}
           isActive={editingUserbio}
-        >
-          Tell about yourself
-        </StyledTextArea>
+        ></StyledTextArea>
         {isSelf &&
           (newUserbio.length > 200 ? (
             <p style={{ color: "red" }}>Max bio length is 200</p>
