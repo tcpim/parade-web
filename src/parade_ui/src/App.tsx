@@ -53,8 +53,9 @@ export const AppContext = createContext<AppContext>({
 const queryClient = new QueryClient();
 
 export const App = () => {
-  const [userLoginInfo, setUserLoginInfo] =
-    useState<UserLoginInfo>(defaultLoginInfo);
+  const [userLoginInfo, setUserLoginInfo] = useState<UserLoginInfo>(
+    defaultTestingLoginInfo
+  );
 
   return (
     <QueryClientProvider client={queryClient}>

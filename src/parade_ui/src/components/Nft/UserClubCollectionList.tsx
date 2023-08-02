@@ -114,7 +114,7 @@ const UserClubCollectionList = ({
             <li key={club.club_id}>
               <ItemButton
                 onClick={() => setCurrentClubId(club.club_id)}
-                selected={club.club_id === currentClubId}
+                selected={club.club_id === displayedClub}
               >
                 <ItemName>{club.club_name}</ItemName>
                 <p style={{ textAlign: "left" }}>

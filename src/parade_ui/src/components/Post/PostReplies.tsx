@@ -57,6 +57,7 @@ const PostReplyCard = (reply: PostReplyCardProps) => {
       </Header>
       <p>{reply.words}</p>
       <Emojis
+        autherId={reply.created_by}
         replyId={reply.id}
         emojis={reply.emoji_reactions}
         clubId={reply.clubId}

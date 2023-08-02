@@ -134,7 +134,12 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
         </ImageFooter>
       )}
       <p>{post.words}</p>
-      <Emojis postId={postId} emojis={post.emoji_reactions} clubId={clubId} />
+      <Emojis
+        autherId={post.created_by}
+        postId={postId}
+        emojis={post.emoji_reactions}
+        clubId={clubId}
+      />
       <TextEditor>
         <TextField
           id="reply"

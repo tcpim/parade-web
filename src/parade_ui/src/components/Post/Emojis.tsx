@@ -30,6 +30,17 @@ const EmojiButton = styled.button`
   }
 `;
 
+const EmojiDiv = styled.div`
+  border: none;
+  border-radius: 1rem;
+  width: 3rem;
+  height: 1.5rem;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const EmojiAddButton = styled.button`
   border: none;
   border-radius: 0.5rem;
@@ -52,13 +63,20 @@ const getEmojiFromUnicode = (emoji: string) => {
 };
 
 export interface EmojisProps {
+  autherId: string;
   postId?: string;
   replyId?: string;
   clubId?: string;
   emojis: Array<[string, number]>;
 }
 
-export const Emojis = ({ postId, replyId, emojis, clubId }: EmojisProps) => {
+export const Emojis = ({
+  autherId,
+  postId,
+  replyId,
+  emojis,
+  clubId,
+}: EmojisProps) => {
   const [emojisCount, setEmojisCount] =
     useState<Array<[string, number]>>(emojis);
   const appContext = useContext(AppContext);
@@ -75,6 +93,10 @@ export const Emojis = ({ postId, replyId, emojis, clubId }: EmojisProps) => {
   });
 
   const mutation = clubId ? clubMutation : streetMutation;
+  const cannotMutate =
+    !appContext.userLoginInfo.walletConnected ||
+    appContext.userLoginInfo.userPid === autherId;
+
   // handle click events
   const handleEmojiClick = (emoji: any) => {
     mutation.mutate(emoji.unified);
@@ -98,11 +120,33 @@ export const Emojis = ({ postId, replyId, emojis, clubId }: EmojisProps) => {
     setEmojisCount(updatedEmojisCount);
   };
 
+  const emojiWrapper = (emoji: string, count: number) => {
+    if (cannotMutate) {
+      return (
+        <EmojiDiv key={emoji}>
+          {getEmojiFromUnicode(emoji)}
+          {count}
+        </EmojiDiv>
+      );
+    } else {
+      return (
+        <EmojiButton
+          onClick={() => handlePlusOneClick(emoji)}
+          key={emoji}
+          disabled={cannotMutate}
+        >
+          {getEmojiFromUnicode(emoji)}
+          {count}
+        </EmojiButton>
+      );
+    }
+  };
+
   const EmojiPopover = () => {
     return (
       <Popover.Root>
         <Popover.Trigger asChild>
-          <EmojiAddButton disabled={!appContext.userLoginInfo.walletConnected}>
+          <EmojiAddButton disabled={cannotMutate}>
             <AiOutlinePlusCircle />
           </EmojiAddButton>
         </Popover.Trigger>
@@ -121,16 +165,7 @@ export const Emojis = ({ postId, replyId, emojis, clubId }: EmojisProps) => {
 
   return (
     <Wrapper>
-      {emojisCount.map((emoji) => (
-        <EmojiButton
-          onClick={() => handlePlusOneClick(emoji[0])}
-          key={emoji[0]}
-          disabled={!appContext.userLoginInfo.walletConnected}
-        >
-          {getEmojiFromUnicode(emoji[0])}
-          {emoji[1]}
-        </EmojiButton>
-      ))}
+      {emojisCount.map((emoji) => emojiWrapper(emoji[0], emoji[1]))}
       {EmojiPopover()}
     </Wrapper>
   );

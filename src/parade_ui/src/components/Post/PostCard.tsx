@@ -89,6 +89,7 @@ const PostCard = ({ post, width = 500 }: PostCardProps) => {
         <p>{post.words}</p>
       </StyledWords>
       <Emojis
+        autherId={post.created_by}
         postId={post.postId}
         emojis={post.emoji_reactions}
         clubId={post.clubId}
