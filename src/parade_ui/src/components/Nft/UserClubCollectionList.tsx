@@ -19,6 +19,7 @@ import {
 
 import { NftInfo, defaultNftInfo } from "../../types/nft";
 import { PostCreationFormMemo } from "../Post/PostCreationForm";
+import { useErrorBoundary } from "react-error-boundary";
 
 const getClubNftInfoList = (
   clubId: string,
@@ -72,6 +73,7 @@ const UserClubCollectionList = ({
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [postFormNftInfo, setPostFormNftInfo] =
     useState<NftInfo>(defaultNftInfo);
+  const { showBoundary } = useErrorBoundary();
 
   const handleOpenForm = (nftInfo: NftInfo) => {
     setOpenForm(true);
@@ -92,7 +94,7 @@ const UserClubCollectionList = ({
       </div>
     );
   } else if (query.isError) {
-    throw new Error("Failed to get club NFTs: " + query.error.message);
+    showBoundary(new Error("Failed to get club NFTs: " + query.error.message));
   } else if (!query.data || query.data.tokenCount === 0) {
     return <div>You don't have any club NFTs</div>;
   }

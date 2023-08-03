@@ -1,6 +1,7 @@
 import { CircularProgress, Divider } from "@mui/material";
 import { NFTCollection } from "@psychedelic/dab-js";
 import { memo, useState } from "react";
+import { useErrorBoundary } from "react-error-boundary";
 import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
 import { NftInfo, defaultNftInfo } from "../../types/nft";
 import { PostCreationFormMemo } from "../Post/PostCreationForm";
@@ -72,6 +73,7 @@ const UserCollectionListDab = ({
     setOpenForm(true);
     setPostFormNftInfo(nftInfo);
   };
+  const { showBoundary } = useErrorBoundary();
 
   // check error cases
   if (query.isLoading) {
@@ -87,7 +89,7 @@ const UserCollectionListDab = ({
       </div>
     );
   } else if (query.isError) {
-    throw new Error("Failed to get club NFTs: " + query.error.message);
+    showBoundary(new Error("Failed to get club NFTs: " + query.error.message));
   } else if (!query.data || query.data.length === 0) {
     return <div>You don't have any non-club NFTs</div>;
   }

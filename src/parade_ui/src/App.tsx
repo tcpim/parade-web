@@ -1,10 +1,12 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Dispatch, SetStateAction, createContext, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes } from "react-router-dom";
 import { ClubChatRoom } from "./components/Chat/ClubChatRoom";
 import { ClubPage } from "./components/Club/ClubPage";
 import { ClubsGrid } from "./components/Club/ClubsGrid";
+import { ErrorFallback } from "./components/CommonUI/ErrorFallback";
 import { PostCreationPage } from "./components/Post/PostCreationPage";
 import { PostPage } from "./components/Post/PostPage";
 import { Profile } from "./components/Profile/Profile";
@@ -57,85 +59,90 @@ export const App = () => {
     useState<UserLoginInfo>(defaultLoginInfo);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AppContext.Provider value={{ userLoginInfo, setUserLoginInfo }}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <TopSideBarLayout>
-                <Feed />
-              </TopSideBarLayout>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <TopSideBarLayout>
-                <Profile />
-              </TopSideBarLayout>
-            }
-          />
-          <Route
-            path="/profile/:userId"
-            element={
-              <TopSideBarLayout>
-                <Profile />
-              </TopSideBarLayout>
-            }
-          />
-          <Route
-            path="/post/:postId"
-            element={
-              <TopSideBarLayout>
-                <PostPage />
-              </TopSideBarLayout>
-            }
-          />
-          <Route
-            path="/club/:clubId/post/:postId"
-            element={
-              <TopSideBarLayout>
-                <PostPage />
-              </TopSideBarLayout>
-            }
-          />
-          <Route
-            path="/post-creator"
-            element={
-              <TopSideBarLayout>
-                <PostCreationPage />
-              </TopSideBarLayout>
-            }
-          />
-          <Route
-            path="/clubs"
-            element={
-              <TopSideBarLayout>
-                <ClubsGrid />
-              </TopSideBarLayout>
-            }
-          />
-          <Route
-            path="/clubs/:clubId"
-            element={
-              <TopSideBarLayout>
-                <ClubPage />
-              </TopSideBarLayout>
-            }
-          />
-          <Route
-            path="/clubs/:clubId/chat"
-            element={
-              <TopSideBarLayout>
-                <ClubChatRoom />
-              </TopSideBarLayout>
-            }
-          />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </AppContext.Provider>
-      <ReactQueryDevtools />
-    </QueryClientProvider>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onError={() => console.log("Something went wrong, try again later!")}
+    >
+      <QueryClientProvider client={queryClient}>
+        <AppContext.Provider value={{ userLoginInfo, setUserLoginInfo }}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <TopSideBarLayout>
+                  <Feed />
+                </TopSideBarLayout>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <TopSideBarLayout>
+                  <Profile />
+                </TopSideBarLayout>
+              }
+            />
+            <Route
+              path="/profile/:userId"
+              element={
+                <TopSideBarLayout>
+                  <Profile />
+                </TopSideBarLayout>
+              }
+            />
+            <Route
+              path="/post/:postId"
+              element={
+                <TopSideBarLayout>
+                  <PostPage />
+                </TopSideBarLayout>
+              }
+            />
+            <Route
+              path="/club/:clubId/post/:postId"
+              element={
+                <TopSideBarLayout>
+                  <PostPage />
+                </TopSideBarLayout>
+              }
+            />
+            <Route
+              path="/post-creator"
+              element={
+                <TopSideBarLayout>
+                  <PostCreationPage />
+                </TopSideBarLayout>
+              }
+            />
+            <Route
+              path="/clubs"
+              element={
+                <TopSideBarLayout>
+                  <ClubsGrid />
+                </TopSideBarLayout>
+              }
+            />
+            <Route
+              path="/clubs/:clubId"
+              element={
+                <TopSideBarLayout>
+                  <ClubPage />
+                </TopSideBarLayout>
+              }
+            />
+            <Route
+              path="/clubs/:clubId/chat"
+              element={
+                <TopSideBarLayout>
+                  <ClubChatRoom />
+                </TopSideBarLayout>
+              }
+            />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </AppContext.Provider>
+        <ReactQueryDevtools />
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };

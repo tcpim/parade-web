@@ -1,6 +1,7 @@
 import * as Menubar from "@radix-ui/react-menubar";
 import { StoicIdentity as stoic } from "ic-stoic-identity";
 import { useContext } from "react";
+import { useErrorBoundary } from "react-error-boundary";
 import { BiWalletAlt } from "react-icons/bi";
 import styled from "styled-components";
 import { AppContext, UserLoginInfo } from "../../../App";
@@ -16,21 +17,26 @@ const ConnectWalletTrigger = styled(CommonTrigger)`
 export const WalletMenu = () => {
   const appContext = useContext(AppContext);
   const walletConnected = appContext.userLoginInfo.walletConnected;
+  const { showBoundary } = useErrorBoundary();
 
   const loginPlugWallet = async () => {
-    await window.ic.plug.requestConnect();
-    const connected = await window.ic.plug.isConnected();
+    try {
+      await window.ic.plug.requestConnect();
+      const connected = await window.ic.plug.isConnected();
 
-    if (connected) {
-      const userLoginInfo: UserLoginInfo = {
-        userPid: window.ic.plug.principalId,
-        userAccount: getAccountFromPrincipal(window.ic.plug.principalId),
-        walletConnected: true,
-        walletType: "Plug",
-      };
-      appContext.setUserLoginInfo(userLoginInfo);
-    } else {
-      throw new Error("Failed to connect with Plug");
+      if (connected) {
+        const userLoginInfo: UserLoginInfo = {
+          userPid: window.ic.plug.principalId,
+          userAccount: getAccountFromPrincipal(window.ic.plug.principalId),
+          walletConnected: true,
+          walletType: "Plug",
+        };
+        appContext.setUserLoginInfo(userLoginInfo);
+      } else {
+        showBoundary(new Error("Failed to connect with Plug"));
+      }
+    } catch (err) {
+      showBoundary(new Error("Failed to connect with Plug"));
     }
   };
 

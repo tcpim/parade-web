@@ -1,3 +1,4 @@
+import { useErrorBoundary } from "react-error-boundary";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
@@ -33,9 +34,10 @@ const StyledButton = styled.button`
 export const ClubPage = () => {
   const { clubId } = useParams();
   const navigate = useNavigate();
+  const { showBoundary } = useErrorBoundary();
 
   if (clubId === undefined) {
-    throw new Error("clubId is undefined");
+    showBoundary(new Error("clubId is undefined"));
   }
 
   return (

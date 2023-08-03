@@ -6,6 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import { StoicIdentity as stoic } from "ic-stoic-identity";
 import { MouseEvent, useContext, useState } from "react";
+import { useErrorBoundary } from "react-error-boundary";
 import { AppContext, UserLoginInfo, defaultLoginInfo } from "../../App";
 import { getAccountFromPrincipal } from "../../utils/principals";
 
@@ -13,6 +14,7 @@ const WalletConnection = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const appContext = useContext(AppContext);
   const walletConnected = appContext.userLoginInfo.walletConnected;
+  const { showBoundary } = useErrorBoundary();
 
   const handleWalletMenuOpen = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -35,7 +37,7 @@ const WalletConnection = () => {
       };
       appContext.setUserLoginInfo(userLoginInfo);
     } else {
-      throw new Error("Failed to connect with Plug");
+      showBoundary(new Error("Failed to connect with Plug"));
     }
   };
 

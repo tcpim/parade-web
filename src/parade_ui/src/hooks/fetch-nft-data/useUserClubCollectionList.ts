@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useErrorBoundary } from "react-error-boundary";
 
 export interface ClubCollectionListData {
   clubs: Club[];
@@ -49,9 +50,10 @@ const paradeApiHost =
 const fetchUserClubCollectionList = async (
   userAccount: string
 ): Promise<ClubCollectionListData> => {
+  const { showBoundary } = useErrorBoundary();
   const response = await fetch(paradeApiHost + userAccount);
   if (!response.ok) {
-    throw new Error("Error fetching user collection list data");
+    showBoundary(new Error("Error fetching user collection list data"));
   }
   const data: ClubCollectionListData = await response.json();
   return data;

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useErrorBoundary } from "react-error-boundary";
 import { v4 as uuidv4 } from "uuid";
 import { CreatePostRequest } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { NftInfo } from "../../types/nft";
@@ -48,11 +49,12 @@ export function useCreateClubPost(createPostProps: CreateClubPostProps) {
   const queryClient = useQueryClient();
 
   const request = getCreatePostRequest(createPostProps);
+  const { showBoundary } = useErrorBoundary();
 
   const mutation = useMutation(
     async () => {
       if (createPostProps.clubId === "") {
-        throw new Error("clubId is empty");
+        showBoundary(new Error("clubId is empty"));
       }
       const response = await getClubServer(createPostProps.clubId).create_post(
         request

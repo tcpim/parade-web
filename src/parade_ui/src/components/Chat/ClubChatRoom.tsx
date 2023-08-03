@@ -1,5 +1,6 @@
 import { CircularProgress, Divider } from "@mui/material";
 import { Fragment, useEffect, useRef, useState } from "react";
+import { useErrorBoundary } from "react-error-boundary";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
@@ -40,6 +41,7 @@ export const ClubChatRoom = () => {
   const { clubId } = useParams();
   const messagesQuery = useGetMessages(clubId ?? "");
   const navigate = useNavigate();
+  const { showBoundary } = useErrorBoundary();
 
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
   const prevScrollPositionRef = useRef<number | null>(null);
@@ -92,7 +94,7 @@ export const ClubChatRoom = () => {
   };
 
   if (clubId === undefined) {
-    throw new Error("clubId is undefined");
+    showBoundary(new Error("clubId is undefined"));
   }
 
   if (messagesQuery.isLoading) {

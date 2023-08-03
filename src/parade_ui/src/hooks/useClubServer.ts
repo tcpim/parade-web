@@ -1,4 +1,5 @@
 import { ActorSubclass } from "@dfinity/agent";
+import { useErrorBoundary } from "react-error-boundary";
 import { createActor } from "../../backend_declarations/club_server";
 import { _SERVICE } from "../../backend_declarations/club_server/ludo_arts_club.did";
 import {
@@ -15,8 +16,9 @@ const CLUBS: ReadonlyMap<string, ActorSubclass<_SERVICE>> = new Map([
 
 export const getClubServer = (clubId: string) => {
   const server = CLUBS.get(clubId);
+  const { showBoundary } = useErrorBoundary();
   if (server === undefined) {
-    throw new Error("Invalid club id to get club server");
+    showBoundary(new Error("Invalid club id to get club server"));
   }
 
   return server;
