@@ -215,7 +215,7 @@ export const PostCreationPage = () => {
             cols={40}
             maxLength={500}
           />
-          {selectedNft !== undefined && selectedNft?.clubId !== "" && (
+          {selectedNft !== undefined && selectedNft.clubId !== undefined && (
             <div style={{ display: "flex", alignItems: "center" }}>
               <p>Also post to street</p>
               <Checkbox

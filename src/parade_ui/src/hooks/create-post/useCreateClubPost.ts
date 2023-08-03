@@ -58,6 +58,11 @@ export function useCreateClubPost(createPostProps: CreateClubPostProps) {
         request
       );
       const result: Post | undefined = convertToPost(response.post);
+      if (response.error.length > 0) {
+        console.error(
+          response.error[0]?.api_name + ": " + response.error[0]?.error_message
+        );
+      }
       return result;
     },
     {

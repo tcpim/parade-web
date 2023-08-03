@@ -1,11 +1,19 @@
 export const MAIN_SERVER_CANISTER =
-  process.env.NODE_ENV !== "production" ? "bkyz2-fmaaa-aaaaa-qaaaq-cai" : "";
+  process.env.NODE_ENV !== "production"
+    ? "ajuq4-ruaaa-aaaaa-qaaga-cai"
+    : "rjqto-qqaaa-aaaap-abhgq-cai";
 
 export const LUDO_ARTS_CLUB_CANISTER =
-  process.env.NODE_ENV !== "production" ? "be2us-64aaa-aaaaa-qaabq-cai" : "";
+  process.env.NODE_ENV !== "production"
+    ? "ahw5u-keaaa-aaaaa-qaaha-cai"
+    : "ratys-gyaaa-aaaap-abhha-cai";
 
 export const POKED_BOTS_CLUB_CANISTER =
-  process.env.NODE_ENV !== "production" ? "bw4dl-smaaa-aaaaa-qaacq-cai" : "";
+  process.env.NODE_ENV !== "production"
+    ? "c5kvi-uuaaa-aaaaa-qaaia-cai"
+    : "tun5g-dyaaa-aaaap-abhja-cai";
 
 export const MOTOKO_GHOST_CLUB_CANISTER =
-  process.env.NODE_ENV !== "production" ? "br5f7-7uaaa-aaaaa-qaaca-cai" : "";
+  process.env.NODE_ENV !== "production"
+    ? "aax3a-h4aaa-aaaaa-qaahq-cai"
+    : "t5ow2-vqaaa-aaaap-abhiq-cai";

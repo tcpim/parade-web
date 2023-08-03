@@ -53,9 +53,13 @@ export const AppContext = createContext<AppContext>({
 const queryClient = new QueryClient();
 
 export const App = () => {
-  const [userLoginInfo, setUserLoginInfo] = useState<UserLoginInfo>(
-    defaultTestingLoginInfo
-  );
+  const defaultLogin =
+    process.env.NODE_ENV === "production"
+      ? defaultLoginInfo
+      : defaultTestingLoginInfo;
+
+  const [userLoginInfo, setUserLoginInfo] =
+    useState<UserLoginInfo>(defaultLogin);
 
   return (
     <QueryClientProvider client={queryClient}>
