@@ -1,5 +1,5 @@
 import Masonry from "@mui/lab/Masonry";
-import { Box, ImageList, ImageListItem } from "@mui/material";
+import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import boxydude from "../../../assets/boxydude-club.png";
@@ -9,30 +9,6 @@ import dscvr from "../../../assets/dscvr-airdrop-club.png";
 import icpunks from "../../../assets/icpunk-club.png";
 import motoko from "../../../assets/motoko-ghost-club.png";
 import pokedbot from "../../../assets/poked-bots-club.png";
-
-const ClubList = () => {
-  const navigate = useNavigate();
-
-  return (
-    <ImageList sx={{ width: "100%", height: "100%" }} cols={3} rowHeight={30}>
-      <Box onClick={() => navigate("/clubs/ludo-arts")}>
-        <ImageListItem>
-          <img src={btcflower} loading="lazy" />
-        </ImageListItem>
-      </Box>
-      <Box onClick={() => navigate("/clubs/poked-bots")}>
-        <ImageListItem>
-          <img src={pokedbot} loading="lazy" />
-        </ImageListItem>
-      </Box>
-      <Box onClick={() => navigate("/clubs/motoko-ghost")}>
-        <ImageListItem>
-          <img src={motoko} loading="lazy" />
-        </ImageListItem>
-      </Box>
-    </ImageList>
-  );
-};
 
 const Wrapper = styled.div`
   margin-left: auto;
@@ -50,10 +26,11 @@ const ImageBlock = styled.div`
 export const ClubsGrid = () => {
   const navigate = useNavigate();
 
+  const isSmallScreen = useMediaQuery({ maxWidth: 900 });
   const width = "100%";
   return (
     <Wrapper>
-      <Masonry columns={3}>
+      <Masonry columns={isSmallScreen ? 1 : 3}>
         <ImageBlock onClick={() => navigate("/clubs/ludo-arts")}>
           <img src={btcflower} loading="lazy" width={width} />
         </ImageBlock>
