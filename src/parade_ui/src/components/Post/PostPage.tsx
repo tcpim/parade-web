@@ -50,6 +50,13 @@ const ImageFooter = styled.div`
   gap: 0.5rem;
 `;
 
+const ReplyButtonWrapper = styled.div`
+  width: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 interface PostDetailProps {
   postId: string;
   clubId: string | undefined;
@@ -106,6 +113,13 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
 
   const post = query.data;
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault(); // Prevents newline from being added to the TextField
+      handleReplySubmit();
+    }
+  };
+
   return (
     <Wrapper>
       <Header>
@@ -153,6 +167,7 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
               : "Login to reply"
           }
           disabled={!appContext.userLoginInfo.walletConnected}
+          onKeyDown={handleKeyDown}
           fullWidth
           multiline
           value={reply}
@@ -162,16 +177,18 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
             reply.length > MAX_REPLY_MESSAGE_LENGTH ? "Max 500 characters" : ""
           }
         />
-        {isMutationLoading() ? (
-          <CircularProgress />
-        ) : (
-          <ReplyButton
-            onClick={handleReplySubmit}
-            disabled={!appContext.userLoginInfo.walletConnected}
-          >
-            Reply
-          </ReplyButton>
-        )}
+        <ReplyButtonWrapper>
+          {isMutationLoading() ? (
+            <CircularProgress />
+          ) : (
+            <ReplyButton
+              onClick={handleReplySubmit}
+              disabled={!appContext.userLoginInfo.walletConnected}
+            >
+              Reply
+            </ReplyButton>
+          )}
+        </ReplyButtonWrapper>
       </TextEditor>
       <PostReplies postId={postId} clubId={clubId} />
     </Wrapper>

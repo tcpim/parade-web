@@ -82,9 +82,22 @@ export const UserInfo = ({ userId }: UserInfoProps) => {
 
   const userNameEditorButton = (isSelf: boolean) => {
     if (setUserNameMutation.data?.error[0]) {
-      return <p color="red">username exists. please choose another one</p>;
+      return (
+        <div>
+          <p color="red">username exists. please choose another one</p>
+          <button
+            onClick={() => {
+              setUserNameMutation.reset();
+              setNewUsername("");
+              setEditingUsername(true);
+            }}
+          >
+            OK
+          </button>
+        </div>
+      );
     } else if (setUserNameMutation.isLoading) {
-      return <CircularProgress />;
+      return <CircularProgress size={"2rem"} />;
     }
 
     if (editingUsername) {
@@ -132,7 +145,7 @@ export const UserInfo = ({ userId }: UserInfoProps) => {
     if (setUserBioMutation.data?.error[0]) {
       return <p color="red">Failed to update bio. Please try again</p>;
     } else if (setUserBioMutation.isLoading) {
-      return <CircularProgress />;
+      return <CircularProgress size={"2rem"} />;
     }
 
     if (editingUserbio) {
