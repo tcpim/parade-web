@@ -18,3 +18,20 @@ clubCanisterIds.add("jv55j-riaaa-aaaal-abvnq-cai"); // Poked Bots Mutant Army
 // motoko-ghost
 clubCanisterIds.add("oeee4-qaaaa-aaaak-qaaeq-cai"); // Motoko Ghosts
 clubCanisterIds.add("ugdkf-taaaa-aaaak-acoia-cai"); // Motoko Mechs
+
+// boxy dude
+clubCanisterIds.add("s36wu-5qaaa-aaaah-qcyzq-cai"); // Boxy Dude
+clubCanisterIds.add("cchps-gaaaa-aaaak-qasaa-cai"); // Boxy Girl
+
+// dscvr airdrop
+clubCanisterIds.add("rw623-hyaaa-aaaah-qctcq-cai"); // OG MEDALS
+clubCanisterIds.add("nbg4r-saaaa-aaaah-qap7a-cai"); // Starverse
+
+// cubetopia
+clubCanisterIds.add("3vdxu-laaaa-aaaah-abqxa-cai"); // Cubetopia Islands
+clubCanisterIds.add("umqto-nyaaa-aaaah-abwoa-cai"); // Cubetopia Pets
+clubCanisterIds.add("bvckr-laaaa-aaaak-acgkq-cai"); // Cubetopia Founder’s Pass
+
+// ic-punks
+clubCanisterIds.add("bxdf4-baaaa-aaaah-qaruq-cai"); // Wrapped IC Punks
+clubCanisterIds.add("y3b7h-siaaa-aaaah-qcnwa-cai"); // Wrapped IC Cats

@@ -52,6 +52,15 @@ const getClubNftInfoList = (
   return tokens;
 };
 
+const getNonEmptyClubList = (data: ClubCollectionListData): Club[] => {
+  return data.clubs.filter((club) =>
+    club.collections.some(
+      (collection) =>
+        collection.ownedTokens && collection.ownedTokens.length > 1
+    )
+  );
+};
+
 interface UserClubCollectionListProps {
   userAccount: string;
   withImageFooter?: boolean;
@@ -97,7 +106,7 @@ const UserClubCollectionList = ({
     return <div>You don't have any club NFTs</div>;
   }
 
-  const clubs: Club[] = query.data.clubs;
+  const clubs: Club[] = getNonEmptyClubList(query.data);
   const displayedClub: string = currentClubId
     ? currentClubId
     : clubs[0].club_id;
@@ -126,23 +135,32 @@ const UserClubCollectionList = ({
         })}
       </StyledItemList>
       <Divider orientation="vertical" flexItem />
-      <ImageList>
-        {clubTokenList.map((token) => {
-          return (
-            <ImageCard key={token.tokenIdentifier}>
-              <NftImage
-                imageUrl={token.imageUrl}
-                width={300}
-                imageType={token.imageType}
-                imageHeightWidthRatio={token.imageHeightWidthRatio}
-              />
-              {withImageFooter &&
-                imageFooter(token, () => handleOpenForm(token), isSelf)}
-              {withImageOverlay && imageOverlay(token, handleImageOverlayClick)}
-            </ImageCard>
-          );
-        })}
-      </ImageList>
+      <div>
+        {displayedClub === "ic-punks" && (
+          <p>
+            Currently only showing wrapped EXT standard. Un-wrapped coming soon!
+          </p>
+        )}
+        <ImageList>
+          {clubTokenList.map((token) => {
+            return (
+              <ImageCard key={token.tokenIdentifier}>
+                <NftImage
+                  imageUrl={token.imageUrl}
+                  width={300}
+                  imageType={token.imageType}
+                  imageHeightWidthRatio={token.imageHeightWidthRatio}
+                />
+                {withImageFooter &&
+                  imageFooter(token, () => handleOpenForm(token), isSelf)}
+                {withImageOverlay &&
+                  imageOverlay(token, handleImageOverlayClick)}
+              </ImageCard>
+            );
+          })}
+        </ImageList>
+      </div>
+
       {openForm && (
         <PostCreationFormMemo
           open={openForm}

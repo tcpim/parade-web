@@ -14,6 +14,7 @@ const DialogOverlay = styled(Dialog.Overlay)`
   background-color: rgba(184, 183, 183, 0.694);
   position: fixed;
   inset: 0;
+  pointer-events: none;
 `;
 
 const DialogContent = styled(Dialog.Content)`
@@ -48,11 +49,19 @@ const DialogButtons = styled.div`
   gap: 1rem;
 `;
 
+const StyledButton = styled.button`
+  cursor: pointer;
+  &:hover {
+    color: gray;
+  }
+`;
+
 interface TooltipWrapperProps {
   children: React.ReactNode;
   className?: string;
   tooltipText: string;
 }
+
 const TooltipWrapper = ({ children, tooltipText }: TooltipWrapperProps) => {
   return (
     <Popover.Root>
@@ -124,7 +133,7 @@ export const PostCreationForm = ({
     <Dialog.Root open={open} modal={true}>
       <Dialog.Portal>
         <DialogOverlay />
-        <DialogContent onPointerDownOutside={handleCloseForm}>
+        <DialogContent>
           <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
             <h3>Flex your NFT</h3>
             <TooltipWrapper tooltipText="This won't touch (list or transfer) your nft. Only the image is attached">
@@ -168,25 +177,26 @@ export const PostCreationForm = ({
               <CircularProgress />
             ) : mutationFinished ? (
               <Dialog.Close asChild>
-                <button onClick={handleCloseForm}>Done</button>
+                <StyledButton onClick={handleCloseForm}>Done</StyledButton>
               </Dialog.Close>
             ) : (
               <Fragment>
                 <Dialog.Close asChild>
-                  <button
+                  <StyledButton
                     onClick={handleCloseForm}
                     style={{ borderRadius: "0.5rem", backgroundColor: "white" }}
                   >
                     Cancel
-                  </button>
+                  </StyledButton>
                 </Dialog.Close>
                 <Dialog.Close asChild>
-                  <button
+                  <StyledButton
                     onClick={() => normalizedMutation.mutate()}
                     style={{ borderRadius: "0.5rem", backgroundColor: "white" }}
+                    disabled={!words}
                   >
                     Submit
-                  </button>
+                  </StyledButton>
                 </Dialog.Close>
               </Fragment>
             )}
