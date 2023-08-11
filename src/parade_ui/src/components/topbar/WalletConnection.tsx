@@ -1,3 +1,4 @@
+import * as amplitude from "@amplitude/analytics-browser";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -9,10 +10,12 @@ import { MouseEvent, useContext, useState } from "react";
 import { AppContext, UserLoginInfo, defaultLoginInfo } from "../../App";
 import { getAccountFromPrincipal } from "../../utils/principals";
 
-const WalletConnection = () => {
+export const WalletConnection = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const appContext = useContext(AppContext);
   const walletConnected = appContext.userLoginInfo.walletConnected;
+
+  amplitude.init("2fa63b52409e3286a24cd859656587f6");
 
   const handleWalletMenuOpen = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -33,17 +36,27 @@ const WalletConnection = () => {
         walletConnected: true,
         walletType: "Plug",
       };
+
       appContext.setUserLoginInfo(userLoginInfo);
+      //amplitude.setUserId(window.ic.plug.principalId);
     } else {
       throw new Error("Failed to connect with Plug");
     }
+  };
+
+  const handlePlugLogin = () => {
+    amplitude.track("connect_wallet", { wallet: "plug" });
+    console.log("ASdasd");
+    // await loginPlugWallet();
   };
 
   const loginStoicWallet = async () => {
     setAnchorEl(null); // close the menu dropdown
     const isLoaded = await stoic.load();
 
+    let userId = "";
     if (isLoaded !== false) {
+      userId = isLoaded.getPrincipal().toText();
       appContext.setUserLoginInfo({
         userPid: isLoaded.getPrincipal().toText(),
         userAccount: getAccountFromPrincipal(isLoaded.getPrincipal().toText()),
@@ -52,6 +65,7 @@ const WalletConnection = () => {
       });
     } else {
       const identity = await stoic.connect();
+      userId = identity.getPrincipal().toText();
       appContext.setUserLoginInfo({
         userPid: identity.getPrincipal().toText(),
         userAccount: getAccountFromPrincipal(identity.getPrincipal().toText()),
@@ -59,6 +73,9 @@ const WalletConnection = () => {
         walletType: "Stoic",
       });
     }
+
+    amplitude.setUserId(userId);
+    amplitude.track("connect_wallet", { wallet: "stoic" });
   };
 
   const handleLogout = () => {
@@ -92,12 +109,10 @@ const WalletConnection = () => {
           <MenuItem onClick={loginStoicWallet}>StoicWallet</MenuItem>
         )}
         {!walletConnected && (
-          <MenuItem onClick={loginPlugWallet}>Plug</MenuItem>
+          <MenuItem onClick={handlePlugLogin}>Plug</MenuItem>
         )}
         {walletConnected && <MenuItem onClick={handleLogout}>Logout</MenuItem>}
       </Menu>
     </Box>
   );
 };
-
-export default WalletConnection;

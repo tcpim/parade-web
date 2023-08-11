@@ -1,3 +1,4 @@
+import * as amplitude from "@amplitude/analytics-browser";
 import * as Menubar from "@radix-ui/react-menubar";
 import { StoicIdentity as stoic } from "ic-stoic-identity";
 import { useContext } from "react";
@@ -29,6 +30,9 @@ export const WalletMenu = () => {
         walletType: "Plug",
       };
       appContext.setUserLoginInfo(userLoginInfo);
+
+      amplitude.setUserId(window.ic.plug.principalId);
+      amplitude.track("connect_wallet", { wallet: "plug" });
     } else {
       throw new Error("Failed to connect with Plug");
     }
@@ -37,22 +41,28 @@ export const WalletMenu = () => {
   const loginStoicWallet = async () => {
     const isLoaded = await stoic.load();
 
+    let userId = "";
     if (isLoaded !== false) {
+      userId = isLoaded.getPrincipal().toText();
       appContext.setUserLoginInfo({
-        userPid: isLoaded.getPrincipal().toText(),
+        userPid: userId,
         userAccount: getAccountFromPrincipal(isLoaded.getPrincipal().toText()),
         walletConnected: true,
         walletType: "Stoic",
       });
     } else {
       const identity = await stoic.connect();
+      userId = identity.getPrincipal().toText();
       appContext.setUserLoginInfo({
-        userPid: identity.getPrincipal().toText(),
+        userPid: userId,
         userAccount: getAccountFromPrincipal(identity.getPrincipal().toText()),
         walletConnected: true,
         walletType: "Stoic",
       });
     }
+
+    amplitude.setUserId(userId);
+    amplitude.track("connect_wallet", { wallet: "stoic" });
   };
 
   return (

@@ -1,3 +1,4 @@
+import * as amplitude from "@amplitude/analytics-browser";
 import { CircularProgress } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import { useContext, useState } from "react";
@@ -136,6 +137,17 @@ export const PostCreationPage = () => {
 
   const handlePostSubmit = () => {
     normalizedMutation.mutate();
+    const eventProp = {
+      clubId: clubId,
+      collection: selectedNft?.canisterId,
+      userId: appContext.userLoginInfo.userPid,
+      page: "create_page",
+    };
+    if (clubId !== "") {
+      amplitude.track("create_club_post", eventProp);
+    } else {
+      amplitude.track("create_street_post", eventProp);
+    }
   };
 
   const handlePostCreationFinished = () => {

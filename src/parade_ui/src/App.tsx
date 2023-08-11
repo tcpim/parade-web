@@ -1,3 +1,4 @@
+import * as amplitude from "@amplitude/analytics-browser";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Dispatch, SetStateAction, createContext, useState } from "react";
@@ -53,6 +54,7 @@ export const AppContext = createContext<AppContext>({
 const queryClient = new QueryClient();
 
 export const App = () => {
+  amplitude.init("2fa63b52409e3286a24cd859656587f6");
   const defaultLogin =
     process.env.NODE_ENV === "production"
       ? defaultLoginInfo

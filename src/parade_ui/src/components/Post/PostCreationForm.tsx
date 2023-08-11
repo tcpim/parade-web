@@ -1,9 +1,10 @@
+import * as amplitude from "@amplitude/analytics-browser";
 import { CircularProgress } from "@mui/material";
-import * as Checkbox from "@radix-ui/react-checkbox";
+import Checkbox from "@mui/material/Checkbox";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Popover from "@radix-ui/react-popover";
 import { Fragment, memo, useContext, useState } from "react";
-import { AiOutlineCheck, AiOutlineQuestionCircle } from "react-icons/ai";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useCreateClubPost } from "../../hooks/create-post/useCreateClubPost";
@@ -51,6 +52,8 @@ const DialogButtons = styled.div`
 
 const StyledButton = styled.button`
   cursor: pointer;
+  border-radius: 0.5rem;
+  background-color: white;
   &:hover {
     color: gray;
   }
@@ -129,6 +132,21 @@ export const PostCreationForm = ({
     ? createClubPostMutation
     : createStreetPostMutation;
 
+  const handleCreateButtonClicked = () => {
+    normalizedMutation.mutate();
+    const eventProp = {
+      clubId: nftInfo.clubId,
+      collection: nftInfo.canisterId,
+      userId: appContext.userLoginInfo.userPid,
+      page: "portfolio_page",
+    };
+    if (isClubNft) {
+      amplitude.track("create_club_post", eventProp);
+    } else {
+      amplitude.track("create_street_post", eventProp);
+    }
+  };
+
   return (
     <Dialog.Root open={open} modal={true}>
       <Dialog.Portal>
@@ -150,22 +168,10 @@ export const PostCreationForm = ({
           />
           {isClubNft && (
             <DialogCheckboxRow>
-              <Checkbox.Root
-                onCheckedChange={() => setIsPublicPost(true)}
-                id="c1"
-                style={{
-                  width: "1.5rem",
-                  height: "1.5rem",
-                  backgroundColor: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Checkbox.Indicator>
-                  <AiOutlineCheck size="1rem" />
-                </Checkbox.Indicator>
-              </Checkbox.Root>
+              <Checkbox
+                checked={isPublicPost}
+                onChange={(e) => setIsPublicPost(e.target.checked)}
+              />
               <label htmlFor="c1">Also post to public street</label>
               <TooltipWrapper tooltipText="Club NFT will be posted to its club by default. Check this to also post to street">
                 <AiOutlineQuestionCircle size="1rem" />
@@ -191,7 +197,7 @@ export const PostCreationForm = ({
                 </Dialog.Close>
                 <Dialog.Close asChild>
                   <StyledButton
-                    onClick={() => normalizedMutation.mutate()}
+                    onClick={handleCreateButtonClicked}
                     style={{ borderRadius: "0.5rem", backgroundColor: "white" }}
                     disabled={!words}
                   >

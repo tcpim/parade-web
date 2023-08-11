@@ -1,3 +1,4 @@
+import * as amplitude from "@amplitude/analytics-browser";
 import { CircularProgress, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import { styled } from "styled-components";
@@ -52,6 +53,11 @@ export const ClubTweet = ({ clubId }: ClubTweetProps) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     createPostMutation.mutate();
+    const eventProp = {
+      clubId: clubId,
+      userId: appContext.userLoginInfo.userPid,
+    };
+    amplitude.track("create_club_tweet", eventProp);
   };
 
   return (
