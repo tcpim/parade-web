@@ -1,3 +1,4 @@
+import * as amplitude from "@amplitude/analytics-browser";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import * as Popover from "@radix-ui/react-popover";
@@ -100,11 +101,13 @@ export const Emojis = ({
   // handle click events
   const handleEmojiClick = (emoji: any) => {
     mutation.mutate(emoji.unified);
+    amplitude.track("emoji_react_post", { clubId: clubId });
     increaseEmojiCount(emoji.unified);
   };
 
   const handlePlusOneClick = (emoji: string) => {
     mutation.mutate(emoji);
+    amplitude.track("emoji_react_post", { clubId: clubId });
     increaseEmojiCount(emoji);
   };
 

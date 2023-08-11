@@ -1,3 +1,4 @@
+import * as amplitude from "@amplitude/analytics-browser";
 import { Box, TextField } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useContext, useState } from "react";
@@ -70,12 +71,14 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
     postId: postId,
     words: reply,
     userPid: appContext.userLoginInfo.userPid,
+    onSuccessCallback: () => setReply(""), // clear reply input
   });
   const clubMutation = useReplyClubPost({
     postId: postId,
     words: reply,
     userPid: appContext.userLoginInfo.userPid,
     clubId: clubId ?? "",
+    onSuccessCallback: () => setReply(""), // clear reply input
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,6 +87,7 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
 
   const handleReplySubmit = () => {
     clubId ? clubMutation.mutate() : streetMutation.mutate();
+    amplitude.track("reply_post", { clubId: clubId });
   };
 
   const isMutationLoading = () => {

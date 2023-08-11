@@ -40,7 +40,7 @@ export const ChatMessageEditor = ({
 
   const handleSendMessage = () => {
     sendMessageMutation.mutate();
-    amplitude.track("send_message", { clubId: clubId });
+    amplitude.track("send_club_message", { clubId: clubId });
   };
 
   return (

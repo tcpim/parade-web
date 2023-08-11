@@ -16,6 +16,7 @@ export interface CreatePostReplyProps {
   postId: string;
   words: string;
   clubId: string;
+  onSuccessCallback: () => void;
 }
 
 const getReplyPostRequest = (props: CreatePostReplyProps): ReplyPostRequest => {
@@ -41,6 +42,7 @@ export const useReplyClubPost = (props: CreatePostReplyProps) => {
 
   const mutation = useMutation(() => addReply(props), {
     onSuccess: () => {
+      props.onSuccessCallback();
       const newReply = {
         id: "newReply",
         post_id: props.postId,
