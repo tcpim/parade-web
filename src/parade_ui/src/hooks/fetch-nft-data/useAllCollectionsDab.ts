@@ -8,5 +8,6 @@ const fetchFromDab = async (): Promise<DABCollection[]> => {
 export const useAllCollectionsDab = () => {
   return useQuery<DABCollection[], Error>(["allCollections"], {
     queryFn: () => fetchFromDab(),
+    staleTime: Infinity, // do not refetch unless the user refreshes
   });
 };

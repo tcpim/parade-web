@@ -62,7 +62,6 @@ export const useSendMessage = ({
           if (oldData === undefined) {
             return undefined;
           }
-          console.log("try to update pages");
           const oldLastPage: MessagePage =
             oldData.pages[oldData.pages.length - 1];
 

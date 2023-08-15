@@ -58,7 +58,7 @@ export const useTrendingCollectionPosts = (canisterId = "", enabled = true) => {
         return lastPage.next_cursor;
       }
     },
-    //staleTime: 1000 * 60,
+    staleTime: 1000 * 60 * 5, // 5 minutes
     keepPreviousData: true,
     enabled: enabled,
   });

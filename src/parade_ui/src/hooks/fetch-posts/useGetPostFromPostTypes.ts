@@ -12,10 +12,9 @@ export function useGetPostFromPostTypes(): (
   pageSize: number,
   posts: Array<PostType>
 ) => Promise<Post[]> {
-  const queryClient = new QueryClient();
-
   const helper = useCallback(
     async (pageSize: number, posts: Array<PostType>): Promise<Post[]> => {
+      const queryClient = new QueryClient();
       const postArray: (Post | undefined)[] = Array(pageSize);
       const clubPostIdMap: Map<string, [number, string][]> = new Map<
         string,
@@ -65,7 +64,7 @@ export function useGetPostFromPostTypes(): (
 
       return postArray.filter((post) => post !== undefined) as Post[];
     },
-    [queryClient]
+    []
   );
   return helper;
 }

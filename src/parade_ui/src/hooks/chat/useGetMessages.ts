@@ -40,5 +40,6 @@ export const useGetMessages = (clubId: string) => {
       }
     },
     keepPreviousData: true,
+    refetchInterval: 10 * 1000, // 5 seconds
   });
 };

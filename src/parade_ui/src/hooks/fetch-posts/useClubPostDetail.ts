@@ -24,6 +24,7 @@ export const useClubPostDetail = (
       return convertToPost(post);
     },
     enabled: enabled,
+    staleTime: 30 * 1000, // 30 seconds
   });
 
   return postDetailQuery;

@@ -43,6 +43,7 @@ export const useClubPostRepiles = (
     },
     keepPreviousData: true,
     enabled: enabled,
+    staleTime: 30 * 1000, // 30 seconds
   });
 
   return postRepliesQuery;

@@ -20,7 +20,9 @@ const fetchFromDab = async (userPid: string): Promise<NFTCollection[]> => {
 };
 
 export const useUserCollectionListDab = (userPid: string) => {
-  return useQuery<NFTCollection[], Error>(["userCollectionList", userPid], {
-    queryFn: () => fetchFromDabCache(userPid),
+  return useQuery<NFTCollection[], Error>({
+    queryKey: ["userCollectionListDab", userPid],
+    queryFn: () => fetchFromDab(userPid),
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };

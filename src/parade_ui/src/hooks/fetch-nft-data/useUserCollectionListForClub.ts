@@ -28,8 +28,9 @@ export const useUserCollectionListForClub = (
   userAccount: string,
   clubId: string
 ) => {
-  return useQuery<CollectionListData, Error>(
-    ["useUserCollectionListForClub", userAccount, clubId],
-    () => fetchUserClubCollectionList(userAccount, clubId)
-  );
+  return useQuery<CollectionListData, Error>({
+    queryKey: ["useUserCollectionListForClub", userAccount, clubId],
+    queryFn: () => fetchUserClubCollectionList(userAccount, clubId),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
 };

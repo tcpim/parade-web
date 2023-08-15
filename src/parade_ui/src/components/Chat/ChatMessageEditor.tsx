@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useSendMessage } from "../../hooks/chat/useSendMessage";
-import { useUserCollectionListForClub } from "../../hooks/fetch-nft-data/useUserCollectionListForClub";
+import { useUserBelongToClub } from "../../hooks/user/useUserBelongToClub";
 import { MAX_CLUB_MESSAGE_LENGTH } from "../../utils/constants";
 
 const StyledSendDiv = styled.div`
@@ -25,12 +25,10 @@ export const ChatMessageEditor = ({
   scrollToBottom,
 }: ChatMessageEditorProps) => {
   const appContext = useContext(AppContext);
-  const query = useUserCollectionListForClub(
+  const belong = useUserBelongToClub(
     appContext.userLoginInfo.userAccount,
     clubId ?? ""
   );
-
-  const belong = query.data?.tokenCount !== 0;
 
   const [message, setMessage] = useState("");
 
@@ -75,7 +73,7 @@ export const ChatMessageEditor = ({
       return (
         <StyledSendDiv>
           <IconButton
-            disabled={message === "" || query.isError || !belong}
+            disabled={message === "" || !belong}
             onClick={handleSendMessage}
           >
             <SendIcon />

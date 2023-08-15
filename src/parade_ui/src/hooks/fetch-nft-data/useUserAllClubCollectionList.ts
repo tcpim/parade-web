@@ -58,8 +58,9 @@ const fetchUserClubCollectionList = async (
 };
 
 export const useUserAllClubCollectionList = (userAccount: string) => {
-  return useQuery<ClubCollectionListData, Error>(
-    ["useUserClubCollectionList", userAccount],
-    () => fetchUserClubCollectionList(userAccount)
-  );
+  return useQuery<ClubCollectionListData, Error>({
+    queryKey: ["useUserAllClubCollectionList", userAccount],
+    queryFn: () => fetchUserClubCollectionList(userAccount),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
 };

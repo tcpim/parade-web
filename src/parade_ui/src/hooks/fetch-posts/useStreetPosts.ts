@@ -61,7 +61,7 @@ export const useStreetPosts = (enabled = true) => {
         return lastPage.next_cursor;
       }
     },
-    //staleTime: 1000 * 60,
+    staleTime: 1000 * 60, // 1 minute
     keepPreviousData: true,
     enabled: enabled,
   });

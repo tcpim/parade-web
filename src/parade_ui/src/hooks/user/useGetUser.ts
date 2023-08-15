@@ -18,5 +18,6 @@ export function useGetUser(userId: string) {
         return convertToUser(response.user[0]);
       }
     },
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }

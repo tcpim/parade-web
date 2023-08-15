@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useCreateClubPost } from "../../hooks/create-post/useCreateClubPost";
-import { useUserCollectionListForClub } from "../../hooks/fetch-nft-data/useUserCollectionListForClub";
+import { useUserBelongToClub } from "../../hooks/user/useUserBelongToClub";
 import { MAX_CLUB_POST_WORDS_LENGTH } from "../../utils/constants";
 
 const Wrapper = styled.form`
@@ -34,11 +34,10 @@ interface ClubTweetProps {
 }
 export const ClubTweet = ({ clubId }: ClubTweetProps) => {
   const appContext = useContext(AppContext);
-  const query = useUserCollectionListForClub(
+  const belong = useUserBelongToClub(
     appContext.userLoginInfo.userAccount,
     clubId ?? ""
   );
-  const belong = query.data?.tokenCount !== 0;
 
   const [words, setWords] = useState("");
 

@@ -42,9 +42,9 @@ export const useClubPosts = (clubId: string, enabled = true) => {
         return lastPage.next_cursor;
       }
     },
-    //staleTime: 1000 * 60,
     keepPreviousData: true,
     enabled: enabled,
+    staleTime: 30 * 1000, // 30 seconds
   });
 
   return clubPostsQuery;
