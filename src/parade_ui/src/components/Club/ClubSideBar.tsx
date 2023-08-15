@@ -1,7 +1,6 @@
 import { useContext } from "react";
-import { AiOutlineTwitter } from "react-icons/ai";
-import { BiLogoDiscord } from "react-icons/bi";
 import { MdOutlineExplore } from "react-icons/md";
+import { SocialIcon } from "react-social-icons";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useUserBelongToClub } from "../../hooks/user/useUserBelongToClub";
@@ -25,6 +24,8 @@ const Icons = styled.div`
 `;
 
 const IconButton = styled.div`
+  display: flex;
+  align-items: center;
   &:hover {
     cursor: pointer;
   }
@@ -33,7 +34,7 @@ const IconButton = styled.div`
 const CollectionRow = styled.div`
   display: grid;
   grid-template-columns: 10rem 5rem;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-bottom: 0.5rem;
 `;
 
@@ -81,11 +82,26 @@ export const ClubSidebar = ({ clubId }: ClubSidebarProps) => {
         <h3 style={{ fontSize: "2rem" }}>{clubInfo.name} Club</h3>
         <Icons>
           {clubInfo.twitter !== "" &&
-            icon(<AiOutlineTwitter size={"2rem"} />, clubInfo.twitter)}
+            icon(
+              <SocialIcon
+                network="twitter"
+                style={{ height: 25, width: 25 }}
+              />,
+              clubInfo.twitter
+            )}
           {clubInfo.discord !== "" &&
-            icon(<BiLogoDiscord size={"2rem"} />, clubInfo.discord)}
+            icon(
+              <SocialIcon
+                network="discord"
+                style={{ height: 25, width: 25 }}
+              />,
+              clubInfo.discord
+            )}
           {clubInfo.website !== "" &&
-            icon(<MdOutlineExplore size={"2rem"} />, clubInfo.website)}
+            icon(
+              <MdOutlineExplore style={{ height: 25, width: 25 }} />,
+              clubInfo.website
+            )}
         </Icons>
         {collectionList()}
       </Content>
