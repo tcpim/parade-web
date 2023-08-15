@@ -22,6 +22,12 @@ const Header = styled.div`
   gap: 1rem;
 `;
 
+const CenteredDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 interface PostRepliesProps {
   postId: string;
   clubId: string | undefined;
@@ -85,9 +91,17 @@ export const PostReplies = ({ postId, clubId }: PostRepliesProps) => {
   );
 
   if (query.isLoading) {
-    return <CircularProgress />;
-  } else if (query.status === "error" || query.data === undefined) {
-    return <p>{query.error?.message}</p>;
+    return (
+      <CenteredDiv>
+        <CircularProgress />
+      </CenteredDiv>
+    );
+  } else if (query.isError || query.data === undefined) {
+    return (
+      <CenteredDiv>
+        <p>Failed to get replies</p>
+      </CenteredDiv>
+    );
   }
 
   return (

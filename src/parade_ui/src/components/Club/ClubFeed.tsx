@@ -49,11 +49,8 @@ export const ClubFeed = () => {
         <CircularProgress />
       </div>
     );
-  } else if (
-    normalizedQuery.status === "error" ||
-    normalizedQuery.data === undefined
-  ) {
-    return <h5>{normalizedQuery.error?.message}</h5>;
+  } else if (normalizedQuery.isError || normalizedQuery.data === undefined) {
+    return <h5>Something went wrong</h5>;
   }
 
   const subTabs = () => {

@@ -10,7 +10,11 @@ export const useClubPostsByIds = (
   const clubPostsQuery = useQuery<GetPostByIdsResponse, Error>({
     queryKey: ["clubPostsByIds", clubId, postIds],
     queryFn: () => {
-      return getClubServer(clubId).get_post_by_ids(postIds);
+      const clubServer = getClubServer(clubId);
+      if (clubServer === undefined) {
+        throw new Error("Club server is undefined");
+      }
+      return clubServer.get_post_by_ids(postIds);
     },
     enabled: enabled,
   });

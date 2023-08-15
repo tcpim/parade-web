@@ -11,6 +11,12 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
+const CenteredDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 interface UserPostsProps {
   userPid: string;
 }
@@ -29,15 +35,16 @@ const UserPosts = ({ userPid }: UserPostsProps) => {
 
   if (userPostQuery.isLoading) {
     return (
-      <div>
+      <CenteredDiv>
         <CircularProgress />
-      </div>
+      </CenteredDiv>
     );
-  } else if (
-    userPostQuery.status === "error" ||
-    userPostQuery.data === undefined
-  ) {
-    return <h6>{userPostQuery.error?.message}</h6>;
+  } else if (userPostQuery.isError || userPostQuery.data === undefined) {
+    return (
+      <CenteredDiv>
+        <h6>Something went wrong</h6>
+      </CenteredDiv>
+    );
   }
 
   return (

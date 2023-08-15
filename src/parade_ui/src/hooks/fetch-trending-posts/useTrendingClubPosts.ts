@@ -23,8 +23,13 @@ export const useTrendingClubPosts = (clubId: string, enabled = true) => {
   >({
     queryKey: ["trendingClubPosts", clubId],
     queryFn: async ({ pageParam = [] }) => {
+      const clubServer = getClubServer(clubId);
+      if (clubServer === undefined) {
+        throw new Error("Club server is undefined");
+      }
+
       const request = getFetchRequest(pageParam);
-      const response = await getClubServer(clubId).get_trending_posts(request);
+      const response = await clubServer.get_trending_posts(request);
 
       const result: PostsPage<TrendingPostKey> = {
         posts: response.posts

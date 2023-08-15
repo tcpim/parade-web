@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Collection } from "./useUserClubCollectionList";
+import { Collection } from "./useUserAllClubCollectionList";
 
 export interface CollectionListData {
   collections: Collection[];

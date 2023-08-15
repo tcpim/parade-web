@@ -10,7 +10,12 @@ export const useClubPostDetail = (
   const postDetailQuery = useQuery<Post, Error>({
     queryKey: ["clubPostDetail", postId],
     queryFn: async () => {
-      const response = await getClubServer(clubId).get_post_by_id(postId);
+      const clubServer = getClubServer(clubId);
+      if (clubServer === undefined) {
+        throw new Error("Club server is undefined");
+      }
+
+      const response = await clubServer.get_post_by_id(postId);
       const post = response.post.length > 0 ? response.post[0] : undefined;
       if (post === undefined) {
         throw new Error("Post not found");

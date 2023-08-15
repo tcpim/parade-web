@@ -13,7 +13,7 @@ import pokedbot from "../../../assets/poked-bots-club.png";
 const Wrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
-  width: 80%;
+  width: 70%;
 `;
 
 const ImageBlock = styled.div`
@@ -26,7 +26,9 @@ const ImageBlock = styled.div`
 export const ClubsGrid = () => {
   const navigate = useNavigate();
 
-  const isSmallScreen = useMediaQuery({ maxWidth: 900 });
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 768px)" });
+
+  console.log("isSmallScreen", isSmallScreen);
   const width = "100%";
   return (
     <Wrapper>

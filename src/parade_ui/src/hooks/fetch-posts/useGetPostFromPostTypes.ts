@@ -45,9 +45,11 @@ export function useGetPostFromPostTypes(): (
             await queryClient.fetchQuery({
               queryKey: ["clubPostsByIds", clubId, postIds],
               queryFn: () => {
-                return getClubServer(clubId).get_post_by_ids(
-                  postIds.map((i) => i[1])
-                );
+                const clubServer = getClubServer(clubId);
+                if (clubServer === undefined) {
+                  throw new Error("Club server is undefined");
+                }
+                return clubServer.get_post_by_ids(postIds.map((i) => i[1]));
               },
             });
 

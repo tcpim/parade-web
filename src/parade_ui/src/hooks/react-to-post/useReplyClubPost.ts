@@ -37,7 +37,11 @@ export const useReplyClubPost = (props: CreatePostReplyProps) => {
     props: CreatePostReplyProps
   ): Promise<ReplyPostResponse> => {
     const request = getReplyPostRequest(props);
-    return getClubServer(props.clubId).reply_post(request);
+    const clubServer = getClubServer(props.clubId);
+    if (clubServer === undefined) {
+      throw new Error("Club server is undefined");
+    }
+    return clubServer.reply_post(request);
   };
 
   const mutation = useMutation(() => addReply(props), {

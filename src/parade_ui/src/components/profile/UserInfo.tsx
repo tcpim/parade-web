@@ -1,6 +1,6 @@
 import { CircularProgress } from "@mui/material";
 import { useContext, useState } from "react";
-import { AiOutlineCheck, AiOutlineClose, AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineEdit } from "react-icons/ai";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
 import { useGetUser } from "../../hooks/user/useGetUser";
@@ -113,7 +113,7 @@ export const UserInfo = ({ userId }: UserInfoProps) => {
             onClick={() => setUserNameMutation.mutate()}
             disabled={newUsername === "" || newUsername === username}
           >
-            <AiOutlineCheck />
+            Confirm
           </StyledEditButton>
           <StyledEditButton
             type="reset"
@@ -122,7 +122,7 @@ export const UserInfo = ({ userId }: UserInfoProps) => {
               setNewUsername("");
             }}
           >
-            <AiOutlineClose />
+            Cancel
           </StyledEditButton>
         </div>
       );
@@ -161,7 +161,7 @@ export const UserInfo = ({ userId }: UserInfoProps) => {
             onClick={() => setUserBioMutation.mutate()}
             disabled={newUserbio === "" || newUserbio === userBio}
           >
-            <AiOutlineCheck />
+            Confirm
           </StyledEditButton>
           <StyledEditButton
             type="reset"
@@ -170,7 +170,7 @@ export const UserInfo = ({ userId }: UserInfoProps) => {
               setNewUserbio("");
             }}
           >
-            <AiOutlineClose />
+            Cancel
           </StyledEditButton>
         </div>
       );

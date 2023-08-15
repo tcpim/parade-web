@@ -54,15 +54,19 @@ export function useCreateClubPost(createPostProps: CreateClubPostProps) {
       if (createPostProps.clubId === "") {
         throw new Error("clubId is empty");
       }
-      const response = await getClubServer(createPostProps.clubId).create_post(
-        request
-      );
+      const clubServer = getClubServer(createPostProps.clubId);
+      if (clubServer === undefined) {
+        throw new Error("Club server is undefined");
+      }
+
+      const response = await clubServer.create_post(request);
       const result: Post | undefined = convertToPost(response.post);
       if (response.error.length > 0) {
         console.error(
           response.error[0]?.api_name + ": " + response.error[0]?.error_message
         );
       }
+
       return result;
     },
     {

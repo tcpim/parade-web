@@ -15,9 +15,6 @@ const CLUBS: ReadonlyMap<string, ActorSubclass<_SERVICE>> = new Map([
 
 export const getClubServer = (clubId: string) => {
   const server = CLUBS.get(clubId);
-  if (server === undefined) {
-    throw new Error("Invalid club id to get club server");
-  }
 
   return server;
 };

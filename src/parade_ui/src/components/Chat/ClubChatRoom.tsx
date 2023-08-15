@@ -36,6 +36,13 @@ const StyledButton = styled.button`
   width: 12rem;
 `;
 
+const LoadingErrorIndicator = styled.div`
+  display: flex;
+  flex-direction: center;
+  justify-content: center;
+  margin-top: 20rem;
+`;
+
 export const ClubChatRoom = () => {
   const { clubId } = useParams();
   const messagesQuery = useGetMessages(clubId ?? "");
@@ -96,12 +103,17 @@ export const ClubChatRoom = () => {
   }
 
   if (messagesQuery.isLoading) {
-    return <CircularProgress />;
-  } else if (
-    messagesQuery.status === "error" ||
-    messagesQuery.data === undefined
-  ) {
-    return <h6>{messagesQuery.error?.message}</h6>;
+    return (
+      <LoadingErrorIndicator>
+        <CircularProgress />
+      </LoadingErrorIndicator>
+    );
+  } else if (messagesQuery.isError || messagesQuery.data === undefined) {
+    return (
+      <LoadingErrorIndicator>
+        {messagesQuery.error?.message}
+      </LoadingErrorIndicator>
+    );
   }
 
   const Chat = () => {

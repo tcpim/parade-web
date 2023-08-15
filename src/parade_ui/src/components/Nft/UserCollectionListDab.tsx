@@ -1,6 +1,7 @@
 import { CircularProgress, Divider } from "@mui/material";
 import { NFTCollection } from "@psychedelic/dab-js";
 import { memo, useState } from "react";
+import { styled } from "styled-components";
 import { useUserCollectionListDab } from "../../hooks/fetch-nft-data/useUserCollectionListDab";
 import { NftInfo, defaultNftInfo } from "../../types/nft";
 import { PostCreationFormMemo } from "../Post/PostCreationForm";
@@ -15,6 +16,12 @@ import {
   imageFooter,
   imageOverlay,
 } from "./UserPortfolio";
+
+const CenteredDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const getCollectionNftInfoList = (
   collection: string,
@@ -76,18 +83,16 @@ const UserCollectionListDab = ({
   // check error cases
   if (query.isLoading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <CenteredDiv>
         <CircularProgress />
-      </div>
+      </CenteredDiv>
     );
   } else if (query.isError) {
-    throw new Error("Failed to get club NFTs: " + query.error.message);
+    return (
+      <CenteredDiv>
+        <p>Something went wrong.</p>
+      </CenteredDiv>
+    );
   } else if (!query.data || query.data.length === 0) {
     return <div>You don't have any non-club NFTs</div>;
   }

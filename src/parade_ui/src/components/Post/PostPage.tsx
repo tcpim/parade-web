@@ -1,5 +1,5 @@
 import * as amplitude from "@amplitude/analytics-browser";
-import { Box, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -62,6 +62,12 @@ interface PostDetailProps {
   clubId: string | undefined;
 }
 
+const CenteredDiv = styled.div`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+`;
+
 const PostDetail = ({ postId, clubId }: PostDetailProps) => {
   const appContext = useContext(AppContext);
   const streetQuery = useStreetPostDetail(postId, clubId === undefined);
@@ -97,18 +103,25 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
     amplitude.track("reply_post", { clubId: clubId });
   };
 
-  const isMutationLoading = () => {
-    return clubId ? clubMutation.isLoading : streetMutation.isLoading;
-  };
+  const normalizedMutation = clubId ? clubMutation : streetMutation;
+  const isMutationLoading = clubId
+    ? clubMutation.isLoading
+    : streetMutation.isLoading;
 
   if (query.isLoading) {
     return (
-      <Box>
+      <CenteredDiv>
         <CircularProgress />
-      </Box>
+      </CenteredDiv>
+    );
+  } else if (query.isError) {
+    return (
+      <CenteredDiv>
+        <p>Something went wrong</p>
+      </CenteredDiv>
     );
   } else if (query.data === undefined) {
-    return <h1>No post found</h1>;
+    return <CenteredDiv>No post found</CenteredDiv>;
   }
 
   const post = query.data;
@@ -117,6 +130,23 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault(); // Prevents newline from being added to the TextField
       handleReplySubmit();
+    }
+  };
+
+  const replyButton = () => {
+    if (normalizedMutation.isLoading) {
+      return <CircularProgress />;
+    } else if (normalizedMutation.isError) {
+      return <h6>Something went wrong</h6>;
+    } else {
+      return (
+        <ReplyButton
+          onClick={handleReplySubmit}
+          disabled={!appContext.userLoginInfo.walletConnected}
+        >
+          Reply
+        </ReplyButton>
+      );
     }
   };
 
@@ -177,18 +207,7 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
             reply.length > MAX_REPLY_MESSAGE_LENGTH ? "Max 500 characters" : ""
           }
         />
-        <ReplyButtonWrapper>
-          {isMutationLoading() ? (
-            <CircularProgress />
-          ) : (
-            <ReplyButton
-              onClick={handleReplySubmit}
-              disabled={!appContext.userLoginInfo.walletConnected}
-            >
-              Reply
-            </ReplyButton>
-          )}
-        </ReplyButtonWrapper>
+        <ReplyButtonWrapper>{replyButton()}</ReplyButtonWrapper>
       </TextEditor>
       <PostReplies postId={postId} clubId={clubId} />
     </Wrapper>

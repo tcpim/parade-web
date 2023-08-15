@@ -19,7 +19,12 @@ export const useReactEmojiClub = (props: ReactEmojiProps) => {
       created_ts: BigInt(Date.now()),
     };
 
-    return getClubServer(props.clubId).react_emoji(request);
+    const clubServer = getClubServer(props.clubId);
+    if (clubServer === undefined) {
+      throw new Error("Club server is undefined");
+    }
+
+    return clubServer.react_emoji(request);
   };
 
   const reactEmojiMutation = useMutation((emoji: string) =>

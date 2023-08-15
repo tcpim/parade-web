@@ -178,6 +178,38 @@ export const PostCreationPage = () => {
       </CenteredDiv>
     );
   }
+
+  const postButton = () => {
+    if (normalizedMutation.isLoading) {
+      return <CircularProgress />;
+    } else if (normalizedMutation.isError) {
+      return <p>Something went wrong</p>;
+    } else if (createPostFinished) {
+      return (
+        <StyledButton
+          onClick={() => handleCheckPostClicked(normalizedMutation.data)}
+        >
+          Check your post
+        </StyledButton>
+      );
+    } else {
+      return (
+        <StyledButton
+          onClick={handlePostSubmit}
+          disabled={selectedNft === undefined}
+        >
+          <p
+            style={{
+              whiteSpace: "nowrap",
+            }}
+          >
+            Post
+          </p>
+        </StyledButton>
+      );
+    }
+  };
+
   return (
     <Wrapper>
       <StyledForm>
@@ -236,30 +268,7 @@ export const PostCreationPage = () => {
               />
             </div>
           )}
-          <ButtonWrapper>
-            {normalizedMutation.isLoading ? (
-              <CircularProgress />
-            ) : createPostFinished ? (
-              <StyledButton
-                onClick={() => handleCheckPostClicked(normalizedMutation.data)}
-              >
-                Check your post
-              </StyledButton>
-            ) : (
-              <StyledButton
-                onClick={handlePostSubmit}
-                disabled={selectedNft === undefined}
-              >
-                <p
-                  style={{
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  Post
-                </p>
-              </StyledButton>
-            )}
-          </ButtonWrapper>
+          <ButtonWrapper>{postButton()}</ButtonWrapper>
         </TextWidow>
       </StyledForm>
       {subTabs()}

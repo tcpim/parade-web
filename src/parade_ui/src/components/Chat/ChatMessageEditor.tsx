@@ -58,6 +58,33 @@ export const ChatMessageEditor = ({
     }
   };
 
+  const sendButton = () => {
+    if (sendMessageMutation.isLoading) {
+      return (
+        <StyledSendDiv>
+          <CircularProgress />
+        </StyledSendDiv>
+      );
+    } else if (sendMessageMutation.isError) {
+      return (
+        <StyledSendDiv>
+          <p>Something went wrong</p>
+        </StyledSendDiv>
+      );
+    } else {
+      return (
+        <StyledSendDiv>
+          <IconButton
+            disabled={message === "" || query.isError || !belong}
+            onClick={handleSendMessage}
+          >
+            <SendIcon />
+          </IconButton>
+        </StyledSendDiv>
+      );
+    }
+  };
+
   return (
     <Box display="flex">
       <TextField
@@ -77,18 +104,7 @@ export const ChatMessageEditor = ({
           message.length > MAX_CLUB_MESSAGE_LENGTH ? "Max 500 characters" : ""
         }
       />
-      <StyledSendDiv>
-        {sendMessageMutation.isLoading ? (
-          <CircularProgress />
-        ) : (
-          <IconButton
-            disabled={message === "" || query.isError || !belong}
-            onClick={handleSendMessage}
-          >
-            <SendIcon />
-          </IconButton>
-        )}
-      </StyledSendDiv>
+      {sendButton()}
     </Box>
   );
 };

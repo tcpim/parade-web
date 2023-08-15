@@ -1,6 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import { DABCollection } from "@psychedelic/dab-js";
+import { UseInfiniteQueryResult } from "@tanstack/react-query";
 import { Fragment, useState } from "react";
 import { styled } from "styled-components";
 import { useAllCollectionsDab } from "../../hooks/fetch-nft-data/useAllCollectionsDab";
@@ -25,6 +26,13 @@ const Wrapper = styled.div`
   margin-right: 20%;
 `;
 
+const CenteredDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20rem;
+`;
+
 export const Feed = () => {
   const [subPage, setSubPage] = useState<SubPage>("recent");
   const [selectedCollection, setSelectedCollection] = useState("");
@@ -45,7 +53,7 @@ export const Feed = () => {
     selectedCollection !== "" && subPage === "trending"
   );
 
-  let normallizedQuery: any = streetPostsQuery;
+  let normallizedQuery: UseInfiniteQueryResult<any, Error> = streetPostsQuery;
   if (selectedCollection === "" && subPage === "trending") {
     normallizedQuery = trendingStreetPostsQuery;
   } else if (selectedCollection !== "" && subPage === "recent") {
@@ -65,15 +73,16 @@ export const Feed = () => {
 
   if (normallizedQuery.isLoading) {
     return (
-      <div>
+      <CenteredDiv>
         <CircularProgress />
-      </div>
+      </CenteredDiv>
     );
-  } else if (
-    normallizedQuery.status === "error" ||
-    normallizedQuery.data === undefined
-  ) {
-    return <h6>{normallizedQuery.error?.message}</h6>;
+  } else if (normallizedQuery.isError || normallizedQuery.data === undefined) {
+    return (
+      <CenteredDiv>
+        <h6>Something went wrong</h6>
+      </CenteredDiv>
+    );
   }
 
   const collections = allCollectionQuery.data ?? [];

@@ -57,7 +57,7 @@ const fetchUserClubCollectionList = async (
   return data;
 };
 
-export const useUserClubCollectionList = (userAccount: string) => {
+export const useUserAllClubCollectionList = (userAccount: string) => {
   return useQuery<ClubCollectionListData, Error>(
     ["useUserClubCollectionList", userAccount],
     () => fetchUserClubCollectionList(userAccount)

@@ -147,6 +147,40 @@ export const PostCreationForm = ({
     }
   };
 
+  const postButton = () => {
+    if (normalizedMutation.isLoading) {
+      return <CircularProgress />;
+    } else if (normalizedMutation.isError) {
+      return (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <p>Something went wrong</p>
+          <Dialog.Close asChild>
+            <StyledButton onClick={handleCloseForm}>Cancel</StyledButton>
+          </Dialog.Close>
+        </div>
+      );
+    } else if (mutationFinished) {
+      return (
+        <Dialog.Close asChild>
+          <StyledButton onClick={handleCloseForm}>Done</StyledButton>
+        </Dialog.Close>
+      );
+    } else {
+      return (
+        <Fragment>
+          <Dialog.Close asChild>
+            <StyledButton onClick={handleCloseForm}>Cancel</StyledButton>
+          </Dialog.Close>
+          <Dialog.Close asChild>
+            <StyledButton onClick={handleCreateButtonClicked} disabled={!words}>
+              Submit
+            </StyledButton>
+          </Dialog.Close>
+        </Fragment>
+      );
+    }
+  };
+
   return (
     <Dialog.Root open={open} modal={true}>
       <Dialog.Portal>
@@ -178,35 +212,7 @@ export const PostCreationForm = ({
               </TooltipWrapper>
             </DialogCheckboxRow>
           )}
-          <DialogButtons>
-            {normalizedMutation.isLoading ? (
-              <CircularProgress />
-            ) : mutationFinished ? (
-              <Dialog.Close asChild>
-                <StyledButton onClick={handleCloseForm}>Done</StyledButton>
-              </Dialog.Close>
-            ) : (
-              <Fragment>
-                <Dialog.Close asChild>
-                  <StyledButton
-                    onClick={handleCloseForm}
-                    style={{ borderRadius: "0.5rem", backgroundColor: "white" }}
-                  >
-                    Cancel
-                  </StyledButton>
-                </Dialog.Close>
-                <Dialog.Close asChild>
-                  <StyledButton
-                    onClick={handleCreateButtonClicked}
-                    style={{ borderRadius: "0.5rem", backgroundColor: "white" }}
-                    disabled={!words}
-                  >
-                    Submit
-                  </StyledButton>
-                </Dialog.Close>
-              </Fragment>
-            )}
-          </DialogButtons>
+          <DialogButtons> {postButton()}</DialogButtons>
         </DialogContent>
       </Dialog.Portal>
     </Dialog.Root>

@@ -36,6 +36,10 @@ export const useSendMessage = ({
 
   const mutation = useMutation({
     mutationFn: () => {
+      if (clubServer === undefined) {
+        throw new Error("Club server is undefined");
+      }
+
       return clubServer.send_club_message(request);
     },
     onSuccess: () => {

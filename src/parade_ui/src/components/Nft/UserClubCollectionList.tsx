@@ -3,8 +3,8 @@ import { memo, useState } from "react";
 import {
   Club,
   ClubCollectionListData,
-  useUserClubCollectionList,
-} from "../../hooks/fetch-nft-data/useUserClubCollectionList";
+  useUserAllClubCollectionList,
+} from "../../hooks/fetch-nft-data/useUserAllClubCollectionList";
 import { NftImage } from "./NftImage";
 import {
   ImageCard,
@@ -17,8 +17,15 @@ import {
   imageOverlay,
 } from "./UserPortfolio";
 
+import { styled } from "styled-components";
 import { NftInfo, defaultNftInfo } from "../../types/nft";
 import { PostCreationFormMemo } from "../Post/PostCreationForm";
+
+const CenteredDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const getClubNftInfoList = (
   clubId: string,
@@ -76,7 +83,7 @@ const UserClubCollectionList = ({
   handleImageOverlayClick,
   isSelf,
 }: UserClubCollectionListProps) => {
-  const query = useUserClubCollectionList(userAccount);
+  const query = useUserAllClubCollectionList(userAccount);
   const [currentClubId, setCurrentClubId] = useState("");
   const [openForm, setOpenForm] = useState<boolean>(false);
   const [postFormNftInfo, setPostFormNftInfo] =
@@ -90,18 +97,16 @@ const UserClubCollectionList = ({
   // check error cases
   if (query.isLoading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <CenteredDiv>
         <CircularProgress />
-      </div>
+      </CenteredDiv>
     );
   } else if (query.isError) {
-    throw new Error("Failed to get club NFTs: " + query.error.message);
+    return (
+      <CenteredDiv>
+        <p>Something went wrong</p>
+      </CenteredDiv>
+    );
   } else if (!query.data || query.data.tokenCount === 0) {
     return <div>You don't have any club NFTs</div>;
   }

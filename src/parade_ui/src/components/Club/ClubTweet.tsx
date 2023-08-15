@@ -60,6 +60,30 @@ export const ClubTweet = ({ clubId }: ClubTweetProps) => {
     amplitude.track("create_club_tweet", eventProp);
   };
 
+  const sendButton = () => {
+    if (createPostMutation.isLoading) {
+      return (
+        <StyledButtonRow>
+          <CircularProgress />
+        </StyledButtonRow>
+      );
+    } else if (createPostMutation.isError) {
+      return (
+        <StyledButtonRow>
+          <p>Something went wrong</p>
+        </StyledButtonRow>
+      );
+    } else {
+      return (
+        <StyledButtonRow>
+          <StyledButton type="submit" disabled={words.length === 0 || !belong}>
+            Post
+          </StyledButton>
+        </StyledButtonRow>
+      );
+    }
+  };
+
   return (
     <Wrapper onSubmit={handleSubmit}>
       <TextField
@@ -78,15 +102,7 @@ export const ClubTweet = ({ clubId }: ClubTweetProps) => {
           words.length > MAX_CLUB_POST_WORDS_LENGTH ? "Max 500 characters" : ""
         }
       />
-      <StyledButtonRow>
-        {createPostMutation.isLoading ? (
-          <CircularProgress />
-        ) : (
-          <StyledButton type="submit" disabled={words.length === 0 || !belong}>
-            Post
-          </StyledButton>
-        )}
-      </StyledButtonRow>
+      {sendButton()}
     </Wrapper>
   );
 };

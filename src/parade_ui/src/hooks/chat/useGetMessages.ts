@@ -17,6 +17,9 @@ export const useGetMessages = (clubId: string) => {
   return useInfiniteQuery<MessagePage, Error>({
     queryKey: ["clubMessages", clubId],
     queryFn: async ({ pageParam = [] }) => {
+      if (clubServer === undefined) {
+        throw new Error("Club server is undefined");
+      }
       const request = getFetchRequest(pageParam);
       const response = await clubServer.get_club_messages(request);
 

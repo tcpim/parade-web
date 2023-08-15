@@ -25,8 +25,13 @@ export const useClubPostRepiles = (
   const postRepliesQuery = useInfiniteQuery<GetPostRepliesResponse, Error>({
     queryKey: ["clubPostReplies", postId, clubId],
     queryFn: async ({ pageParam = 0 }) => {
+      const clubServer = getClubServer(clubId);
+      if (clubServer === undefined) {
+        throw new Error("Club server is undefined");
+      }
+
       const request = getPostRepliesRequest(postId, pageParam);
-      const response = await getClubServer(clubId).get_post_replies(request);
+      const response = await clubServer.get_post_replies(request);
       return response;
     },
     getNextPageParam: (lastPage, pages) => {

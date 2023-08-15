@@ -18,8 +18,13 @@ export const useClubPosts = (clubId: string, enabled = true) => {
   const clubPostsQuery = useInfiniteQuery<PostsPage<PostCreatedTsKey>, Error>({
     queryKey: ["clubPosts", clubId],
     queryFn: async ({ pageParam = [] }) => {
+      const clubServer = getClubServer(clubId);
+      if (clubServer === undefined) {
+        throw new Error("Club server is undefined");
+      }
+
       const request = getFetchRequest(pageParam);
-      const response = await getClubServer(clubId).get_posts(request);
+      const response = await clubServer.get_posts(request);
 
       const result: PostsPage<PostCreatedTsKey> = {
         posts: response.posts
