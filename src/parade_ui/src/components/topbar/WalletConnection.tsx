@@ -38,16 +38,15 @@ export const WalletConnection = () => {
       };
 
       appContext.setUserLoginInfo(userLoginInfo);
-      //amplitude.setUserId(window.ic.plug.principalId);
+      amplitude.setUserId(window.ic.plug.principalId);
     } else {
       throw new Error("Failed to connect with Plug");
     }
   };
 
-  const handlePlugLogin = () => {
+  const handlePlugLogin = async () => {
     amplitude.track("connect_wallet", { wallet: "plug" });
-    console.log("ASdasd");
-    // await loginPlugWallet();
+    await loginPlugWallet();
   };
 
   const loginStoicWallet = async () => {

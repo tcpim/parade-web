@@ -17,3 +17,15 @@ export const MOTOKO_GHOST_CLUB_CANISTER =
   process.env.NODE_ENV !== "production"
     ? "aax3a-h4aaa-aaaaa-qaahq-cai"
     : "t5ow2-vqaaa-aaaap-abhiq-cai";
+
+export const BOXY_DUDE_CLUB_CANISTER =
+  process.env.NODE_ENV !== "production" ? "c2lt4-zmaaa-aaaaa-qaaiq-cai" : "";
+
+export const DSCVR_AIRDROP_CLUB_CANISTER =
+  process.env.NODE_ENV !== "production" ? "ctiya-peaaa-aaaaa-qaaja-cai" : "";
+
+export const CUBETOPIA_CLUB_CANISTER =
+  process.env.NODE_ENV !== "production" ? "cuj6u-c4aaa-aaaaa-qaajq-cai" : "";
+
+export const IC_PUNKS_CLUB_CANISTER =
+  process.env.NODE_ENV !== "production" ? "cbopz-duaaa-aaaaa-qaaka-cai" : "";

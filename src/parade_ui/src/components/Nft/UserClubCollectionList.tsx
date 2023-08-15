@@ -60,12 +60,14 @@ const getClubNftInfoList = (
 };
 
 const getNonEmptyClubList = (data: ClubCollectionListData): Club[] => {
-  return data.clubs.filter((club) =>
+  const res = data.clubs.filter((club) =>
     club.collections.some(
       (collection) =>
-        collection.ownedTokens && collection.ownedTokens.length > 1
+        collection.ownedTokens && collection.ownedTokens.length > 0
     )
   );
+
+  return res.sort((a, b) => a.club_id.localeCompare(b.club_id));
 };
 
 interface UserClubCollectionListProps {
@@ -108,10 +110,15 @@ const UserClubCollectionList = ({
       </CenteredDiv>
     );
   } else if (!query.data || query.data.tokenCount === 0) {
-    return <div>You don't have any club NFTs</div>;
+    return (
+      <CenteredDiv>
+        <h6>You don't have any club NFTs</h6>
+      </CenteredDiv>
+    );
   }
 
   const clubs: Club[] = getNonEmptyClubList(query.data);
+  console.log("!!!clubs", clubs);
   const displayedClub: string = currentClubId
     ? currentClubId
     : clubs[0].club_id;

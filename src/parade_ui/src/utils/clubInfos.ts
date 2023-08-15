@@ -98,4 +98,85 @@ export const clubs: ClubMap = {
       },
     ],
   },
+  "ic-punks": {
+    name: "IC Punks",
+    description: "",
+    twitter: "",
+    discord: "",
+    website: "",
+    collections: [
+      {
+        name: "IC Punks",
+        canisterId: "bxdf4-baaaa-aaaah-qaruq-cai",
+        tradeUrl: "https://toniq.io/marketplace/motoko",
+      },
+      {
+        name: "IC Cats",
+        canisterId: "y3b7h-siaaa-aaaah-qcnwa-cai",
+        tradeUrl: "https://toniq.io/marketplace/motoko-mechs",
+      },
+    ],
+  },
+  cubetopia: {
+    name: "Cubetopia",
+    description: "",
+    twitter: "https://twitter.com/TheCubetopia",
+    discord: "",
+    website: "",
+    collections: [
+      {
+        name: "Cubetopia Islands",
+        canisterId: "3vdxu-laaaa-aaaah-abqxa-cai",
+        tradeUrl: "https://toniq.io/marketplace/motoko",
+      },
+      {
+        name: "Cubetopia Pets",
+        canisterId: "umqto-nyaaa-aaaah-abwoa-cai",
+        tradeUrl: "https://toniq.io/marketplace/motoko-mechs",
+      },
+      {
+        name: "Cubetopia Founder’s Pass",
+        canisterId: "bvckr-laaaa-aaaak-acgkq-cai",
+        tradeUrl: "https://toniq.io/marketplace/motoko-mechs",
+      },
+    ],
+  },
+  "boxy-dude": {
+    name: "Boxy Dude",
+    description: "",
+    twitter: "https://twitter.com/icboxy",
+    discord: "",
+    website: "",
+    collections: [
+      {
+        name: "Boxy Dude",
+        canisterId: "s36wu-5qaaa-aaaah-qcyzq-cai",
+        tradeUrl: "https://toniq.io/marketplace/motoko",
+      },
+      {
+        name: "Boxy Girl",
+        canisterId: "cchps-gaaaa-aaaak-qasaa-cai",
+        tradeUrl: "https://toniq.io/marketplace/motoko-mechs",
+      },
+    ],
+  },
+  "dscvr-airdrop": {
+    name: "DSCVR Airdrop",
+    description: "",
+    twitter: "",
+    discord: "",
+    website: "",
+    collections: [
+      {
+        name: "OG MEDALS",
+        canisterId: "rw623-hyaaa-aaaah-qctcq-cai",
+        tradeUrl: "https://toniq.io/marketplace/motoko",
+      },
+      {
+        name: "Starverse",
+        canisterId: "nbg4r-saaaa-aaaah-qap7a-cai",
+        tradeUrl: "https://toniq.io/marketplace/motoko-mechs",
+      },
+    ],
+  },
 };

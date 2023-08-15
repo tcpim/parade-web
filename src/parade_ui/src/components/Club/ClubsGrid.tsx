@@ -42,16 +42,16 @@ export const ClubsGrid = () => {
         <ImageBlock onClick={() => navigate("/clubs/motoko-ghost")}>
           <img src={motoko} loading="lazy" width={width} />
         </ImageBlock>
-        <ImageBlock onClick={() => navigate("/clubs/motoko-ghost")}>
+        <ImageBlock onClick={() => navigate("/clubs/ic-punks")}>
           <img src={icpunks} loading="lazy" width={width} />
         </ImageBlock>
-        <ImageBlock onClick={() => navigate("/clubs/motoko-ghost")}>
+        <ImageBlock onClick={() => navigate("/clubs/boxy-dude")}>
           <img src={boxydude} loading="lazy" width={width} />
         </ImageBlock>
-        <ImageBlock onClick={() => navigate("/clubs/motoko-ghost")}>
+        <ImageBlock onClick={() => navigate("/clubs/dscvr-airdrop")}>
           <img src={dscvr} loading="lazy" width={width} />
         </ImageBlock>
-        <ImageBlock onClick={() => navigate("/clubs/motoko-ghost")}>
+        <ImageBlock onClick={() => navigate("/clubs/cubetopia")}>
           <img src={cubetopia} loading="lazy" width={width} />
         </ImageBlock>
       </Masonry>
