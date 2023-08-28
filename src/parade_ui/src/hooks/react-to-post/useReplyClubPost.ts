@@ -9,7 +9,7 @@ import {
   ReplyPostRequest,
   ReplyPostResponse,
 } from "../../../backend_declarations/club_server/ludo_arts_club.did";
-import { getClubServer } from "../useClubServer";
+import { getClubServer } from "../server-connect/useClubServer";
 
 export interface CreatePostReplyProps {
   userPid: string;

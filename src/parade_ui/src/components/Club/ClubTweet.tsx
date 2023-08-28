@@ -3,7 +3,7 @@ import { CircularProgress, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
-import { useCreateClubPost } from "../../hooks/create-post/useCreateClubPost";
+import { useCreateClubPost } from "../../hooks/server-connect/create-post/useCreateClubPost";
 import { useUserBelongToClub } from "../../hooks/user/useUserBelongToClub";
 import { MAX_CLUB_POST_WORDS_LENGTH } from "../../utils/constants";
 

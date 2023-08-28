@@ -6,7 +6,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { SendClubMessageRequest } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { Message, MessagePage } from "../../types/message";
-import { getClubServer } from "../useClubServer";
+import { getClubServer } from "../server-connect/useClubServer";
 
 const getSendClubMessageRequest = (message: string, sender: string) => {
   const request: SendClubMessageRequest = {

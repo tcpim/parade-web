@@ -7,8 +7,8 @@ import { Fragment, memo, useContext, useState } from "react";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { styled } from "styled-components";
 import { AppContext } from "../../App";
-import { useCreateClubPost } from "../../hooks/create-post/useCreateClubPost";
-import { useCreateStreetPost } from "../../hooks/create-post/useCreateStreetPost";
+import { useCreateClubPost } from "../../hooks/server-connect/create-post/useCreateClubPost";
+import { useCreateStreetPost } from "../../hooks/server-connect/create-post/useCreateStreetPost";
 import { NftInfo } from "../../types/nft";
 
 const DialogOverlay = styled(Dialog.Overlay)`

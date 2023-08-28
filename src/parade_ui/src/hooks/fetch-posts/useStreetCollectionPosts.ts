@@ -5,7 +5,7 @@ import {
 } from "../../../backend_declarations/main_server/main_server.did";
 import { Post } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
-import { useMainServer } from "../useMainServer";
+import { useMainServerActor } from "../server-connect/useMainServerActor";
 import { useGetPostFromPostTypes } from "./useGetPostFromPostTypes";
 
 interface StreetCollectionPostsPage {
@@ -26,7 +26,7 @@ const getFetchRequest = (
 };
 
 export const useStreetCollectionPosts = (canisterId = "", enabled = true) => {
-  const mainServer = useMainServer();
+  const mainServer = useMainServerActor();
   const getPosts = useGetPostFromPostTypes();
 
   const collectionPostsQuery = useInfiniteQuery<

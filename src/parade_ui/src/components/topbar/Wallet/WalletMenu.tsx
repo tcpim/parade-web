@@ -1,9 +1,11 @@
 import * as amplitude from "@amplitude/analytics-browser";
+import { Identity } from "@dfinity/agent";
 import * as Menubar from "@radix-ui/react-menubar";
 import { StoicIdentity as stoic } from "ic-stoic-identity";
 import { useContext } from "react";
 import { BiWalletAlt } from "react-icons/bi";
 import styled from "styled-components";
+import { CANISTER_LIST } from "../../../../backend_declarations/config";
 import { AppContext, UserLoginInfo } from "../../../App";
 import { getAccountFromPrincipal } from "../../../utils/principals";
 import { CommonContent, CommonItem, CommonTrigger } from "./menuStyles";
@@ -16,10 +18,20 @@ const ConnectWalletTrigger = styled(CommonTrigger)`
 
 export const WalletMenu = () => {
   const appContext = useContext(AppContext);
-  const walletConnected = appContext.userLoginInfo.walletConnected;
+
+  const connectObj: any = {
+    whitelist: CANISTER_LIST,
+  };
+
+  // No longer need this since we are skipping using wallet identity in local testing
+  // But when we want to test with wallet identity,
+  // uncomment this and switch to plug local network
+  // if (process.env.NODE_ENV !== "production") {
+  //   connectObj["host"] = "http://127.0.0.1:8000";
+  // }
 
   const loginPlugWallet = async () => {
-    await window.ic.plug.requestConnect();
+    await window.ic.plug.requestConnect(connectObj);
     const connected = await window.ic.plug.isConnected();
 
     if (connected) {
@@ -27,7 +39,7 @@ export const WalletMenu = () => {
         userPid: window.ic.plug.principalId,
         userAccount: getAccountFromPrincipal(window.ic.plug.principalId),
         walletConnected: true,
-        walletType: "Plug",
+        walletType: "plug",
       };
       appContext.setUserLoginInfo(userLoginInfo);
 
@@ -39,29 +51,21 @@ export const WalletMenu = () => {
   };
 
   const loginStoicWallet = async () => {
-    const isLoaded = await stoic.load();
-
-    let userId = "";
-    if (isLoaded !== false) {
-      userId = isLoaded.getPrincipal().toText();
-      appContext.setUserLoginInfo({
-        userPid: userId,
-        userAccount: getAccountFromPrincipal(isLoaded.getPrincipal().toText()),
-        walletConnected: true,
-        walletType: "Stoic",
-      });
-    } else {
-      const identity = await stoic.connect();
-      userId = identity.getPrincipal().toText();
-      appContext.setUserLoginInfo({
-        userPid: userId,
-        userAccount: getAccountFromPrincipal(identity.getPrincipal().toText()),
-        walletConnected: true,
-        walletType: "Stoic",
-      });
+    let identity: Identity = await stoic.load();
+    if (!identity) {
+      identity = await stoic.connect();
     }
 
-    amplitude.setUserId(userId);
+    const userPrincipalId = identity.getPrincipal().toText();
+    appContext.setUserLoginInfo({
+      userPid: userPrincipalId,
+      userAccount: getAccountFromPrincipal(userPrincipalId),
+      walletConnected: true,
+      walletType: "stoic",
+      identity: identity,
+    });
+
+    amplitude.setUserId(userPrincipalId);
     amplitude.track("connect_wallet", { wallet: "stoic" });
   };
 
