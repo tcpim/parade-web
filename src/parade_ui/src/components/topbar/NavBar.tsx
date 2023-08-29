@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import {
   HiOutlineGlobeAlt,
+  HiOutlineInformationCircle,
   HiOutlinePlus,
   HiOutlineUser,
   HiOutlineUserGroup,
@@ -83,6 +84,17 @@ export const NavBar = ({ className }: NavBarProps) => {
       >
         <Icon as={HiOutlineUser} size={2} bold={currentPath === "/profile"} />
         Profile
+      </ListItem>
+      <ListItem
+        onClick={() => navigate("/about")}
+        textBold={currentPath === "/about"}
+      >
+        <Icon
+          as={HiOutlineInformationCircle}
+          size={2}
+          bold={currentPath === "/about"}
+        />
+        About
       </ListItem>
     </Wrapper>
   );
