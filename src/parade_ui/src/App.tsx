@@ -1,4 +1,5 @@
 import * as amplitude from "@amplitude/analytics-browser";
+import { Identity } from "@dfinity/agent";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Dispatch, SetStateAction, createContext, useState } from "react";
@@ -18,12 +19,15 @@ const NotFoundPage = () => {
   return <h1>Not Found</h1>;
 };
 
+export type WalletType = "plug" | "stoic" | "";
+
 export interface UserLoginInfo {
   userPid: string;
   userAccount: string;
   userInfo?: User;
   walletConnected: boolean;
-  walletType: "Plug" | "Stoic" | "";
+  walletType: WalletType;
+  identity?: Identity;
 }
 
 interface AppContext {
@@ -44,7 +48,7 @@ const defaultTestingLoginInfo: UserLoginInfo = {
   userAccount:
     "8795113c70c29285fb83d2b016fb12d8ee0d3e4fb19fca6b1c014c2f5096c17c",
   walletConnected: true,
-  walletType: "Stoic",
+  walletType: "stoic",
 };
 
 export const AppContext = createContext<AppContext>({
@@ -57,9 +61,7 @@ const queryClient = new QueryClient();
 export const App = () => {
   amplitude.init("2fa63b52409e3286a24cd859656587f6");
   const defaultLogin =
-    process.env.NODE_ENV === "production"
-      ? defaultLoginInfo
-      : defaultTestingLoginInfo;
+    process.env.NODE_ENV === "production" ? defaultLoginInfo : defaultLoginInfo;
 
   const [userLoginInfo, setUserLoginInfo] =
     useState<UserLoginInfo>(defaultLogin);

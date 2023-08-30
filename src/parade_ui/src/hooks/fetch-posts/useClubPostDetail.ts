@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Post, convertToPost } from "../../types/post";
-import { getClubServer } from "../useClubServer";
+import { getClubServer } from "../server-connect/useClubServer";
 
 export const useClubPostDetail = (
   postId: string,

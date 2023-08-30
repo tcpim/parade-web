@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
-import { CreateStreetPostRequest } from "../../../backend_declarations/main_server/main_server.did";
-import { NftInfo } from "../../types/nft";
-import { Post, convertToPost } from "../../types/post";
-import { useMainServer } from "../useMainServer";
+import { CreateStreetPostRequest } from "../../../../backend_declarations/main_server/main_server.did";
+import { NftInfo } from "../../../types/nft";
+import { Post, convertToPost } from "../../../types/post";
+import { useMainServerActor } from "../useMainServerActor";
 
 export interface CreateStreetPostProps {
   userPid: string;
@@ -37,14 +37,14 @@ const getCreatePostRequest = (
 };
 
 export function useCreateStreetPost(createPostProps: CreateStreetPostProps) {
-  const mainServer = useMainServer();
   const queryClient = useQueryClient();
-
+  const actor = useMainServerActor();
   const request = getCreatePostRequest(createPostProps);
 
+  // TOOD: if response contains error, handle it in frontend
   const mutation = useMutation(
     async () => {
-      const response = await mainServer.create_street_post(request);
+      const response: any = await actor.create_street_post(request);
       const result: Post | undefined = convertToPost(response.post);
       return result;
     },

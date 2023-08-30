@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
-import { CreatePostRequest } from "../../../backend_declarations/club_server/ludo_arts_club.did";
-import { NftInfo } from "../../types/nft";
-import { Post, convertToPost } from "../../types/post";
+import { CreatePostRequest } from "../../../../backend_declarations/club_server/ludo_arts_club.did";
+import { NftInfo } from "../../../types/nft";
+import { Post, convertToPost } from "../../../types/post";
 import { getClubServer } from "../useClubServer";
 
 export interface CreateClubPostProps {

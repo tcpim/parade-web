@@ -19,6 +19,7 @@ const Wrapper = styled.div<WrapperProps>`
 
 const MessageHeader = styled.div<WrapperProps>`
   display: flex;
+  gap: 4px;
   margin-left: ${(props) => (props.selfMessage ? "auto" : "0")};
   margin-right: ${(props) => (props.selfMessage ? "0" : "auto")};
 `;

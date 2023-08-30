@@ -7,7 +7,7 @@ import {
 import { PostsPage } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 import { useGetPostFromPostTypes } from "../fetch-posts/useGetPostFromPostTypes";
-import { useMainServer } from "../useMainServer";
+import { useMainServerActor } from "../server-connect/useMainServerActor";
 
 const getFetchRequest = (
   canisterId: string,
@@ -22,7 +22,7 @@ const getFetchRequest = (
 };
 
 export const useTrendingCollectionPosts = (canisterId = "", enabled = true) => {
-  const mainServer = useMainServer();
+  const mainServer = useMainServerActor();
   const getPosts = useGetPostFromPostTypes();
 
   const queryFunction = useCallback(

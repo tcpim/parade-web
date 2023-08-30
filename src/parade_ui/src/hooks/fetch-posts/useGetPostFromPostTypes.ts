@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { GetPostByIdsResponse } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { PostType } from "../../../backend_declarations/main_server/main_server.did";
 import { Post, convertToPost } from "../../types/post";
-import { getClubServer } from "../useClubServer";
+import { getClubServer } from "../server-connect/useClubServer";
 
 /**
  * Returns a callback that fetches posts from club server and marge with street posts

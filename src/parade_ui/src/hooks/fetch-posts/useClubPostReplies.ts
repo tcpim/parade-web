@@ -4,7 +4,7 @@ import {
   GetPostRepliesResponse,
 } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { DEFAULT_PAGE_SIZE_FOR_REPLIES } from "../../utils/constants";
-import { getClubServer } from "../useClubServer";
+import { getClubServer } from "../server-connect/useClubServer";
 
 const getPostRepliesRequest = (
   postId: string,

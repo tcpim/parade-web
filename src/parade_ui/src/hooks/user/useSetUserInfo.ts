@@ -5,14 +5,14 @@ import {
   SetUserInfoResponse,
   SetUserNameRequest,
 } from "../../../backend_declarations/main_server/main_server.did";
-import { useMainServer } from "../useMainServer";
+import { useMainServerActor } from "../server-connect/useMainServerActor";
 
 export function useSetUserName(
   userId: string,
   newUsername: string,
   onSuccessCallback?: any
 ) {
-  const mainServer = useMainServer();
+  const mainServer = useMainServerActor();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -35,7 +35,7 @@ export function useSetUserBio(
   newBio: string,
   onSuccessCallback?: any
 ) {
-  const mainServer = useMainServer();
+  const mainServer = useMainServerActor();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -58,7 +58,7 @@ export function useSetUserAvatar(
   avatar: Uint8Array,
   mime: string
 ) {
-  const mainServer = useMainServer();
+  const mainServer = useMainServerActor();
   const queryClient = useQueryClient();
 
   return useMutation({

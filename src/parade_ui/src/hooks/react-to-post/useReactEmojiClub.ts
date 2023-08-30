@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { ReactEmojiRequest } from "../../../backend_declarations/club_server/ludo_arts_club.did";
-import { getClubServer } from "../useClubServer";
+import { getClubServer } from "../server-connect/useClubServer";
 
 interface ReactEmojiProps {
   postId?: string;

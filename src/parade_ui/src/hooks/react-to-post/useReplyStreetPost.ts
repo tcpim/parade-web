@@ -9,7 +9,7 @@ import {
   ReplyPostRequest,
   ReplyPostResponse,
 } from "../../../backend_declarations/main_server/main_server.did";
-import { useMainServer } from "../useMainServer";
+import { useMainServerActor } from "../server-connect/useMainServerActor";
 
 export interface CreatePostReplyProps {
   userPid: string;
@@ -30,7 +30,7 @@ const getReplyPostRequest = (props: CreatePostReplyProps): ReplyPostRequest => {
 };
 
 export const useReplyStreetPost = (props: CreatePostReplyProps) => {
-  const mainServer = useMainServer();
+  const mainServer = useMainServerActor();
   const queryClient = useQueryClient();
 
   const addReply = (
