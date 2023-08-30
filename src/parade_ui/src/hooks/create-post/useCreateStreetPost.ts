@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
-import { CreateStreetPostRequest } from "../../../../backend_declarations/main_server/main_server.did";
-import { NftInfo } from "../../../types/nft";
-import { Post, convertToPost } from "../../../types/post";
-import { useMainServerActor } from "../useMainServerActor";
+import { CreateStreetPostRequest } from "../../../backend_declarations/main_server/main_server.did";
+import { NftInfo } from "../../types/nft";
+import { Post, convertToPost } from "../../types/post";
+import { useMainServerActor } from "../server-connect/useMainServerActor";
 
 export interface CreateStreetPostProps {
   userPid: string;
