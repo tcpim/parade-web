@@ -33,11 +33,15 @@ export const useReplyStreetPost = (props: CreatePostReplyProps) => {
   const mainServer = useMainServerActor();
   const queryClient = useQueryClient();
 
-  const addReply = (
+  const addReply = async (
     props: CreatePostReplyProps
   ): Promise<ReplyPostResponse> => {
     const request = getReplyPostRequest(props);
-    return mainServer.reply_post(request);
+    const res = await mainServer.reply_post(request);
+    if (res.error[0] != undefined) {
+      throw new Error("Error reply_post: " + res.error[0].error_message);
+    }
+    return res;
   };
 
   const mutation = useMutation(() => addReply(props), {

@@ -35,12 +35,16 @@ export const useSendMessage = ({
   const request = getSendClubMessageRequest(message, sender);
 
   const mutation = useMutation({
-    mutationFn: () => {
+    mutationFn: async () => {
       if (clubServer === undefined) {
         throw new Error("Club server is undefined");
       }
 
-      return clubServer.send_club_message(request);
+      const res = await clubServer.send_club_message(request);
+      if (res[0] !== undefined) {
+        throw new Error("Error send_club_message: " + res[0].error_message);
+      }
+      return res;
     },
     onSuccess: () => {
       // attach new message

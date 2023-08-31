@@ -41,10 +41,14 @@ export function useCreateStreetPost(createPostProps: CreateStreetPostProps) {
   const actor = useMainServerActor();
   const request = getCreatePostRequest(createPostProps);
 
-  // TOOD: if response contains error, handle it in frontend
   const mutation = useMutation(
     async () => {
-      const response: any = await actor.create_street_post(request);
+      const response = await actor.create_street_post(request);
+      if (response.error[0] != undefined) {
+        throw new Error(
+          "Error create_street_post: " + response.error[0].error_message
+        );
+      }
       const result: Post | undefined = convertToPost(response.post);
       return result;
     },

@@ -57,9 +57,9 @@ export function useCreateClubPost(createPostProps: CreateClubPostProps) {
 
       const response = await clubServer.create_post(request);
       const result: Post | undefined = convertToPost(response.post);
-      if (response.error.length > 0) {
-        console.error(
-          response.error[0]?.api_name + ": " + response.error[0]?.error_message
+      if (response.error[0] != undefined) {
+        throw new Error(
+          "Error club create_post: " + response.error[0].error_message
         );
       }
 

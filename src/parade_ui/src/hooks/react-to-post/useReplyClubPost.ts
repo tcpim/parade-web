@@ -33,7 +33,7 @@ const getReplyPostRequest = (props: CreatePostReplyProps): ReplyPostRequest => {
 export const useReplyClubPost = (props: CreatePostReplyProps) => {
   const queryClient = useQueryClient();
   const clubServer = useClubServerActor(props.clubId);
-  const addReply = (
+  const addReply = async (
     props: CreatePostReplyProps
   ): Promise<ReplyPostResponse> => {
     const request = getReplyPostRequest(props);
@@ -41,7 +41,12 @@ export const useReplyClubPost = (props: CreatePostReplyProps) => {
     if (clubServer === undefined) {
       throw new Error("Club server is undefined");
     }
-    return clubServer.reply_post(request);
+    const res = await clubServer.reply_post(request);
+    if (res.error[0] != undefined) {
+      throw new Error("Error club reply_post: " + res.error[0].error_message);
+    }
+
+    return res;
   };
 
   const mutation = useMutation(() => addReply(props), {
