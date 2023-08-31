@@ -19,16 +19,24 @@ export const MOTOKO_GHOST_CLUB_CANISTER =
     : "t5ow2-vqaaa-aaaap-abhiq-cai";
 
 export const BOXY_DUDE_CLUB_CANISTER =
-  process.env.NODE_ENV !== "production" ? "c2lt4-zmaaa-aaaaa-qaaiq-cai" : "";
+  process.env.NODE_ENV !== "production"
+    ? "c2lt4-zmaaa-aaaaa-qaaiq-cai"
+    : "nup3g-dyaaa-aaaap-abjia-cai";
 
 export const DSCVR_AIRDROP_CLUB_CANISTER =
-  process.env.NODE_ENV !== "production" ? "ctiya-peaaa-aaaaa-qaaja-cai" : "";
+  process.env.NODE_ENV !== "production"
+    ? "ctiya-peaaa-aaaaa-qaaja-cai"
+    : "nto5s-oaaaa-aaaap-abjiq-cai";
 
 export const CUBETOPIA_CLUB_CANISTER =
-  process.env.NODE_ENV !== "production" ? "cuj6u-c4aaa-aaaaa-qaajq-cai" : "";
+  process.env.NODE_ENV !== "production"
+    ? "cuj6u-c4aaa-aaaaa-qaajq-cai"
+    : "n2nwo-yiaaa-aaaap-abjja-cai";
 
 export const IC_PUNKS_CLUB_CANISTER =
-  process.env.NODE_ENV !== "production" ? "cbopz-duaaa-aaaaa-qaaka-cai" : "";
+  process.env.NODE_ENV !== "production"
+    ? "cbopz-duaaa-aaaaa-qaaka-cai"
+    : "n5mq2-vqaaa-aaaap-abjjq-cai";
 
 export const CANISTER_LIST = [
   MAIN_SERVER_CANISTER,
