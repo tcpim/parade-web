@@ -1,16 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { Post, convertToPost } from "../../types/post";
-import { getClubServer } from "../server-connect/useClubServer";
+import { useClubServerActor } from "../server-connect/useClubServerActor";
 
 export const useClubPostDetail = (
   postId: string,
   clubId: string,
   enabled: boolean
 ) => {
+  const clubServer = useClubServerActor(clubId);
+
   const postDetailQuery = useQuery<Post, Error>({
     queryKey: ["clubPostDetail", postId],
     queryFn: async () => {
-      const clubServer = getClubServer(clubId);
       if (clubServer === undefined) {
         throw new Error("Club server is undefined");
       }

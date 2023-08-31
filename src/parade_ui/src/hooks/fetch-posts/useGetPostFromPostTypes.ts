@@ -1,9 +1,13 @@
+import { ActorSubclass } from "@dfinity/agent";
 import { QueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { GetPostByIdsResponse } from "../../../backend_declarations/club_server/ludo_arts_club.did";
+import {
+  _SERVICE as ClubServerInterface,
+  GetPostByIdsResponse,
+} from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { PostType } from "../../../backend_declarations/main_server/main_server.did";
 import { Post, convertToPost } from "../../types/post";
-import { getClubServer } from "../server-connect/useClubServer";
+import { useClubServerActorMap } from "../server-connect/useClubServerActor";
 
 /**
  * Returns a callback that fetches posts from club server and marge with street posts
@@ -12,6 +16,11 @@ export function useGetPostFromPostTypes(): (
   pageSize: number,
   posts: Array<PostType>
 ) => Promise<Post[]> {
+  const actorMap: Map<
+    string,
+    ActorSubclass<ClubServerInterface>
+  > = useClubServerActorMap();
+
   const helper = useCallback(
     async (pageSize: number, posts: Array<PostType>): Promise<Post[]> => {
       const queryClient = new QueryClient();
@@ -44,7 +53,7 @@ export function useGetPostFromPostTypes(): (
             await queryClient.fetchQuery({
               queryKey: ["clubPostsByIds", clubId, postIds],
               queryFn: () => {
-                const clubServer = getClubServer(clubId);
+                const clubServer = actorMap.get(clubId);
                 if (clubServer === undefined) {
                   throw new Error("Club server is undefined");
                 }
@@ -64,7 +73,7 @@ export function useGetPostFromPostTypes(): (
 
       return postArray.filter((post) => post !== undefined) as Post[];
     },
-    []
+    [actorMap]
   );
   return helper;
 }

@@ -9,7 +9,7 @@ import {
   ReplyPostRequest,
   ReplyPostResponse,
 } from "../../../backend_declarations/club_server/ludo_arts_club.did";
-import { getClubServer } from "../server-connect/useClubServer";
+import { useClubServerActor } from "../server-connect/useClubServerActor";
 
 export interface CreatePostReplyProps {
   userPid: string;
@@ -32,12 +32,12 @@ const getReplyPostRequest = (props: CreatePostReplyProps): ReplyPostRequest => {
 
 export const useReplyClubPost = (props: CreatePostReplyProps) => {
   const queryClient = useQueryClient();
-
+  const clubServer = useClubServerActor(props.clubId);
   const addReply = (
     props: CreatePostReplyProps
   ): Promise<ReplyPostResponse> => {
     const request = getReplyPostRequest(props);
-    const clubServer = getClubServer(props.clubId);
+
     if (clubServer === undefined) {
       throw new Error("Club server is undefined");
     }

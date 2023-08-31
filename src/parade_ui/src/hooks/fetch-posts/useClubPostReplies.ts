@@ -4,7 +4,7 @@ import {
   GetPostRepliesResponse,
 } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { DEFAULT_PAGE_SIZE_FOR_REPLIES } from "../../utils/constants";
-import { getClubServer } from "../server-connect/useClubServer";
+import { useClubServerActor } from "../server-connect/useClubServerActor";
 
 const getPostRepliesRequest = (
   postId: string,
@@ -22,10 +22,11 @@ export const useClubPostRepiles = (
   clubId: string,
   enabled: boolean
 ) => {
+  const clubServer = useClubServerActor(clubId);
+
   const postRepliesQuery = useInfiniteQuery<GetPostRepliesResponse, Error>({
     queryKey: ["clubPostReplies", postId, clubId],
     queryFn: async ({ pageParam = 0 }) => {
-      const clubServer = getClubServer(clubId);
       if (clubServer === undefined) {
         throw new Error("Club server is undefined");
       }

@@ -118,7 +118,6 @@ const UserClubCollectionList = ({
   }
 
   const clubs: Club[] = getNonEmptyClubList(query.data);
-  console.log("!!!clubs", clubs);
   const displayedClub: string = currentClubId
     ? currentClubId
     : clubs[0].club_id;

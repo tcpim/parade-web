@@ -5,7 +5,7 @@ import {
 } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { Post, PostsPage, convertToPost } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
-import { getClubServer } from "../server-connect/useClubServer";
+import { useClubServerActor } from "../server-connect/useClubServerActor";
 
 const getFetchRequest = (cursor: [] | [PostCreatedTsKey]): GetPostsRequest => {
   return {
@@ -15,10 +15,10 @@ const getFetchRequest = (cursor: [] | [PostCreatedTsKey]): GetPostsRequest => {
 };
 
 export const useClubPosts = (clubId: string, enabled = true) => {
+  const clubServer = useClubServerActor(clubId);
   const clubPostsQuery = useInfiniteQuery<PostsPage<PostCreatedTsKey>, Error>({
     queryKey: ["clubPosts", clubId],
     queryFn: async ({ pageParam = [] }) => {
-      const clubServer = getClubServer(clubId);
       if (clubServer === undefined) {
         throw new Error("Club server is undefined");
       }

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { ReactEmojiRequest } from "../../../backend_declarations/club_server/ludo_arts_club.did";
-import { getClubServer } from "../server-connect/useClubServer";
+import { useClubServerActor } from "../server-connect/useClubServerActor";
 
 interface ReactEmojiProps {
   postId?: string;
@@ -10,6 +10,7 @@ interface ReactEmojiProps {
 }
 
 export const useReactEmojiClub = (props: ReactEmojiProps) => {
+  const clubServer = useClubServerActor(props.clubId);
   const addEmoji = (props: ReactEmojiProps, emoji: string) => {
     const request: ReactEmojiRequest = {
       post_id: props.postId === undefined ? [] : [props.postId],
@@ -19,7 +20,6 @@ export const useReactEmojiClub = (props: ReactEmojiProps) => {
       created_ts: BigInt(Date.now()),
     };
 
-    const clubServer = getClubServer(props.clubId);
     if (clubServer === undefined) {
       throw new Error("Club server is undefined");
     }
