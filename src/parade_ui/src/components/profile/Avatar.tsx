@@ -1,7 +1,7 @@
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Avatar, Box, IconButton } from "@mui/material";
-import imageCompression from "browser-image-compression";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useGetUser } from "../../hooks/user/useGetUser";
 import { useSetUserAvatar } from "../../hooks/user/useSetUserInfo";
 import { UserAvatar as UserAvatarType } from "../../types/user";
@@ -36,6 +36,7 @@ export const UserAvatar = ({
   const [newImage, setNewImage] = useState("");
   const [newImageType, setNewImageType] = useState("");
   const [imageUploaded, setImageUploaded] = useState(false);
+  const navigate = useNavigate();
 
   const existingImage = decodeUint8ArrayToImage(userInfo.data?.avatar);
 
@@ -56,38 +57,41 @@ export const UserAvatar = ({
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const imageFile = e.target.files[0];
-      if (imageFile.size / 1024 / 1024 > 1.0) {
-        alert("Image size must be less than 1MB");
+      if (imageFile.size / 1024 > 100) {
+        alert("Image size must be less than 100KB");
         return;
       }
 
-      const options = {
-        maxSizeMB: 0.1, // (100KB in MB)
-        maxWidthOrHeight: 1920,
-        useWebWorker: true,
-        fileType: imageFile.type,
-      };
-
       try {
-        const compressedFile = await imageCompression(imageFile, options);
-
         const reader = new FileReader();
         reader.onloadend = () => {
           if (reader.result) {
+            console.log("resulkt: " + reader.result.toString());
+            console.log("tuype: " + imageFile.type);
+
             setNewImage(reader.result.toString());
-            setNewImageType(compressedFile.type);
+            setNewImageType(imageFile.type);
             setImageUploaded(true);
           }
         };
-        reader.readAsDataURL(compressedFile);
+        reader.readAsDataURL(imageFile);
       } catch (error) {
         console.log(error);
       }
     }
   };
 
+  const handleOnClick = () => {
+    if (canChange) return;
+
+    navigate("/profile/" + userId);
+  };
+
   return (
-    <Box sx={{ position: "relative", width: size, height: size }}>
+    <Box
+      onClick={handleOnClick}
+      sx={{ position: "relative", width: size, height: size }}
+    >
       <Avatar
         sx={{ width: size, height: size }}
         alt="Anonymous"

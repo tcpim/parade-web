@@ -1,13 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { Post, convertToPost } from "../../types/post";
-import { useClubServerActor } from "../server-connect/useClubServerActor";
+import { useClubServerActorQuery } from "../server-connect/useClubServerActor";
 
 export const useClubPostDetail = (
   postId: string,
   clubId: string,
   enabled: boolean
 ) => {
-  const clubServer = useClubServerActor(clubId);
+  const clubServer = useClubServerActorQuery(clubId);
 
   const postDetailQuery = useQuery<Post, Error>({
     queryKey: ["clubPostDetail", postId],

@@ -1,6 +1,9 @@
 import { ActorSubclass } from "@dfinity/agent";
-import { useContext } from "react";
-import { idlFactory as clubServerIdl } from "../../../backend_declarations/club_server";
+import { useContext, useMemo } from "react";
+import {
+  createActor as clubCreateActor,
+  idlFactory as clubServerIdl,
+} from "../../../backend_declarations/club_server";
 import { _SERVICE as ClubServerInterface } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import {
   BOXY_DUDE_CLUB_CANISTER,
@@ -24,7 +27,7 @@ const CLUB_TO_CANISTER: ReadonlyMap<string, string> = new Map([
   ["boxy-dude", BOXY_DUDE_CLUB_CANISTER],
 ]);
 
-export const useClubServerActor = (
+export const useClubServerActorUpdate = (
   clubId: string
 ): ActorSubclass<ClubServerInterface> => {
   const isProd = process.env.NODE_ENV === "production";
@@ -42,14 +45,24 @@ export const useClubServerActor = (
   return isProd ? prodActor : devActor;
 };
 
-export const useClubServerActorMap = (): Map<
+export const useClubServerActorQuery = (
+  clubId: string
+): ActorSubclass<ClubServerInterface> => {
+  return useMemo(() => {
+    const canisterId = CLUB_TO_CANISTER.get(clubId);
+    if (canisterId === undefined) throw new Error("Invalid clubId");
+    return clubCreateActor(canisterId);
+  }, [clubId]);
+};
+
+export const useClubServerActorQueryMap = (): Map<
   string,
   ActorSubclass<ClubServerInterface>
 > => {
   const actorMap = new Map<string, ActorSubclass<ClubServerInterface>>();
 
   CLUB_TO_CANISTER.forEach((canisterId, clubId) => {
-    actorMap.set(clubId, useClubServerActor(clubId));
+    actorMap.set(clubId, useClubServerActorQuery(clubId));
   });
 
   return actorMap;

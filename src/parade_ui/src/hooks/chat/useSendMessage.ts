@@ -6,7 +6,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { SendClubMessageRequest } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { Message, MessagePage } from "../../types/message";
-import { useClubServerActor } from "../server-connect/useClubServerActor";
+import { useClubServerActorUpdate } from "../server-connect/useClubServerActor";
 
 const getSendClubMessageRequest = (message: string, sender: string) => {
   const request: SendClubMessageRequest = {
@@ -31,7 +31,7 @@ export const useSendMessage = ({
   onSuccessCallback,
 }: SendMessageProps) => {
   const queryClient = useQueryClient();
-  const clubServer = useClubServerActor(clubId);
+  const clubServer = useClubServerActorUpdate(clubId);
   const request = getSendClubMessageRequest(message, sender);
 
   const mutation = useMutation({

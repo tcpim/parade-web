@@ -5,14 +5,17 @@ import {
   SetUserInfoResponse,
   SetUserNameRequest,
 } from "../../../backend_declarations/main_server/main_server.did";
-import { useMainServerActor } from "../server-connect/useMainServerActor";
+import {
+  useMainServerActorQuery,
+  useMainServerActorUpdate,
+} from "../server-connect/useMainServerActor";
 
 export function useSetUserName(
   userId: string,
   newUsername: string,
   onSuccessCallback?: any
 ) {
-  const mainServer = useMainServerActor();
+  const mainServer = useMainServerActorUpdate();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -35,7 +38,7 @@ export function useSetUserBio(
   newBio: string,
   onSuccessCallback?: any
 ) {
-  const mainServer = useMainServerActor();
+  const mainServer = useMainServerActorUpdate();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -58,17 +61,24 @@ export function useSetUserAvatar(
   avatar: Uint8Array,
   mime: string
 ) {
-  const mainServer = useMainServerActor();
+  // use query client because setting avartar with plug identity doesn't work somehow
+  const mainServer = useMainServerActorQuery();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (): Promise<SetUserInfoResponse> => {
+    mutationFn: async (): Promise<SetUserInfoResponse> => {
       const request: SetUserAvatarRequest = {
         user_id: userId,
         avatar: avatar,
         mime_type: mime,
       };
-      return mainServer.set_user_avatar(request);
+      const res = await mainServer.set_user_avatar(request);
+      if (res.error[0] != undefined) {
+        console.log("useSetUserAvatar error: " + res.error[0].error_message);
+      } else {
+        console.log("useSetUserAvatar res: " + res.user);
+      }
+      return res;
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["getUser", userId]);

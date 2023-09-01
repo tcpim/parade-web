@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { User, convertToUser } from "../../types/user";
-import { useMainServerActor } from "../server-connect/useMainServerActor";
+import { useMainServerActorQuery } from "../server-connect/useMainServerActor";
 
 export function useGetUser(userId: string) {
-  const mainServer = useMainServerActor();
+  const mainServer = useMainServerActorQuery();
   return useQuery<User, Error>({
     queryKey: ["getUser", userId],
     queryFn: async () => {

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { CreateStreetPostRequest } from "../../../backend_declarations/main_server/main_server.did";
 import { NftInfo } from "../../types/nft";
 import { Post, convertToPost } from "../../types/post";
-import { useMainServerActor } from "../server-connect/useMainServerActor";
+import { useMainServerActorUpdate } from "../server-connect/useMainServerActor";
 
 export interface CreateStreetPostProps {
   userPid: string;
@@ -38,7 +38,7 @@ const getCreatePostRequest = (
 
 export function useCreateStreetPost(createPostProps: CreateStreetPostProps) {
   const queryClient = useQueryClient();
-  const actor = useMainServerActor();
+  const actor = useMainServerActorUpdate();
   const request = getCreatePostRequest(createPostProps);
 
   const mutation = useMutation(

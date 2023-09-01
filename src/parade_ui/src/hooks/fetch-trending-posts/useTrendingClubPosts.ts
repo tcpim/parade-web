@@ -5,7 +5,7 @@ import {
 } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { Post, PostsPage, convertToPost } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
-import { useClubServerActor } from "../server-connect/useClubServerActor";
+import { useClubServerActorQuery } from "../server-connect/useClubServerActor";
 
 const getFetchRequest = (
   cursor: [] | [TrendingPostKey]
@@ -17,7 +17,7 @@ const getFetchRequest = (
 };
 
 export const useTrendingClubPosts = (clubId: string, enabled = true) => {
-  const clubServer = useClubServerActor(clubId);
+  const clubServer = useClubServerActorQuery(clubId);
   const trendingClubPostsQuery = useInfiniteQuery<
     PostsPage<TrendingPostKey>,
     Error

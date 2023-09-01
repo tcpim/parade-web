@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Post, convertToPost } from "../../types/post";
-import { useMainServerActor } from "../server-connect/useMainServerActor";
+import { useMainServerActorQuery } from "../server-connect/useMainServerActor";
 
 export const useStreetPostDetail = (postId: string, enabled: boolean) => {
-  const server = useMainServerActor();
+  const server = useMainServerActorQuery();
 
   const postDetailQuery = useQuery<Post, Error>({
     queryKey: ["postDetail", postId],

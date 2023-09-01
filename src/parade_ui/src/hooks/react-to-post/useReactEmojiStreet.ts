@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { ReactEmojiRequest } from "../../../backend_declarations/main_server/main_server.did";
-import { useMainServerActor } from "../server-connect/useMainServerActor";
+import { useMainServerActorUpdate } from "../server-connect/useMainServerActor";
 
 interface ReactEmojiProps {
   postId?: string;
@@ -9,7 +9,7 @@ interface ReactEmojiProps {
 }
 
 export const useReactEmojiStreet = (props: ReactEmojiProps) => {
-  const mainServer = useMainServerActor();
+  const mainServer = useMainServerActorUpdate();
 
   const addEmoji = (props: ReactEmojiProps, emoji: string) => {
     const request: ReactEmojiRequest = {

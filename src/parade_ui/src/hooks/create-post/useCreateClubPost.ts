@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { CreatePostRequest } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { NftInfo } from "../../types/nft";
 import { Post, convertToPost } from "../../types/post";
-import { useClubServerActor } from "../server-connect/useClubServerActor";
+import { useClubServerActorUpdate } from "../server-connect/useClubServerActor";
 
 export interface CreateClubPostProps {
   clubId: string;
@@ -46,7 +46,7 @@ const getCreatePostRequest = (
 
 export function useCreateClubPost(createPostProps: CreateClubPostProps) {
   const queryClient = useQueryClient();
-  const clubServer = useClubServerActor(createPostProps.clubId);
+  const clubServer = useClubServerActorUpdate(createPostProps.clubId);
   const request = getCreatePostRequest(createPostProps);
 
   const mutation = useMutation(

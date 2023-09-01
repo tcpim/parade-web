@@ -8,7 +8,7 @@ import {
 } from "../../../backend_declarations/main_server/main_server.did";
 import { Post } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
-import { useMainServerActor } from "../server-connect/useMainServerActor";
+import { useMainServerActorQuery } from "../server-connect/useMainServerActor";
 import { useGetPostFromPostTypes } from "./useGetPostFromPostTypes";
 
 interface StreetPostsPage {
@@ -27,7 +27,7 @@ const getFetchRequest = (
 };
 
 export const useStreetPosts = (enabled = true) => {
-  const mainServer = useMainServerActor();
+  const mainServer = useMainServerActorQuery();
   const getPosts = useGetPostFromPostTypes();
 
   const queryFunction = useCallback(

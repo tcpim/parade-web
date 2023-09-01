@@ -32,7 +32,6 @@ export const useServerActorProd = (
 
   const [actor, setActor] = useState<any | undefined>();
 
-  console.log(canisterId, wallet, identity, actor);
   useEffect(() => {
     const constructActor = async () => {
       const actor = await getActor(
@@ -85,5 +84,6 @@ const getPlugActor = async (canisterId: string, idlFactory: any) => {
     interfaceFactory: idlFactory,
   });
 
+  console.log("!!plug" + plugActor);
   return plugActor;
 };

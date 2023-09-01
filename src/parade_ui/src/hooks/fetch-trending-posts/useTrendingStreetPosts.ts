@@ -7,7 +7,7 @@ import {
 import { PostsPage } from "../../types/post";
 import { DEFAULT_PAGE_SIZE_FOR_FEED } from "../../utils/constants";
 import { useGetPostFromPostTypes } from "../fetch-posts/useGetPostFromPostTypes";
-import { useMainServerActor } from "../server-connect/useMainServerActor";
+import { useMainServerActorQuery } from "../server-connect/useMainServerActor";
 
 const getFetchRequest = (
   cursor: [] | [TrendingPostKey],
@@ -20,7 +20,7 @@ const getFetchRequest = (
 };
 
 export const useTrendingStreetPosts = (enabled = true) => {
-  const mainServer = useMainServerActor();
+  const mainServer = useMainServerActorQuery();
   const getPosts = useGetPostFromPostTypes();
 
   const queryFunction = useCallback(

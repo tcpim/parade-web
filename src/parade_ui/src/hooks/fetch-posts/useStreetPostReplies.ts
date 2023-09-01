@@ -4,7 +4,7 @@ import {
   GetPostRepliesResponse,
 } from "../../../backend_declarations/main_server/main_server.did";
 import { DEFAULT_PAGE_SIZE_FOR_REPLIES } from "../../utils/constants";
-import { useMainServerActor } from "../server-connect/useMainServerActor";
+import { useMainServerActorQuery } from "../server-connect/useMainServerActor";
 
 const getPostRepliesRequest = (
   postId: string,
@@ -18,7 +18,7 @@ const getPostRepliesRequest = (
 };
 
 export const useStreetPostRepiles = (postId: string, enabled: boolean) => {
-  const mainServer = useMainServerActor();
+  const mainServer = useMainServerActorQuery();
   const postRepliesQuery = useInfiniteQuery<GetPostRepliesResponse, Error>({
     queryKey: ["postReplies", postId],
     queryFn: async ({ pageParam = 0 }) => {

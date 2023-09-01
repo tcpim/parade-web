@@ -7,7 +7,7 @@ import {
 } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { PostType } from "../../../backend_declarations/main_server/main_server.did";
 import { Post, convertToPost } from "../../types/post";
-import { useClubServerActorMap } from "../server-connect/useClubServerActor";
+import { useClubServerActorQueryMap } from "../server-connect/useClubServerActor";
 
 /**
  * Returns a callback that fetches posts from club server and marge with street posts
@@ -19,7 +19,7 @@ export function useGetPostFromPostTypes(): (
   const actorMap: Map<
     string,
     ActorSubclass<ClubServerInterface>
-  > = useClubServerActorMap();
+  > = useClubServerActorQueryMap();
 
   const helper = useCallback(
     async (pageSize: number, posts: Array<PostType>): Promise<Post[]> => {

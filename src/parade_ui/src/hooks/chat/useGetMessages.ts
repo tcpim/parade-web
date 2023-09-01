@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { GetClubMessagesRequest } from "../../../backend_declarations/club_server/ludo_arts_club.did";
 import { Message, MessagePage, convertToMessage } from "../../types/message";
 import { DEFAULT_PAGE_SIZE_FOR_MESSAGES } from "../../utils/constants";
-import { useClubServerActor } from "../server-connect/useClubServerActor";
+import { useClubServerActorQuery } from "../server-connect/useClubServerActor";
 
 const getFetchRequest = (cursor: [] | [bigint]): GetClubMessagesRequest => {
   return {
@@ -12,7 +12,7 @@ const getFetchRequest = (cursor: [] | [bigint]): GetClubMessagesRequest => {
 };
 
 export const useGetMessages = (clubId: string) => {
-  const clubServer = useClubServerActor(clubId);
+  const clubServer = useClubServerActorQuery(clubId);
 
   return useInfiniteQuery<MessagePage, Error>({
     queryKey: ["clubMessages", clubId],
