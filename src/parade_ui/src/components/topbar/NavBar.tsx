@@ -52,19 +52,19 @@ export const NavBar = ({ className }: NavBarProps) => {
 
   return (
     <Wrapper className={className}>
-      <ListItem
-        onClick={() => navigate("/clubs")}
-        textBold={currentPath === "/clubs"}
-      >
-        <Icon
-          as={HiOutlineUserGroup}
-          size={2}
-          bold={currentPath === "/clubs"}
-        />
+      <ListItem onClick={() => navigate("/")} textBold={currentPath === "/"}>
+        <Icon as={HiOutlineUserGroup} size={2} bold={currentPath === "/"} />
         Clubs
       </ListItem>
-      <ListItem onClick={() => navigate("/")} textBold={currentPath === "/"}>
-        <Icon as={HiOutlineGlobeAlt} size={2} bold={currentPath === "/"} />
+      <ListItem
+        onClick={() => navigate("/street")}
+        textBold={currentPath === "/street"}
+      >
+        <Icon
+          as={HiOutlineGlobeAlt}
+          size={2}
+          bold={currentPath === "/street"}
+        />
         Street
       </ListItem>
       <ListItem

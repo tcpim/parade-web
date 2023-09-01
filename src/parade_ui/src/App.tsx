@@ -74,6 +74,14 @@ export const App = () => {
             path="/"
             element={
               <TopSideBarLayout>
+                <ClubsGrid />
+              </TopSideBarLayout>
+            }
+          />
+          <Route
+            path="/street"
+            element={
+              <TopSideBarLayout>
                 <Feed />
               </TopSideBarLayout>
             }
@@ -115,14 +123,6 @@ export const App = () => {
             element={
               <TopSideBarLayout>
                 <PostCreationPage />
-              </TopSideBarLayout>
-            }
-          />
-          <Route
-            path="/clubs"
-            element={
-              <TopSideBarLayout>
-                <ClubsGrid />
               </TopSideBarLayout>
             }
           />

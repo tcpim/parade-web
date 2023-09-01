@@ -7,6 +7,7 @@ export const useClubPostDetail = (
   clubId: string,
   enabled: boolean
 ) => {
+  if (!enabled) return;
   const clubServer = useClubServerActorQuery(clubId);
 
   const postDetailQuery = useQuery<Post, Error>({

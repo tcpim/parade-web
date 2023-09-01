@@ -77,7 +77,7 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
     clubId !== undefined
   );
   const query = clubId ? clubQuery : streetQuery;
-  const userInfoQuery = useGetUser(query.data?.created_by ?? "");
+  const userInfoQuery = useGetUser(query?.data?.created_by ?? "");
   const [reply, setReply] = useState("");
 
   const streetMutation = useReplyStreetPost({
@@ -104,20 +104,17 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
   };
 
   const normalizedMutation = clubId ? clubMutation : streetMutation;
-  const isMutationLoading = clubId
-    ? clubMutation.isLoading
-    : streetMutation.isLoading;
 
-  if (query.isLoading) {
-    return (
-      <CenteredDiv>
-        <CircularProgress />
-      </CenteredDiv>
-    );
-  } else if (query.isError) {
+  if (query === undefined || query.isError) {
     return (
       <CenteredDiv>
         <p>Something went wrong</p>
+      </CenteredDiv>
+    );
+  } else if (query.isLoading) {
+    return (
+      <CenteredDiv>
+        <CircularProgress />
       </CenteredDiv>
     );
   } else if (query.data === undefined) {

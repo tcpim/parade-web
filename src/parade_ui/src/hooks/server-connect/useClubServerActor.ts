@@ -47,10 +47,12 @@ export const useClubServerActorUpdate = (
 
 export const useClubServerActorQuery = (
   clubId: string
-): ActorSubclass<ClubServerInterface> => {
+): ActorSubclass<ClubServerInterface> | undefined => {
   return useMemo(() => {
     const canisterId = CLUB_TO_CANISTER.get(clubId);
-    if (canisterId === undefined) throw new Error("Invalid clubId");
+    if (canisterId === undefined) {
+      return undefined;
+    }
     return clubCreateActor(canisterId);
   }, [clubId]);
 };
@@ -62,7 +64,10 @@ export const useClubServerActorQueryMap = (): Map<
   const actorMap = new Map<string, ActorSubclass<ClubServerInterface>>();
 
   CLUB_TO_CANISTER.forEach((canisterId, clubId) => {
-    actorMap.set(clubId, useClubServerActorQuery(clubId));
+    const actor = useClubServerActorQuery(clubId);
+    if (actor !== undefined) {
+      actorMap.set(clubId, actor);
+    }
   });
 
   return actorMap;

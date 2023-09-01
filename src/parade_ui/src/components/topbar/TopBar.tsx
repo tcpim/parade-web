@@ -81,7 +81,7 @@ export const TopBar = ({ className }: TopBarProps) => {
     <Wrapper className={className}>
       <Logo src={logo} onClick={() => navigate("/")}></Logo>
       <TopBarIcons>
-        <TooltipWrapper onClick={() => navigate("/clubs")} tooltipText="Clubs">
+        <TooltipWrapper onClick={() => navigate("/")} tooltipText="Clubs">
           <IconButton>
             <Icon
               as={HiOutlineUserGroup}
@@ -90,9 +90,16 @@ export const TopBar = ({ className }: TopBarProps) => {
             />
           </IconButton>
         </TooltipWrapper>
-        <TooltipWrapper onClick={() => navigate("/")} tooltipText="Street">
+        <TooltipWrapper
+          onClick={() => navigate("/street")}
+          tooltipText="Street"
+        >
           <IconButton>
-            <Icon as={HiOutlineGlobeAlt} size={2} bold={currentPath === "/"} />
+            <Icon
+              as={HiOutlineGlobeAlt}
+              size={2}
+              bold={currentPath === "/street"}
+            />
           </IconButton>
         </TooltipWrapper>
         <TooltipWrapper
