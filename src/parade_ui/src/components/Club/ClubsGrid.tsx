@@ -1,5 +1,4 @@
 import Masonry from "@mui/lab/Masonry";
-import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import boxydude from "../../../assets/boxydude-club.png";
@@ -26,33 +25,30 @@ const ImageBlock = styled.div`
 export const ClubsGrid = () => {
   const navigate = useNavigate();
 
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 768px)" });
-
-  console.log("isSmallScreen", isSmallScreen);
   const width = "100%";
   return (
     <Wrapper>
-      <Masonry columns={isSmallScreen ? 1 : 3}>
+      <Masonry columns={3}>
         <ImageBlock onClick={() => navigate("/clubs/ludo-arts")}>
-          <img src={btcflower} loading="lazy" width={width} />
+          <img src={btcflower} width={width} />
         </ImageBlock>
         <ImageBlock onClick={() => navigate("/clubs/poked-bots")}>
-          <img src={pokedbot} loading="lazy" width={width} />
+          <img src={pokedbot} width={width} />
         </ImageBlock>
         <ImageBlock onClick={() => navigate("/clubs/motoko-ghost")}>
-          <img src={motoko} loading="lazy" width={width} />
+          <img src={motoko} width={width} />
         </ImageBlock>
         <ImageBlock onClick={() => navigate("/clubs/ic-punks")}>
-          <img src={icpunks} loading="lazy" width={width} />
+          <img src={icpunks} width={width} />
         </ImageBlock>
         <ImageBlock onClick={() => navigate("/clubs/boxy-dude")}>
-          <img src={boxydude} loading="lazy" width={width} />
+          <img src={boxydude} width={width} />
         </ImageBlock>
         <ImageBlock onClick={() => navigate("/clubs/dscvr-airdrop")}>
-          <img src={dscvr} loading="lazy" width={width} />
+          <img src={dscvr} width={width} />
         </ImageBlock>
         <ImageBlock onClick={() => navigate("/clubs/cubetopia")}>
-          <img src={cubetopia} loading="lazy" width={width} />
+          <img src={cubetopia} width={width} />
         </ImageBlock>
       </Masonry>
     </Wrapper>

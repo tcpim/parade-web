@@ -67,10 +67,7 @@ const UserPortfolioActivity = ({ userId }: ProfileProps) => {
   const userInfoDiv = (userId: string) => {
     return (
       <UserInfoDiv>
-        <UserAvatar
-          canChange={isSelf}
-          userId={appContext.userLoginInfo.userPid}
-        />
+        <UserAvatar canChange={isSelf} userId={userId} />
         <UserInfo userId={userId} />
       </UserInfoDiv>
     );

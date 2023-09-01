@@ -110,9 +110,10 @@ const UserClubCollectionList = ({
       </CenteredDiv>
     );
   } else if (!query.data || query.data.tokenCount === 0) {
+    const text = isSelf ? "You" : "This user";
     return (
       <CenteredDiv>
-        <h6>You don't have any club NFTs</h6>
+        <h6>{text} don't have any club NFTs</h6>
       </CenteredDiv>
     );
   }
