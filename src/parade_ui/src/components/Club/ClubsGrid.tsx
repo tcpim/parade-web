@@ -48,7 +48,6 @@ export const ClubsGrid = () => {
             <img
               src={`${image.img}?w=248&fit=crop&auto=format`}
               srcSet={`${image.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-              loading="lazy"
             />
           </StyledImageItem>
         ))}

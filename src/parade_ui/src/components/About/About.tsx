@@ -1,3 +1,4 @@
+import { SocialIcon } from "react-social-icons";
 import { styled } from "styled-components";
 
 const Wrapper = styled.div`
@@ -22,32 +23,69 @@ const StyledText = styled.p`
   color: #555;
 `;
 
+const IconButton = styled.div`
+  display: flex;
+  align-items: center;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
 export const About = () => {
+  const icon = (icon: any, link: string) => {
+    return <IconButton onClick={() => window.open(link)}>{icon}</IconButton>;
+  };
+
   return (
     <Wrapper>
       <StyledSection>
         <StyledHeading>Mission</StyledHeading>
         <StyledText>
-          Our company was founded on the principle of XYZ. We believe in ABC and
-          strive to DEF. Our core mission is to provide unparalleled service,
-          innovate in our field, and bring value to our stakeholders. We exist
-          because of GHI, and we're proud to serve our community and beyond.
+          Parade's mission is to empower NFT communities in a sustainable and
+          fun way. We believe that digital collectibles play an important role
+          in the Web3 world, and we want to help creators and collectors build
+          thriving communities around their NFTs.
         </StyledText>
       </StyledSection>
       <StyledSection>
         <StyledHeading>Roadmap</StyledHeading>
         <StyledText>
-          As we look to the future, we're excited about several upcoming
-          milestones:
+          We don't have an explicit roadmap. You, the community, will help
+          define our roadmap. Please share your ideas and feedback with us on
+          Twitter or Discord. However, we do have a few ideas in mind:
+          <ol style={{ margin: "4px" }}>
+            <li>Automatic club creation with holder's voting</li>
+            <li>
+              Quantify holder loyalty by gathering information on-chain and
+              off-chain
+            </li>
+            <li>
+              Provide tools to distribute creator revenue to loyal fans, such as
+              royalties
+            </li>
+          </ol>
+          Again, we will prioritize our roadmap based on your feedback!
         </StyledText>
       </StyledSection>
 
       <StyledSection>
         <StyledHeading>Contact Us</StyledHeading>
         <StyledText>
-          We're always eager to hear from you. Whether it's feedback, questions,
-          or any other inquiries, feel free to reach out!
+          We're always looking for ways to improve. If you have any questions,
+          suggestions and feedback, please contact us at
         </StyledText>
+        <div style={{ display: "flex", gap: "8px" }}>
+          <IconButton
+            onClick={() => window.open("https://twitter.com/parade_web3")}
+          >
+            <SocialIcon network="twitter" style={{ height: 25, width: 25 }} />
+          </IconButton>
+          <IconButton
+            onClick={() => window.open("https://discord.gg/6p2vw4ZfMg")}
+          >
+            <SocialIcon network="discord" style={{ height: 25, width: 25 }} />
+          </IconButton>
+        </div>
       </StyledSection>
     </Wrapper>
   );
