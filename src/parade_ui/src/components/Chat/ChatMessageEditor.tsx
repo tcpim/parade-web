@@ -73,7 +73,11 @@ export const ChatMessageEditor = ({
       return (
         <StyledSendDiv>
           <IconButton
-            disabled={message === "" || !belong}
+            disabled={
+              message === "" ||
+              !belong ||
+              message.length > MAX_CLUB_MESSAGE_LENGTH
+            }
             onClick={handleSendMessage}
           >
             <SendIcon />

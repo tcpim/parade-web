@@ -75,7 +75,14 @@ export const ClubTweet = ({ clubId }: ClubTweetProps) => {
     } else {
       return (
         <StyledButtonRow>
-          <StyledButton type="submit" disabled={words.length === 0 || !belong}>
+          <StyledButton
+            type="submit"
+            disabled={
+              words.length === 0 ||
+              !belong ||
+              words.length > MAX_CLUB_POST_WORDS_LENGTH
+            }
+          >
             Post
           </StyledButton>
         </StyledButtonRow>
