@@ -1,4 +1,5 @@
-import Masonry from "@mui/lab/Masonry";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import boxydude from "../../../assets/boxydude-club.png";
@@ -22,35 +23,36 @@ const ImageBlock = styled.div`
   cursor: pointer;
 `;
 
+const imageList = [
+  { img: btcflower, url: "/clubs/ludo-arts" },
+  { img: pokedbot, url: "/clubs/poked-bots" },
+  { img: motoko, url: "/clubs/motoko-ghost" },
+  { img: icpunks, url: "/clubs/ic-punks" },
+  { img: boxydude, url: "/clubs/boxy-dude" },
+  { img: dscvr, url: "/clubs/dscvr-airdrop" },
+  { img: cubetopia, url: "/clubs/cubetopia" },
+];
+
+const StyledImageItem = styled(ImageListItem)`
+  cursor: pointer;
+`;
+
 export const ClubsGrid = () => {
   const navigate = useNavigate();
 
-  const width = "100%";
   return (
     <Wrapper>
-      <Masonry columns={3}>
-        <ImageBlock onClick={() => navigate("/clubs/ludo-arts")}>
-          <img src={btcflower} width={width} />
-        </ImageBlock>
-        <ImageBlock onClick={() => navigate("/clubs/poked-bots")}>
-          <img src={pokedbot} width={width} />
-        </ImageBlock>
-        <ImageBlock onClick={() => navigate("/clubs/motoko-ghost")}>
-          <img src={motoko} width={width} />
-        </ImageBlock>
-        <ImageBlock onClick={() => navigate("/clubs/ic-punks")}>
-          <img src={icpunks} width={width} />
-        </ImageBlock>
-        <ImageBlock onClick={() => navigate("/clubs/boxy-dude")}>
-          <img src={boxydude} width={width} />
-        </ImageBlock>
-        <ImageBlock onClick={() => navigate("/clubs/dscvr-airdrop")}>
-          <img src={dscvr} width={width} />
-        </ImageBlock>
-        <ImageBlock onClick={() => navigate("/clubs/cubetopia")}>
-          <img src={cubetopia} width={width} />
-        </ImageBlock>
-      </Masonry>
+      <ImageList cols={3} variant="masonry" gap={10}>
+        {imageList.map((image, index) => (
+          <StyledImageItem key={index} onClick={() => navigate(image.url)}>
+            <img
+              src={`${image.img}?w=248&fit=crop&auto=format`}
+              srcSet={`${image.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+              loading="lazy"
+            />
+          </StyledImageItem>
+        ))}
+      </ImageList>
     </Wrapper>
   );
 };

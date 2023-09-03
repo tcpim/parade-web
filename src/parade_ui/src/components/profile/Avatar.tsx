@@ -1,7 +1,8 @@
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import { Avatar, Box, IconButton } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { styled } from "styled-components";
 import { useGetUser } from "../../hooks/user/useGetUser";
 import { useSetUserAvatar } from "../../hooks/user/useSetUserInfo";
 import { UserAvatar as UserAvatarType } from "../../types/user";
@@ -20,6 +21,18 @@ const decodeUint8ArrayToImage = (avatar?: UserAvatarType) => {
   const res = `data:${avatar.avatarMime};base64,${base64String}`;
   return res;
 };
+
+interface WrapperProps {
+  size: number;
+  canChange: boolean;
+}
+
+const Wrapper = styled.div<WrapperProps>`
+  position: relative;
+  width: ${(props) => `${props.size}px`};
+  height: ${(props) => `${props.size}px`};
+  cursor: ${(props) => (props.canChange ? "default" : "pointer")};
+`;
 
 interface UserAvatarProps {
   size?: number;
@@ -88,10 +101,7 @@ export const UserAvatar = ({
   };
 
   return (
-    <Box
-      onClick={handleOnClick}
-      sx={{ position: "relative", width: size, height: size }}
-    >
+    <Wrapper onClick={handleOnClick} size={size} canChange={canChange}>
       <Avatar
         sx={{ width: size, height: size }}
         alt="Anonymous"
@@ -121,6 +131,6 @@ export const UserAvatar = ({
           <CameraAltIcon />
         </IconButton>
       </label>
-    </Box>
+    </Wrapper>
   );
 };

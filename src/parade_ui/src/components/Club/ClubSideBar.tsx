@@ -63,7 +63,7 @@ export const ClubSidebar = ({ clubId }: ClubSidebarProps) => {
       <div>
         {clubInfo.collections.map((collection) => {
           return (
-            <CollectionRow>
+            <CollectionRow key={collection.canisterId}>
               <p>{truncateStr(collection.name, 15)}</p>
               <button onClick={() => window.open(collection.tradeUrl)}>
                 Trade
