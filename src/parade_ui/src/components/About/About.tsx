@@ -54,7 +54,7 @@ export const About = () => {
           define our roadmap. Please share your ideas and feedback with us on
           Twitter or Discord. However, we do have a few ideas in mind:
           <ol style={{ margin: "4px" }}>
-            <li>Automatic club creation with holder's voting</li>
+            <li>Automatic club creation upon holder's voting</li>
             <li>
               Quantify holder loyalty by gathering information on-chain and
               off-chain
@@ -65,6 +65,34 @@ export const About = () => {
             </li>
           </ol>
           Again, we will prioritize our roadmap based on your feedback!
+        </StyledText>
+      </StyledSection>
+      <StyledSection>
+        <StyledHeading>FAQ</StyledHeading>
+        <StyledText>
+          <h6>What is Street and Club?</h6>
+          <p>
+            Club is a holder-exclusive place where NFT holders of certain
+            collections can interact with each other. Street is for people to
+            talk about their NFTs which don't belong to a club yet. However,
+            when you create a post using a club NFT, you can also "Post to
+            Street" to expand the visibility of your post.
+          </p>
+          <br />
+          <h6>
+            When I post my NFT, will my NFT be listed or transferred to
+            somewhere?
+          </h6>
+          <p>
+            No. As for now, Parade will not touch your NFT in anyway when you
+            use the website. We will announce if we implement any features that
+            may transfer/list your NFT. That being said, we recommend you to use
+            Plug wallet because it will warn you whenever you are about to sign
+            a transaction that may transfer your asset. See:
+            <a href="https://docs.plugwallet.ooo/resources/app-trust-and-security/">
+              https://docs.plugwallet.ooo/resources/app-trust-and-security/
+            </a>
+          </p>
         </StyledText>
       </StyledSection>
 

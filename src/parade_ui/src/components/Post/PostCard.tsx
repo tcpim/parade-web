@@ -86,7 +86,7 @@ const PostCard = ({ post, width = 500 }: PostCardProps) => {
       )}
       <StyledWords>
         <h6>{getUserName(userInfoQuery.data)}</h6>
-        <p>{post.words}</p>
+        <p style={{ overflowWrap: "anywhere" }}>{post.words}</p>
       </StyledWords>
       <Emojis
         autherId={post.created_by}

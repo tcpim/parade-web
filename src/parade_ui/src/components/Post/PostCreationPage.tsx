@@ -196,7 +196,7 @@ export const PostCreationPage = () => {
       return (
         <StyledButton
           onClick={handlePostSubmit}
-          disabled={selectedNft === undefined}
+          disabled={selectedNft === undefined || words.length >= 500}
         >
           <p
             style={{
@@ -259,6 +259,9 @@ export const PostCreationPage = () => {
             cols={40}
             maxLength={500}
           />
+          {words.length == 500 && (
+            <p style={{ color: "red" }}>Max 500 characters</p>
+          )}
           {selectedNft !== undefined && selectedNft.clubId !== undefined && (
             <div style={{ display: "flex", alignItems: "center" }}>
               <p>Also post to street</p>

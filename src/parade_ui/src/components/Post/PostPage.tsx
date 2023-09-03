@@ -139,7 +139,10 @@ const PostDetail = ({ postId, clubId }: PostDetailProps) => {
       return (
         <ReplyButton
           onClick={handleReplySubmit}
-          disabled={!appContext.userLoginInfo.walletConnected}
+          disabled={
+            !appContext.userLoginInfo.walletConnected ||
+            reply.length > MAX_REPLY_MESSAGE_LENGTH
+          }
         >
           Reply
         </ReplyButton>
